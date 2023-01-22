@@ -1,0 +1,299 @@
+---
+title: "ECO 395 Homework 1"
+author: "Minjin Kang, Paul Park"
+date: "2023-01-21"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(ggplot2)
+library(rsample)
+library(caret)
+library(modelr)
+library(parallel)
+library(foreach)
+library(dplyr)
+
+```
+
+## 1) Data visualization: flights at ABIA
+
+
+
+**Question: What is the best time of year to fly to minimize delays, and does this change by destination?**
+
+
+
+```{r problem 1a, message=FALSE, echo=FALSE}
+# read in the data: make sure to use the path name to
+# wherever you'd stored the file
+ABIA = read.csv('Data/ABIA.csv')
+
+# Filter rows with origin = AUS
+ABIA_austin_origin = ABIA %>%
+  filter(Origin == "AUS")
+
+# Create a new column from two existing columns
+ABIA_augmented = ABIA_austin_origin %>%
+  mutate(TotalDelay = ArrDelay + DepDelay)
+
+# Replace N/A values with zeros 
+ABIA_augmented[is.na(ABIA_augmented)] = 0
+
+# Monthly average delay
+ABIA_monthlytotal <- ABIA_augmented %>%
+  group_by(Month) %>%
+  summarise(Mean_Delay= mean(TotalDelay))
+
+# Plot monthly aggregate average delay
+ggplot(ABIA_monthlytotal) + 
+  geom_line(aes(x=Month, y=Mean_Delay), size=1.1) +
+  labs(x="Month",
+       y="Average Delays (in minute)",
+       title="Monthly Average Delay for All Flights Departing AUS",
+       subtitle="(Year 2008)") + 
+  scale_x_continuous(breaks = seq(1, 12, by = 1)) + 
+  theme_bw() +
+  theme(plot.title = element_text(face="bold"))
+```
+
+**Figure 1:** Line graph showing monthly average delay time for 49,623 flights that departed from AUS in 2008.
+
+Figure 1 shows that the best months to fly from Austin to minimize delays are September and October. September has the least delays of all (around two minutes), while October has an average delay of four minutes, which is significantly less compared to other months. This makes sense as these months lie between the two busiest travel seasons of the year, summer vacation (July and August) and Thanksgiving and Christmas/New Year (November and December)
+
+
+```{r problem 1b, message=FALSE, echo=FALSE}
+# Second, we will see if this monthly aggregate average delay trend is changing by destination. We choose six popular destination.
+
+# Pick top 6 destination by counting rows by each destination
+top_six_dest <- ABIA_augmented %>%
+  count(Dest, sort = TRUE)
+
+# Make data containing only top 6 destination
+top6_dest <- subset(ABIA_augmented, Dest == "DAL" | Dest == "DFW" | Dest == "IAH" | Dest == "PHX" | Dest == "DEN" | Dest == "ORD")
+
+# Monthly average delay for each Destination
+top6_dest_groupby <- top6_dest%>%
+  group_by(Month,Dest) %>%
+  summarise(MeanDelay=mean(TotalDelay))
+
+# Make dataframe 
+df <- top6_dest_groupby %>% as.data.frame()
+
+# Plot top 6 destination monthly average delay
+ggplot(df, aes(x=Month, y=MeanDelay, shape=Dest,color=Dest)) +
+  geom_line() +
+  labs(x="Month",
+       y="Average Delays (in minute)",
+       title="Monthly Average Delay for Flights Departing AUS by Destination",
+       subtitle="(Year 2008)") + 
+  scale_x_continuous(breaks = seq(1, 12, by = 1)) + 
+  theme_bw() +
+  theme(plot.title = element_text(face="bold"))
+```
+
+**Figure 2:** Line graph showing monthly average delay time for 22,740 flights that departed from AUS to the six most popular destination airports in 2008.
+
+Next, we wanted to find out whether the result changes by destination. We picked six most popular destinations, which are Dallas Love Field Airport (DAL), Denver International Airport (DEN), Dallas/Fort Worth International Airport (DFW), George Bush Intercontinental Airport (IAH), Chicago O'Hare International Airport (ORD), Phoenix Sky Harbor International Airport (PHX). Figure 2 shows that the overall trend of delays throughout the year is similar to that shown by Figure 1. In general, September and October seem to be the months with the least flight delays.
+
+## 2) Wrangling the Olympics
+
+### A)
+```{r problem 2A, message=FALSE, echo=FALSE}
+# read in the data: make sure to use the path name to
+# wherever you'd stored the file
+Olympics = read.csv('Data/olympics_top20.csv')
+
+# A) What is 95th percentile of heights for female competitiors across Athletics events?
+
+# Filter to get female and Athletics data only
+Olympics_female=Olympics %>%
+  filter(sex=="F", sport=="Athletics")
+
+# Get 95th percentile of heights
+quantile(Olympics_female$height, 0.95)
+```
+
+95th percentile of heights for female competitors across Athletcis events is 183cm.
+
+### B)
+```{r problem 2B, message=FALSE, echo=FALSE}
+
+# B) Which single women's event had the greatest variability in competitor's heights across the entire history of the Olympics, as measured by the standard deviation?
+
+# Filter to get female data, group by event and getting standard deviation for each event. Slicing to get event having the highest standard deviation. 
+Olympics_female_event = Olympics %>%
+  filter(sex=="F") %>%
+  group_by(event) %>%
+  summarise(heightvariance=sd(height)) %>%
+  slice(which.max(heightvariance)) %>% as.data.frame()
+
+# Make dataframe 
+df_f <- Olympics_female_event%>% as.data.frame()
+
+knitr::kable(head(df_f, 1), col.names = c("Event", "Height Variability"))
+
+```
+
+Rowing Women’s Coxed Fours has the greatest variability in women competitor's heights across the entire history of the Olympics.
+
+### C)
+```{r problem 2C, message=FALSE, echo=FALSE}
+
+# C) How has the average age of Olympic swimmers changed over time? Does this trend look different depending on the gender?
+
+# Filter to get swimmer data, group by gender to see if the trend look different depending on gender, and group by year to see trend of the data and export to dataframe to visualize
+Olympics_swimmerage = Olympics %>%
+  filter(sport=="Swimming") %>%
+  group_by(sex,year) %>%
+  summarise(Meanage=mean(age)) %>% as.data.frame()
+
+# Plot the data with line graph
+ggplot(Olympics_swimmerage,aes(x=year, y=Meanage,color=sex))+
+  geom_line() + geom_point() +
+  labs(title="Change in Average Age for Male and Female Swimmers",
+       
+       x="Year",
+       y="Average age") +
+       #subtitle="(Year 1896 Olympic Medalist)") +
+  theme_classic() +
+  theme(plot.title = element_text(face="bold"))
+
+
+```
+
+**Figure 3:** Line graph showing the change in average age of Olympic swimmers between 1600 - 2016
+
+The change in average age has an overall upward trend for both male and female Olympic swimmers. For male swimmers, the average age marks its lowest (mid-teens) in the early 1900's and goes through a period of steep hike through 1925. It then rapidly comes back down to late teens/early twenties and steadily increases over a long period of time. By 2000, the average male swimmer's age is approximately mid-twenties. The female swimmer's average age displays a somewhat similar of an upward trend. The average age revolves around early to mid teens between 1925 and 1975, then we see a massive spike that moves the average age towards early to mid twenties through 2000s. Average age of female swimmers is certainly lower than that of male swimmers throughout history, but the rising trend is congruent.
+
+## 3) K-nearest neighbors: cars
+
+```{r problem 3, message=FALSE, echo=FALSE}
+sclass = read.csv('Data/sclass.csv')
+
+# Filter for two trim levels: 350 and 65 AMG
+sclass_350 <- sclass %>%
+  filter(trim=='350')
+
+sclass_65 <- sclass %>%
+  filter(trim=='65 AMG')
+
+
+# Do a train-test split for sclass_350
+sclass350_split =  initial_split(sclass_350, prop=0.8)
+sclass350_train = training(sclass350_split)
+sclass350_test  = testing(sclass350_split)
+
+# Fix the range of k 
+k_grid=2:150
+
+
+# Using the code in 02_intro_learning slide, check rmse value for k value from 2 to 150
+rmse_350_out = foreach(i=2:150, .combine='c') %do% {
+  
+  # Train the model and calculate RMSE on the test set
+  knn_350=knnreg(price ~ mileage, data=sclass350_train, k=i)
+  rmse(knn_350, sclass350_test)
+}
+
+# Make a data frame for plotting
+rmse_350_df <- rmse_350_out %>% as.data.frame()
+
+# Set x-axis for k, set y-axis for RMSE and plotting to find k value which has the lowest RMSE
+ggplot(rmse_350_df, aes(x = k_grid, y = rmse_350_out)) +
+  geom_line(color="blue") +
+  labs(x="K",
+       y="RMSE",
+       title="Plot of RMSE versus K to find the optimal K value for Trim 350") +
+  theme_minimal() +
+  theme(plot.title = element_text(face="bold"))
+
+# Find the optimal value of K 
+k_grid[which.min(rmse_350_out)]
+
+# KNN with the optimal value K and getting RMSE
+knn44_350=knnreg(price ~ mileage, data=sclass350_train, k=k_grid[which.min(rmse_350_out)])
+rmse(knn44_350,sclass350_test)
+
+# Attach the predictions to the test data frame
+sclass350_test = sclass350_test %>%
+  mutate(price_pred = predict(knn44_350, sclass350_test))
+
+p_test = ggplot(data = sclass350_test) + 
+  geom_point(mapping = aes(x = mileage, y = price), alpha=0.5) +
+  ggtitle("Predictions of Price given Mileage for Trim 350") 
+  
+
+# now add the predictions
+p_test + 
+  geom_line(aes(x = mileage, y = price_pred), color='firebrick', size=1.5) +
+  theme_minimal() +
+  theme(plot.title = element_text(face="bold"))
+
+
+
+
+
+# Do a train-test split for sclass_65
+sclass65_split =  initial_split(sclass_65, prop=0.8)
+sclass65_train = training(sclass65_split)
+sclass65_test  = testing(sclass65_split)
+
+
+# Fix the range of k 
+k_grid=2:150
+
+
+# Using the code in 02_intro_learning slide, check rmse value for k value from 2 to 150
+rmse_65_out = foreach(i=2:150, .combine='c') %do% {
+  
+  # Train the model and calculate RMSE on the test set
+  knn_65=knnreg(price ~ mileage, data=sclass65_train, k=i)
+  rmse(knn_65, sclass65_test)
+}
+
+# Make a data frame for plotting
+rmse_65_df <- rmse_65_out %>% as.data.frame()
+
+# Set x-axis for k, set y-axis for RMSE and plotting to find k value which has the lowest RMSE
+ggplot(rmse_65_df, aes(x = k_grid, y = rmse_65_out)) +
+  geom_line(color="blue") +
+  labs(x="K",
+       y="RMSE",
+       title="Plot of RMSE versus K to find the optimal K value for Trim 350") +
+  theme_minimal() +
+  theme(plot.title = element_text(face="bold"))
+
+
+# Find the optimal value of K 
+k_grid[which.min(rmse_65_out)]
+
+# KNN with the optimal value of K and getting RMSE
+knn15_65=knnreg(price ~ mileage, data=sclass65_train, k=k_grid[which.min(rmse_65_out)])
+rmse(knn15_65,sclass65_test)
+
+# Attach the predictions to the test data frame
+sclass65_test = sclass65_test %>%
+  mutate(price_pred = predict(knn15_65, sclass65_test))
+
+p_test = ggplot(data = sclass65_test) + 
+  geom_point(mapping = aes(x = mileage, y = price), alpha=0.5) +
+  ggtitle("Predictions of Price given Mileage for Trim 65 AMG") 
+
+# now add the predictions
+p_test + 
+  geom_line(aes(x = mileage, y = price_pred), color='firebrick', size=1.5) +
+  theme_minimal() +
+  theme(plot.title = element_text(face="bold"))
+
+
+
+# Trim 350 has larger optimal K value as it contains more data points than trim 65 AMG. More data points means lower variance, less chance of memorizing random noise. 
+
+
+
+
+```
+
