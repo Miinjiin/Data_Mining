@@ -116,7 +116,13 @@ Olympics_female=Olympics %>%
   filter(sex=="F", sport=="Athletics")
 
 # Get 95th percentile of heights
-quantile(Olympics_female$height, 0.95)
+Output = quantile(Olympics_female$height, 0.95)
+
+Numquantile="95%"
+
+df1<- data.frame(Numquantile,Output, row.names = "")
+
+knitr::kable(head(df1, 1), col.names = c("quantile", "height"))
 ```
 
 95th percentile of heights for female competitors across Athletcis events is 183cm.
