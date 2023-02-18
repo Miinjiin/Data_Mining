@@ -1,0 +1,105 @@
+---
+title: "ECO 395M exercise 2"
+author: "Minjin Kang, Paul Park"
+date: "2023-02-18"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(ggplot2)
+library(rsample)  
+library(caret)
+library(modelr)
+library(parallel)
+library(foreach)
+library(tidyverse)
+library(mosaic)
+
+```
+
+## 1) Saratoga house prices
+
+** Between linear model and K-nearest-neighbor regression model, which one is better at achieving lower
+out-of-sample mean-squared error? **
+
+```{r problem 1, message=FALSE, echo=FALSE, warning=FALSE}
+# read the data
+data(SaratogaHouses)
+
+# split into training and testing set
+saratoga_split = initial_split(SaratogaHouses, prop = 0.8)
+saratoga_train = training(saratoga_split)
+saratoga_test = testing(saratoga_split)
+
+#1) Best linear model
+
+# medium model we did in linear model class
+lm_medium = lm(price ~ . - pctCollege - sewer - waterfront - landValue - newConstruction, data=saratoga_train)
+rmse(lm_medium, saratoga_test)
+#coef(lm_medium) %>% round(0)
+
+# medium model we did in AIC class
+#lm_medium = lm(price ~ lotSize + age + livingArea + pctCollege + bedrooms + fireplaces + bathrooms + rooms + heating + fuel + centralAir, data=saratoga_train)
+
+# add meaningful interaction variable 
+lm_answer = lm(price ~ . +  (livingArea:lotSize + livingArea:fuel + livingArea:centralAir + bedrooms:bathrooms + heating:fuel) - pctCollege - sewer - waterfront - landValue - newConstruction, data=saratoga_train)
+rmse(lm_answer, saratoga_test)
+
+# add not meaningful interaction variable
+lm_notanswer= lm(price ~ . +  (age:livingArea + centralAir:lotSize) - pctCollege - sewer - waterfront - landValue - newConstruction, data=saratoga_train)
+rmse(lm_notanswer, saratoga_test)
+
+# medium rmse: 61107.2 , answer rmse: 59942.05 , notanswer rmse: 60834.71
+
+#2) Best KNN regression model
+
+knn_saratoga_split = initial_split(SaratogaHouses, prop = 0.8)
+knn_saratoga_train = training(knn_saratoga_split)
+knn_saratoga_test = testing(knn_saratoga_split)
+
+# standarize before applying KNN
+Xtrain=model.matrix(~ . - pctCollege - sewer - waterfront - landValue - newConstruction - 1, data=knn_saratoga_train)
+Xtest=model.matrix(~ . - pctCollege - sewer - waterfront - landValue - newConstruction - 1, data=knn_saratoga_test)
+
+# training and testing set responses
+ytrain=knn_saratoga_train$price
+ytest=knn_saratoga_test$price
+
+# now rescale
+scale_train = apply(Xtrain, 2, sd)
+Xtilde_train = scale(Xtrain, scale=scale_train)
+Xtilde_test = scale(Xtest, scale=scale_train)
+
+# fix the range of k
+k_grid=2:150
+
+colnames(Xtilde_train)
+colnames(Xtilde_test)
+
+#finding_smallest_k = foreach(i=2:150, .combine='c') %do% {
+  knn_k=knnreg(price~lotSize+age+livingArea+bedrooms+fireplaces+bathrooms+rooms+heatinghotair+heatinghotwater/steam+heatingelectric+fuelelectric+fueloil+centralAir, data=Xtilde_train, k=i)
+  rmse(knn_k, Xtilde_test)
+}
+
+# KNN with the optimal value K and getting RMSE
+knn =knnreg(price ~ lotSize+age+livingArea+bedrooms+fireplaces+bathrooms+rooms+heating+fuel+centralAir, data=Xtilde_train, k=k_grid[which.min(finding_smallest_k)])
+
+rmse(knn,Xtilde_test)
+
+
+```
+
+## Classification and retrospective sampling 
+
+
+``````{r problem 2, message=FALSE, echo=FALSE, warning=FALSE}
+credit=read.csv('Data/german_credit.csv')
+
+
+
+
+```
+
+
