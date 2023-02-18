@@ -36,8 +36,22 @@ flight delays.
 
 #### A) What is 95th percentile of heights for female competitiors across Athletics events?
 
-    ## 95% 
-    ## 183
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">quantile</th>
+<th style="text-align: right;">height</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">95%</td>
+<td style="text-align: right;">183</td>
+</tr>
+</tbody>
+</table>
 
 95th percentile of heights for female competitors across Athletcis
 events is 183cm.
@@ -95,11 +109,11 @@ optimal value of K
 
 **Optimal value of K**
 
-    ## [1] 16
+    ## [1] 11
 
 **RMSE from the Optimal value of K**
 
-    ## [1] 10268.88
+    ## [1] 10737.34
 
 ![](ECO-395M-exercise-1_files/figure-markdown_strict/problem%203_1.4-1.png)
 
@@ -116,11 +130,11 @@ optimal value of K
 
 **Optimal value of K**
 
-    ## [1] 73
+    ## [1] 9
 
 **RMSE from the Optimal value of K**
 
-    ## [1] 18330.38
+    ## [1] 22179.64
 
 ![](ECO-395M-exercise-1_files/figure-markdown_strict/problem%203_2.4-1.png)
 
