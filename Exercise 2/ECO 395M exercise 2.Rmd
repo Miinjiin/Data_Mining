@@ -93,10 +93,35 @@ rmse(knn,Xtilde_test)
 
 ## Classification and retrospective sampling 
 
-
 ``````{r problem 2, message=FALSE, echo=FALSE, warning=FALSE}
 credit=read.csv('Data/german_credit.csv')
 
+default=credit %>%
+  group_by(history) %>%
+  summarize(average_default=mean(Default)) %>%
+  as.data.frame()
+
+default %>%
+  ggplot(aes(x=history, y=average_default, fill=history)) +
+  geom_col()+
+  labs(x="Credit history",
+       y="Default probability",
+       title="Predictng default by credit history ",
+       subtitle="(german_credit)") + 
+  theme_bw() +
+  theme(plot.title = element_text(face="bold"))
+
+# split training and testing data
+credit_split=initial_split(credit, prop= 0.8)
+credit_train=training(credit_split)
+credit_test=testing(credit_split)
+
+# logistic regression
+logistic=glm(Default ~ duration+amount+installment+age+history+purpose+foreign, data=credit_train, family=binomial)
+
+coef_df<- coef(logistic)%>% as.data.frame %>% round(2)
+
+knitr::kable(coef_df)
 
 
 
