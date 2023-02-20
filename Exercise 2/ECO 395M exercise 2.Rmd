@@ -115,6 +115,9 @@ default %>%
 
 ```
 
+**Figure 1:** Bar plot showing average default probability by credit history.
+
+
 ```{r problem 2.2, message=FALSE, echo=FALSE, warning=FALSE}
 # split training and testing data
 credit_split=initial_split(credit, prop= 0.8)
@@ -128,9 +131,20 @@ coef_df<- coef(logistic)%>% as.data.frame %>% round(2)
 
 knitr::kable(coef_df)
 
+
+credit_history = credit %>%
+  group_by(history) %>%
+  summarise(count = n ()) %>%
+  as.data.frame()
+
+summarise(credit_history)
+
 ```
 
 
+The bar plot shows that a borrower with a 'good' credit rating history has the highest probability of defaulting on a loan, followed by 'poor,' and 'terrible.' Similar result is again found in the logistic regression model, which shows that 'historyterrible' and 'historybad' are more negatively correlated with 'Default,' than the intercept (historygood). Both results indicate that a borrower with a good credit history is more likely to default on his/her loan, which is **highly counter-intuitive.**
+
+This data set is not appropriate for predicting "high" vs. "low" probably of default when screening prospective borrowers. Sampling defaulted loans and matching similar kinds of loans will inevitably lead to a biased prediction because the majority of samples collected are borrowers with poor and terrible credit rating **as shown above.** Rather, the bank should use a random selection when collecting samples to better predict the probability of defaults.
 
 
 
