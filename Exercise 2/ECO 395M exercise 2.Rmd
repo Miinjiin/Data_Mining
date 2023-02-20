@@ -18,7 +18,6 @@ library(tidyverse)
 library(mosaic)
 library(dplyr)
 
-
 ```
 
 ## 1) Saratoga house prices
@@ -152,7 +151,7 @@ This data set is not appropriate for predicting "high" vs. "low" probably of def
 
 ### Model building
 
-```{r problem 3, message=FALSE, echo=FALSE}
+```{r problem 3.1, message=FALSE, echo=FALSE}
 
 dev=read.csv('Data/hotels_dev.csv')
 val=read.csv('Data/hotels_val.csv')
@@ -164,18 +163,22 @@ dev_test = testing(dev_split)
 
 # baseline1: using only four features
 b1 = dev %>%
-  select(market_segment, adults, customer_type, is_repeated_guest)
-# building linear model
+  select(children, market_segment, adults, customer_type, is_repeated_guest)
+# building linear model using four features
 b1_lm = lm(children ~ market_segment + adults + customer_type +is_repeated_guest, data=dev_train, family=binomial)
+# examine the fitted coefficients
+coef(b1_lm) %>% round(3)
 
 
 # baseline2: using all predictor except the arrival date
 b2 = dev[, colnames(dev)[colnames(dev)!='arrival_date']]
 # building linear model
 b2_lm=lm(children ~ . - arrival_date, data=dev_train, family=binomial)
+# examine the fitted coefficients
+coef(b1_lm) %>% round(3)
 
 
-# we should build the best linear model, similar method we used for number 1 we'll add some interaction variable which seems highly correlated
+# build the best linear model, similar method that we used for number 1, and we'll add some interaction variable which seems highly correlated
 
 # let's see columns names first and pick ones that seems related 
 colnames(dev)
@@ -183,15 +186,35 @@ colnames(dev)
 str(dev)
 # result: some columns are int, some columns are chr
 
-# I picked adults & stays in the weekend nights
-b_best_lm=lm(children ~ . - arrival_date + adults:stays_in_weekend_nights, data=dev_train, family=binomial)
+# Add interaction variables and made sample best linear model
+b_best_lm=lm(children ~ . - arrival_date + adults:stays_in_weekend_nights + adults:total_of_special_requests + adults:average_daily_rate + average_daily_rate:total_of_special_requests, data=dev_train)
 
-# we should add bunch of interaction variables and had to check which one has the lowest rmse
+
+
+# calculating the confusion matrix which tabulates predicted class versus actual class , tresholding predicted probabilities at 0.5
+
+phat_b1=predict(b1_lm,dev_test)
+yhat_b1=ifelse(phat_b1 > 0.5, 1, 0)
+confusion_b1=table(y=dev_test$children, yhat=yhat_b1)
+
+phat_b2=predict(b2_lm,dev_test)
+yhat_b2=ifelse(phat_b2 > 0.5, 1, 0)
+confusion_b2=table(y=dev_test$children, yhat=yhat_b2)
+
+phat_b_best=predict(b_best_lm,dev_test)
+yhat_b_best=ifelse(phat_b_best > 0.5, 1, 0)
+confusion_b_best=table(y=dev_test$children, yhat=yhat_b_best)
+
+knitr::kable(confusion_b1)
+knitr::kable(confusion_b2)
+knitr::kable(confusion_b_best)
+
 
 
 ```
 
+```{r problem 3.2, message=FALSE, echo=FALSE}
 
 
-
+```
 
