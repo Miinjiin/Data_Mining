@@ -116,6 +116,8 @@ Xtest_full = data.frame(Xtilde_test,Xtest_add) %>% as.data.frame()
 
 #rmse_out_saratoga
 
+k_grid=2:150
+
 finding_smallest_k = foreach(i=k_grid, .combine='c') %do% {
   knn_k=knnreg(price ~ . - pctCollege - sewer - waterfront - landValue - newConstruction, data=Xtrain_full, k=i)
   rmse_k=rmse(knn_k,Xtest_full)
