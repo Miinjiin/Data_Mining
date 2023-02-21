@@ -82,7 +82,7 @@ knn_saratoga_split = initial_split(SaratogaHouses, prop = 0.8)
 knn_saratoga_train = training(knn_saratoga_split)
 knn_saratoga_test = testing(knn_saratoga_split)
 
-# standarize before applying KNN
+# remove columns which has chr value and standarize before applying KNN
 Xtrain=model.matrix(~ . - pctCollege - sewer - waterfront - landValue - newConstruction - 1, data=knn_saratoga_train)
 Xtest=model.matrix(~ . - pctCollege - sewer - waterfront - landValue - newConstruction - 1, data=knn_saratoga_test)
 
@@ -95,16 +95,43 @@ scale_train = apply(Xtrain, 2, sd)
 Xtilde_train = scale(Xtrain, scale=scale_train)
 Xtilde_test = scale(Xtest, scale=scale_train)
 
-# fix the range of k
-k_grid=2:150
 
-colnames(Xtilde_train)
-colnames(Xtilde_test)
+#Xtilde_test=data.frame(Xtilde_test)%>%
+#  mutate(price=c(ytest))
+#Xtilde_train=data.frame(Xtilde_train)%>%
+#  mutate(price=c(ytrain))
 
-#finding_smallest_k = foreach(i=2:150, .combine='c') %do% {
-#knn_k=knnreg(price~lotSize+age+livingArea+bedrooms+fireplaces+bathrooms+rooms+heatingho#tair+heatinghotwater/steam+heatingelectric+fuelelectric+fueloil+centralAir, #data=Xtilde_train, k=i)
-#  rmse(knn_k, Xtilde_test)
+Xtrain_add <- subset(knn_saratoga_train, select = c("pctCollege","sewer","waterfront","landValue","newConstruction"))
+Xtest_add <- subset(knn_saratoga_test, select = c("pctCollege","sewer","waterfront","landValue","newConstruction"))
+
+# add chr value columns again
+Xtrain_full = data.frame(Xtilde_train,Xtrain_add) %>% as.data.frame()
+Xtest_full = data.frame(Xtilde_test,Xtest_add) %>% as.data.frame()
+
+
+#rmse_out_saratoga=foreach(i=2:150, .combine='c') %do% {
+#  knn_model_saratoga= knnreg(price ~ . - pctCollege - sewer - waterfront - landValue - newConstruction, #data=Xtrain_full, k=i)
+#  modelr::rmse(knn_model_saratoga,Xtest_full)
 #}
+
+#rmse_out_saratoga
+
+finding_smallest_k = foreach(i=k_grid, .combine='c') %do% {
+  knn_k=knnreg(price ~ . - pctCollege - sewer - waterfront - landValue - newConstruction, data=Xtrain_full, k=i)
+  rmse_k=rmse(knn_k,Xtest_full)
+}
+
+#rmse == min(finding_smallest_k$rmse)
+#rmse
+
+finding_smallest_k = finding_smallest_k %>% as.data.frame()
+
+best_k=which(finding_smallest_k == min(finding_smallest_k))
+
+best_k
+
+#knn_best_k=knnreg(price ~ . - pctCollege - sewer - waterfront - landValue - newConstruction, data=Xtrain_full, k=2)
+#rmse(knn_best_k,Xtest_full)
 
 # KNN with the optimal value K and getting RMSE
 #knn =knnreg(price ~ lotSize+age+livingArea+bedrooms+fireplaces+bathrooms+rooms+heating+fuel+centralAir, data=Xtilde_train, k=k_grid[which.min(finding_smallest_k)])
@@ -115,6 +142,9 @@ colnames(Xtilde_test)
 ```
 
 
+After running the RMSE for different levels of K, we found that consistently one
+of the lowest estimators for Price given our KNN estimate is K=15. We will use
+K=10 as our value in the bakeoff against the the linear model.
 
 
 
