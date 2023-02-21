@@ -3,11 +3,11 @@
 \*\* Between linear model and K-nearest-neighbor regression model, which
 one is better at achieving lower out-of-sample mean-squared error? \*\*
 
-    ## [1] 61933.92
+    ## [1] 65288.39
 
-    ## [1] 60887.64
+    ## [1] 64516.35
 
-    ## [1] 61214.81
+    ## [1] 65401.06
 
     ##  [1] "price"                  "lotSize"                "age"                   
     ##  [4] "livingArea"             "bedrooms"               "fireplaces"            
@@ -23,69 +23,80 @@ one is better at achieving lower out-of-sample mean-squared error? \*\*
 
 ## 2) Classification and retrospective sampling
 
+Likelihood that one will default based on their credit
+history(Good,Poor,Terrible).
+
 ![](ECO-395M-exercise-2_files/figure-markdown_strict/problem%202.1-1.png)
 
 **Figure 1:** Bar plot showing average default probability by credit
 history.
 
+<table class="kable_wrapper">
+<tbody>
+<tr>
+<td>
+
 <table>
 <thead>
 <tr class="header">
-<th></th>
+<th style="text-align: left;"></th>
 <th style="text-align: right;">.</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>(Intercept)</td>
-<td style="text-align: right;">-0.61</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">-0.98</td>
 </tr>
 <tr class="even">
-<td>duration</td>
+<td style="text-align: left;">duration</td>
 <td style="text-align: right;">0.03</td>
 </tr>
 <tr class="odd">
-<td>amount</td>
+<td style="text-align: left;">amount</td>
 <td style="text-align: right;">0.00</td>
 </tr>
 <tr class="even">
-<td>installment</td>
-<td style="text-align: right;">0.19</td>
+<td style="text-align: left;">installment</td>
+<td style="text-align: right;">0.26</td>
 </tr>
 <tr class="odd">
-<td>age</td>
+<td style="text-align: left;">age</td>
 <td style="text-align: right;">-0.02</td>
 </tr>
 <tr class="even">
-<td>historypoor</td>
-<td style="text-align: right;">-1.13</td>
+<td style="text-align: left;">historypoor</td>
+<td style="text-align: right;">-1.18</td>
 </tr>
 <tr class="odd">
-<td>historyterrible</td>
-<td style="text-align: right;">-1.89</td>
+<td style="text-align: left;">historyterrible</td>
+<td style="text-align: right;">-1.95</td>
 </tr>
 <tr class="even">
-<td>purposeedu</td>
-<td style="text-align: right;">0.65</td>
+<td style="text-align: left;">purposeedu</td>
+<td style="text-align: right;">1.02</td>
 </tr>
 <tr class="odd">
-<td>purposegoods/repair</td>
-<td style="text-align: right;">0.08</td>
+<td style="text-align: left;">purposegoods/repair</td>
+<td style="text-align: right;">0.23</td>
 </tr>
 <tr class="even">
-<td>purposenewcar</td>
-<td style="text-align: right;">0.80</td>
+<td style="text-align: left;">purposenewcar</td>
+<td style="text-align: right;">1.02</td>
 </tr>
 <tr class="odd">
-<td>purposeusedcar</td>
-<td style="text-align: right;">-0.80</td>
+<td style="text-align: left;">purposeusedcar</td>
+<td style="text-align: right;">-0.83</td>
 </tr>
 <tr class="even">
-<td>foreigngerman</td>
-<td style="text-align: right;">-1.04</td>
+<td style="text-align: left;">foreigngerman</td>
+<td style="text-align: right;">-0.94</td>
 </tr>
 </tbody>
 </table>
+
+</td>
+<td>
 
 <table>
 <thead>
@@ -106,6 +117,11 @@ history.
 <tr class="odd">
 <td style="text-align: left;">terrible</td>
 <td style="text-align: right;">293</td>
+</tr>
+</tbody>
+</table>
+
+</td>
 </tr>
 </tbody>
 </table>
@@ -138,12 +154,6 @@ Starting by spliting train/test data with `hotels_dev.csv`, and making
 baseline 1 and baseline 2 with the requirements given.
 
 For best linear model, we added some meaningful interaction variables.
-
-    ## Warning: In lm.fit(x, y, offset = offset, singular.ok = singular.ok, ...) :
-    ##  extra argument 'family' will be disregarded
-
-    ## Warning: In lm.fit(x, y, offset = offset, singular.ok = singular.ok, ...) :
-    ##  extra argument 'family' will be disregarded
 
     ## 'data.frame':    45000 obs. of  22 variables:
     ##  $ hotel                         : chr  "City_Hotel" "City_Hotel" "Resort_Hotel" "Resort_Hotel" ...
@@ -185,11 +195,11 @@ used only four features.
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">0</td>
-<td style="text-align: right;">8276</td>
+<td style="text-align: right;">8284</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">1</td>
-<td style="text-align: right;">724</td>
+<td style="text-align: right;">716</td>
 </tr>
 </tbody>
 </table>
@@ -206,7 +216,7 @@ Percentage of out-of-sample correct classifications is,
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: right;">91.96</td>
+<td style="text-align: right;">92.04</td>
 </tr>
 </tbody>
 </table>
@@ -225,13 +235,13 @@ all possible predictors expect arrival\_date.
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">0</td>
-<td style="text-align: right;">8156</td>
-<td style="text-align: right;">120</td>
+<td style="text-align: right;">8178</td>
+<td style="text-align: right;">106</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">1</td>
-<td style="text-align: right;">476</td>
-<td style="text-align: right;">248</td>
+<td style="text-align: right;">449</td>
+<td style="text-align: right;">267</td>
 </tr>
 </tbody>
 </table>
@@ -246,7 +256,7 @@ Percentage of out-of-sample correct classifications is,
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: right;">93.38</td>
+<td style="text-align: right;">93.83</td>
 </tr>
 </tbody>
 </table>
@@ -267,13 +277,13 @@ meaningful interaction variables.
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">0</td>
-<td style="text-align: right;">8153</td>
-<td style="text-align: right;">123</td>
+<td style="text-align: right;">8185</td>
+<td style="text-align: right;">99</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">1</td>
-<td style="text-align: right;">479</td>
-<td style="text-align: right;">245</td>
+<td style="text-align: right;">458</td>
+<td style="text-align: right;">258</td>
 </tr>
 </tbody>
 </table>
@@ -288,7 +298,7 @@ Percentage of out-of-sample correct classifications is,
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: right;">93.31</td>
+<td style="text-align: right;">93.81</td>
 </tr>
 </tbody>
 </table>
@@ -309,28 +319,28 @@ Validating the model by testing with entirely fresh data,
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: right;">0.7167718</td>
-<td style="text-align: right;">0.9726368</td>
+<td style="text-align: right;">0.7211225</td>
+<td style="text-align: right;">0.9776119</td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">0.6606482</td>
+<td style="text-align: right;">0.6617359</td>
 <td style="text-align: right;">0.9626866</td>
 </tr>
 <tr class="odd">
-<td style="text-align: right;">0.5940831</td>
+<td style="text-align: right;">0.5984338</td>
 <td style="text-align: right;">0.9552239</td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">0.5266478</td>
-<td style="text-align: right;">0.9427861</td>
+<td style="text-align: right;">0.5325212</td>
+<td style="text-align: right;">0.9452736</td>
 </tr>
 <tr class="odd">
-<td style="text-align: right;">0.4596476</td>
-<td style="text-align: right;">0.9253731</td>
+<td style="text-align: right;">0.4611703</td>
+<td style="text-align: right;">0.9303483</td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">0.3933000</td>
-<td style="text-align: right;">0.9054726</td>
+<td style="text-align: right;">0.3980857</td>
+<td style="text-align: right;">0.9129353</td>
 </tr>
 </tbody>
 </table>
@@ -345,6 +355,7 @@ dataset `hotels_val.csv`
 
 We tried generating ROC with R package `ROCR`
 ![](ECO-395M-exercise-2_files/figure-markdown_strict/problem%203.2.2-1.png)
+
 **Figure 2:** Using ROCR package, plot shows True Positive Rate against
 the False Postive Rate for different threshold t. This took less time!
 Simple and Fast!
@@ -371,114 +382,106 @@ children
 <tbody>
 <tr class="odd">
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">16.25783</td>
-<td style="text-align: right;">18</td>
+<td style="text-align: right;">26.44073</td>
+<td style="text-align: right;">32</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">2</td>
-<td style="text-align: right;">19.87360</td>
-<td style="text-align: right;">23</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">3</td>
-<td style="text-align: right;">19.21082</td>
-<td style="text-align: right;">18</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">16.23235</td>
-<td style="text-align: right;">14</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">5</td>
-<td style="text-align: right;">19.60883</td>
-<td style="text-align: right;">17</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">6</td>
-<td style="text-align: right;">18.81752</td>
-<td style="text-align: right;">22</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">7</td>
-<td style="text-align: right;">18.85148</td>
-<td style="text-align: right;">17</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">8</td>
-<td style="text-align: right;">21.35309</td>
+<td style="text-align: right;">23.02324</td>
 <td style="text-align: right;">24</td>
 </tr>
 <tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">23.41067</td>
+<td style="text-align: right;">25</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">22.68622</td>
+<td style="text-align: right;">19</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">20.74658</td>
+<td style="text-align: right;">22</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">19.39443</td>
+<td style="text-align: right;">21</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">19.46407</td>
+<td style="text-align: right;">18</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">23.17621</td>
+<td style="text-align: right;">19</td>
+</tr>
+<tr class="odd">
 <td style="text-align: right;">9</td>
-<td style="text-align: right;">21.36310</td>
-<td style="text-align: right;">17</td>
+<td style="text-align: right;">19.65619</td>
+<td style="text-align: right;">16</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">10</td>
-<td style="text-align: right;">22.11810</td>
-<td style="text-align: right;">22</td>
+<td style="text-align: right;">18.62772</td>
+<td style="text-align: right;">17</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">11</td>
-<td style="text-align: right;">22.62715</td>
-<td style="text-align: right;">29</td>
+<td style="text-align: right;">17.28727</td>
+<td style="text-align: right;">13</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">12</td>
-<td style="text-align: right;">19.55053</td>
-<td style="text-align: right;">20</td>
+<td style="text-align: right;">19.89755</td>
+<td style="text-align: right;">23</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">13</td>
-<td style="text-align: right;">19.63405</td>
-<td style="text-align: right;">17</td>
+<td style="text-align: right;">19.47573</td>
+<td style="text-align: right;">20</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">14</td>
-<td style="text-align: right;">22.58145</td>
-<td style="text-align: right;">20</td>
+<td style="text-align: right;">18.70615</td>
+<td style="text-align: right;">19</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">15</td>
-<td style="text-align: right;">20.49343</td>
-<td style="text-align: right;">15</td>
+<td style="text-align: right;">19.62264</td>
+<td style="text-align: right;">17</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">16</td>
-<td style="text-align: right;">22.05827</td>
-<td style="text-align: right;">22</td>
+<td style="text-align: right;">16.99710</td>
+<td style="text-align: right;">18</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">17</td>
-<td style="text-align: right;">19.29131</td>
+<td style="text-align: right;">18.01732</td>
 <td style="text-align: right;">21</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">18</td>
-<td style="text-align: right;">22.81697</td>
-<td style="text-align: right;">23</td>
+<td style="text-align: right;">17.70746</td>
+<td style="text-align: right;">17</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">19</td>
-<td style="text-align: right;">21.83196</td>
-<td style="text-align: right;">20</td>
+<td style="text-align: right;">18.98224</td>
+<td style="text-align: right;">22</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">20</td>
-<td style="text-align: right;">17.42815</td>
-<td style="text-align: right;">23</td>
+<td style="text-align: right;">18.68049</td>
+<td style="text-align: right;">19</td>
 </tr>
 </tbody>
 </table>
-
-    ##   fold       variable    value
-    ## 1    1 expected_child 16.25783
-    ## 2    2 expected_child 19.87360
-    ## 3    3 expected_child 19.21082
-    ## 4    4 expected_child 16.23235
-    ## 5    5 expected_child 19.60883
-    ## 6    6 expected_child 18.81752
 
 ![](ECO-395M-exercise-2_files/figure-markdown_strict/problem%203.2.4-1.png)
 **Figure 1:** Generated 20 folds having information of expected number

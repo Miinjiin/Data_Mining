@@ -94,7 +94,15 @@ colnames(Xtilde_test)
 
 ```
 
+
+
+
+
+
 ## 2) Classification and retrospective sampling 
+
+
+Likelihood that one will default based on their credit history(Good,Poor,Terrible).
 
 ```{r problem 2.1, message=FALSE, echo=FALSE, warning=FALSE}
 # import data set
@@ -134,21 +142,27 @@ logistic=glm(Default ~ duration+amount+installment+age+history+purpose+foreign, 
 
 coef_df<- coef(logistic)%>% as.data.frame %>% round(2)
 
-knitr::kable(coef_df,"simple")
-
 # count values by history group
 credit_history = credit %>%
   group_by(history) %>%
   summarise(count = n ()) %>%
   as.data.frame()
 
-knitr::kable(credit_history,col.names = c("history", "count"),"simple")
+knitr::kables(
+  list(
+  knitr:: kable(coef_df, valign='t'),
+  knitr:: kable(credit_history,col.names = c("history", "count"))
+  )
+)
 ```
 
 
 The bar plot shows that a borrower with a 'good' credit rating history has the highest probability of defaulting on a loan, followed by 'poor,' and 'terrible.' Similar result is again found in the logistic regression model, which shows that 'historyterrible' and 'historybad' are more negatively correlated with 'Default,' than the intercept (historygood). Both results indicate that a borrower with a good credit history is more likely to default on his/her loan, which is **highly counter-intuitive.**
 
 This data set is not appropriate for predicting "high" vs. "low" probably of default when screening prospective borrowers. Sampling defaulted loans and matching similar kinds of loans will inevitably lead to a biased prediction because the majority of samples collected are borrowers with poor and terrible credit rating **as shown above.** Rather, the bank should use a random selection when collecting samples to better predict the probability of defaults.
+
+
+
 
 
 
@@ -163,7 +177,7 @@ Starting by spliting train/test data with `hotels_dev.csv`, and making baseline 
 For best linear model, we added some meaningful interaction variables.
 
 
-```{r problem 3.1, message=FALSE, echo=FALSE}
+```{r problem 3.1, message=FALSE, echo=FALSE, warning=FALSE}
 
 dev=read.csv('Data/hotels_dev.csv')
 
@@ -227,6 +241,8 @@ confusion_b_best=table(y=dev_test$children, yhat=yhat_b_best)
 Under is the predictions on the testing set.
 We will use this to measure out-of-sample performance.
 
+
+
 **Table1:** Confusion matrix for baseline 1 model, a small model that used only four features.
 ```{r problem 3.1.1, message=FALSE, echo=FALSE}
 
@@ -239,6 +255,10 @@ Percentage of out-of-sample correct classifications is,
 
 knitr:: kable(round(sum(diag(confusion_b1))/sum(confusion_b1) * 100, 2))
 ```
+
+
+
+
 
 
 **Table2:** Confusion matrix for baseline 2 model, a big model that used all possible predictors expect arrival_date.
@@ -254,6 +274,12 @@ knitr:: kable(round(sum(diag(confusion_b2))/sum(confusion_b2) * 100, 2))
 ```
 Having better result than baseline 1 model
 
+
+
+
+
+
+
 **Table3:** Confusion matrix for best linear model we made, adding meaningful interaction variables.
 ```{r problem 3.1.3, message=FALSE, echo=FALSE}
 
@@ -266,6 +292,9 @@ Percentage of out-of-sample correct classifications is,
 knitr:: kable(round(sum(diag(confusion_b_best))/sum(confusion_b_best) * 100, 2))
 ```
 Model we made has similar result to baseline 2 model
+
+
+
 
 
 
@@ -351,7 +380,13 @@ perf <- performance(pred,"tpr","fpr")
 plot(perf, main="ROC curve generated from ROCR package", col='blue')
 
 ```
+
+
 **Figure 2:** Using ROCR package, plot shows True Positive Rate against the False Postive Rate for different threshold t. This took less time! Simple and Fast!
+
+
+
+
 
 
 ### Model validation : STEP 2 ### 
@@ -407,7 +442,6 @@ knitr::kable(fold_cv_df)
 ```{r problem 3.2.4, message=FALSE, echo=FALSE, fig.width = 17}
 
 df2 <- melt(fold_cv_df, id.vars='fold')
-head(df2)
 ggplot(df2, aes(x=fold, y=value, fill=variable),ylim=c(0, 40)) +
   geom_bar(stat='identity', position=position_dodge(), width=0.8) + 
     labs(title="Expected vs Actual num of children for 20 folds",
@@ -415,7 +449,6 @@ ggplot(df2, aes(x=fold, y=value, fill=variable),ylim=c(0, 40)) +
        y="Number of bookings having children") +
   scale_x_continuous(breaks=seq(1,20,1)) +
   scale_y_continuous(expand=expansion(mult=c(0,0.05)))
-
 
 ```
 **Figure 1:** Generated 20 folds having information of expected number of bookings with children and actual number of bookings with children.
