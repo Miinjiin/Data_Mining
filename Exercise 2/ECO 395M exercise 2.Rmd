@@ -97,13 +97,16 @@ colnames(Xtilde_test)
 ## 2) Classification and retrospective sampling 
 
 ```{r problem 2.1, message=FALSE, echo=FALSE, warning=FALSE}
+# import data set
 credit=read.csv('Data/german_credit.csv')
 
+# group by history and calculate mean default value for each
 default=credit %>%
   group_by(history) %>%
   summarize(average_default=mean(Default)) %>%
   as.data.frame()
 
+# make bar plot of default probability by credit history
 default %>%
   ggplot(aes(x=history, y=average_default, fill=history)) +
   geom_col()+
@@ -120,6 +123,7 @@ default %>%
 
 
 ```{r problem 2.2, message=FALSE, echo=FALSE, warning=FALSE}
+
 # split training and testing data
 credit_split=initial_split(credit, prop= 0.8)
 credit_train=training(credit_split)
@@ -130,16 +134,15 @@ logistic=glm(Default ~ duration+amount+installment+age+history+purpose+foreign, 
 
 coef_df<- coef(logistic)%>% as.data.frame %>% round(2)
 
-knitr::kable(coef_df)
+knitr::kable(coef_df,"simple")
 
-
+# count values by history group
 credit_history = credit %>%
   group_by(history) %>%
   summarise(count = n ()) %>%
   as.data.frame()
 
-summarise(credit_history)
-
+knitr::kable(credit_history,col.names = c("history", "count"),"simple")
 ```
 
 
@@ -153,6 +156,13 @@ This data set is not appropriate for predicting "high" vs. "low" probably of def
 
 ### Model building
 
+We will build predictive model for whether a hotel booking will have children on it.
+
+Starting by spliting train/test data with `hotels_dev.csv`, and making baseline 1 and baseline 2 with the requirements given. 
+
+For best linear model, we added some meaningful interaction variables.
+
+
 ```{r problem 3.1, message=FALSE, echo=FALSE}
 
 dev=read.csv('Data/hotels_dev.csv')
@@ -163,28 +173,30 @@ dev_train = training(dev_split)
 dev_test = testing(dev_split)
 
 # baseline1: using only four features
+
 b1 = dev %>%
   select(children, market_segment, adults, customer_type, is_repeated_guest)
 # building linear model using four features
 b1_lm = lm(children ~ market_segment + adults + customer_type +is_repeated_guest, data=dev_train, family=binomial)
 # examine the fitted coefficients
-coef(b1_lm) %>% round(3)
+coef1= coef(b1_lm) %>% round(3)
 
 
 # baseline2: using all predictor except the arrival date
+
 b2 = dev[, colnames(dev)[colnames(dev)!='arrival_date']]
 # building linear model
 b2_lm=lm(children ~ . - arrival_date, data=dev_train, family=binomial)
 # examine the fitted coefficients
-coef(b1_lm) %>% round(3)
+coef2= coef(b1_lm) %>% round(3)
 
 
 # build the best linear model, similar method that we used for number 1, and we'll add some interaction variable which seems highly correlated
 
 # let's see columns names first and pick ones that seems related 
-colnames(dev)
+colname = colnames(dev)
 # see if the type is integer or character
-str(dev)
+type = str(dev)
 # result: some columns are int, some columns are chr
 
 # Add interaction variables and made sample best linear model
@@ -194,111 +206,160 @@ b_best_lm=lm(children ~ . - arrival_date + adults:stays_in_weekend_nights + adul
 
 # calculating the confusion matrix which tabulates predicted class versus actual class , tresholding predicted probabilities at 0.5
 
+# Confusion matrix for baseline 1
 phat_b1=predict(b1_lm,dev_test)
 yhat_b1=ifelse(phat_b1 > 0.5, 1, 0)
 confusion_b1=table(y=dev_test$children, yhat=yhat_b1)
 
+# Confusion matrix for baseline 2
 phat_b2=predict(b2_lm,dev_test)
 yhat_b2=ifelse(phat_b2 > 0.5, 1, 0)
 confusion_b2=table(y=dev_test$children, yhat=yhat_b2)
 
+# Confusion matrix for best linear model we made
 phat_b_best=predict(b_best_lm,dev_test)
 yhat_b_best=ifelse(phat_b_best > 0.5, 1, 0)
 confusion_b_best=table(y=dev_test$children, yhat=yhat_b_best)
 
-knitr::kable(confusion_b1)
-knitr::kable(confusion_b2)
-knitr::kable(confusion_b_best)
-
-
 
 ```
+
+Under is the predictions on the testing set.
+We will use this to measure out-of-sample performance.
+
+**Table1:** Confusion matrix for baseline 1 model, a small model that used only four features.
+```{r problem 3.1.1, message=FALSE, echo=FALSE}
+
+knitr:: kable(confusion_b1)
+```
+We can check it never predicted children.
+
+Percentage of out-of-sample correct classifications is,
+```{r problem 3.1.1.1, message=FALSE, echo=FALSE}
+
+knitr:: kable(round(sum(diag(confusion_b1))/sum(confusion_b1) * 100, 2))
+```
+
+
+**Table2:** Confusion matrix for baseline 2 model, a big model that used all possible predictors expect arrival_date.
+```{r problem 3.1.2, message=FALSE, echo=FALSE}
+
+knitr:: kable(confusion_b2)
+```
+
+Percentage of out-of-sample correct classifications is,
+```{r problem 3.1.2.1, message=FALSE, echo=FALSE}
+
+knitr:: kable(round(sum(diag(confusion_b2))/sum(confusion_b2) * 100, 2))
+```
+Having better result than baseline 1 model
+
+**Table3:** Confusion matrix for best linear model we made, adding meaningful interaction variables.
+```{r problem 3.1.3, message=FALSE, echo=FALSE}
+
+knitr:: kable(confusion_b_best)
+```
+
+Percentage of out-of-sample correct classifications is,
+```{r problem 3.1.3.1, message=FALSE, echo=FALSE}
+
+knitr:: kable(round(sum(diag(confusion_b_best))/sum(confusion_b_best) * 100, 2))
+```
+Model we made has similar result to baseline 2 model
 
 
 
 ### Model validation : STEP 1 ### 
 
+Validating the model by testing with entirely fresh data, `hotels_val.csv`
+
 ```{r problem 3.2.1, message=FALSE, echo=FALSE}
 val=read.csv('Data/hotels_val.csv')
 
-# split into training and testing set
-val_split = initial_split(val, prop = 0.8)
-val_train = training(val_split)
-val_test = testing(val_split)
-
-dev_split = initial_split(dev, prop = 0.8)
-dev_train = training(dev_split)
-dev_test = testing(dev_split)
-
-b_best_lm=lm(children ~ . - arrival_date + adults:stays_in_weekend_nights + adults:total_of_special_requests + adults:average_daily_rate + average_daily_rate:total_of_special_requests, data=dev_train)
+#b_best_lm=lm(children ~ . - arrival_date + adults:stays_in_weekend_nights + adults:total_of_special_requests + adults:average_daily_rate + average_daily_rate:total_of_special_requests, data=dev_train)
 
 
-phat_val_best=predict(b_best_lm, val_test, type = "response")
+phat_val_best=predict(b_best_lm, val, type = "response")
 
 
-roc= foreach(i=1:90, .combine='c') %do% {
-  yhat_val_best=ifelse(phat_val_best >= (i/100), 1, 0)
-  confusion_val_best=table(y=val_test$children, yhat=yhat_val_best)
-  TN=confusion_val_best[1,1]
-  FP=confusion_val_best[1,2]
-  FN=confusion_val_best[2,1]
-  TP=confusion_val_best[2,2]
-  FPR=FP/(TN+FP)
-  TPR=TP/(FN+TP)
-  TPR
-  FPR
-}
+#roc= foreach(i=1:90, .combine='c') %do% {
+#  yhat_val_best=ifelse(phat_val_best >= (i/100), 1, 0)
+#  confusion_val_best=table(y=val$children, yhat=yhat_val_best)
+#  TN=confusion_val_best[1,1]
+#  FP=confusion_val_best[1,2]
+#  FN=confusion_val_best[2,1]
+#  TP=confusion_val_best[2,2]
+#  FPR=FP/(TN+FP)
+#  TPR=TP/(FN+TP)
+#  TPR
+#  FPR
+#}
+#roc
 
 roc_tpr= foreach(i=1:90, .combine='c') %do% {
   yhat_val_best=ifelse(phat_val_best >= (i/100), 1, 0)
-  confusion_val_best=table(y=val_test$children, yhat=yhat_val_best)
+  confusion_val_best=table(y=val$children, yhat=yhat_val_best)
   TN=confusion_val_best[1,1]
   FP=confusion_val_best[1,2]
   FN=confusion_val_best[2,1]
   TP=confusion_val_best[2,2]
-  FPR=FP/(TN+FP)
   TPR=TP/(FN+TP)
   TPR
 }
 
 roc_fpr= foreach(i=1:90, .combine='c') %do% {
   yhat_val_best=ifelse(phat_val_best >= (i/100), 1, 0)
-  confusion_val_best=table(y=val_test$children, yhat=yhat_val_best)
+  confusion_val_best=table(y=val$children, yhat=yhat_val_best)
   TN=confusion_val_best[1,1]
   FP=confusion_val_best[1,2]
   FN=confusion_val_best[2,1]
   TP=confusion_val_best[2,2]
   FPR=FP/(TN+FP)
-  TPR=TP/(FN+TP)
   FPR
   }
 
-roc_df=data.frame(roc_tpr,roc_fpr)
+roc_df=data.frame(roc_fpr,roc_tpr)
 
-knitr::kable(roc_df)
+knitr::kable(head(roc_df),col.names=c("ROC_FPR","ROC_TPR"))
 
 ```
+
+To make ROC curve plot, we made a dataframe for False Positive Rate value and True Postive Rate value for each threshold t.
+
+
 ```{r problem 3.2.1.2, message=FALSE, echo=FALSE}
 ggplot(roc_df)+
-  geom_line(aes(x=roc_fpr, y=roc_tpr)) +
-  labs(title="ROC curve",
-       x="FPR",
-       y="TPR") +
-       #subtitle="(Year 1896 Olympic Medalist)") +
+  geom_line(aes(x=roc_fpr, y=roc_tpr), color="blue") +
+  labs(title="ROC curve for best linear model we built",
+       x="FPR(False Positive Rate)",
+       y="TPR(True Postive Rate)") +
   theme_classic() +
   theme(plot.title = element_text(face="bold"))
 
 ```
 
+**Figure 1:** ROC curve(TPR(t)vsFPR(t)) for our best model, using new dataset `hotels_val.csv`
+
+
+We tried generating ROC with R package `ROCR`
 ```{r problem 3.2.2, message=FALSE, echo=FALSE}
 
-phat_val_best=predict(b_best_lm, val_test, type = "response")
-val_test$pred_child <- phat_val_best
-pred <- prediction(val_test$pred_child, val_test$children)
+phat_val_best=predict(b_best_lm, val, type = "response")
+val$pred_child <- phat_val_best
+pred <- prediction(val$pred_child, val$children)
 perf <- performance(pred,"tpr","fpr")
-plot(perf)
+plot(perf, main="ROC curve generated from ROCR package", col='blue')
 
 ```
+**Figure 2:** Using ROCR package, plot shows True Positive Rate against the False Postive Rate for different threshold t. This took less time! Simple and Fast!
+
+
+### Model validation : STEP 2 ### 
+
+Let's create 20 folds of `hotels_val.csv`.
+For each fold set, we will have 250 bookings and will get expected number of childrens and actual number of childrens. Will compare this expected vs actual number of children. 
+
+**Table 1:** Generated 20 folds each having information of expected number of bookings with children and actual number of bookings with children
 ```{r problem 3.2.3, message=FALSE, echo=FALSE, error=FALSE, warning=FALSE}
 
 # create 20 folds
@@ -342,22 +403,22 @@ knitr::kable(fold_cv_df)
 
 
 
-```{r problem 3.2.4, message=FALSE, echo=FALSE, fig.width = 25}
 
-
+```{r problem 3.2.4, message=FALSE, echo=FALSE, fig.width = 17}
 
 df2 <- melt(fold_cv_df, id.vars='fold')
 head(df2)
 ggplot(df2, aes(x=fold, y=value, fill=variable),ylim=c(0, 40)) +
-    geom_bar(stat='identity', position=position_dodge(), width=0.8) + 
+  geom_bar(stat='identity', position=position_dodge(), width=0.8) + 
+    labs(title="Expected vs Actual num of children for 20 folds",
+       x="K Fold",
+       y="Number of bookings having children") +
   scale_x_continuous(breaks=seq(1,20,1)) +
   scale_y_continuous(expand=expansion(mult=c(0,0.05)))
 
 
-
-
 ```
-
+**Figure 1:** Generated 20 folds having information of expected number of bookings with children and actual number of bookings with children.
 
 
 
