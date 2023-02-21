@@ -27,6 +27,9 @@ library(reshape2)
 ** Between linear model and K-nearest-neighbor regression model, which one is better at achieving lower
 out-of-sample mean-squared error? **
 
+First of all, we built the best linear model for price that we can. 
+To evaluate the model performance we making, we compared the rmse of the model with the medium model.
+
 ```{r problem 1, message=FALSE, echo=FALSE, warning=FALSE}
 # read the data
 data(SaratogaHouses)
@@ -40,7 +43,7 @@ saratoga_test = testing(saratoga_split)
 
 # medium model we did in linear model class
 lm_medium = lm(price ~ . - pctCollege - sewer - waterfront - landValue - newConstruction, data=saratoga_train)
-rmse(lm_medium, saratoga_test)
+rmse_for_med = rmse(lm_medium, saratoga_test)
 #coef(lm_medium) %>% round(0)
 
 # medium model we did in AIC class
@@ -48,13 +51,32 @@ rmse(lm_medium, saratoga_test)
 
 # add meaningful interaction variable 
 lm_answer = lm(price ~ . +  (livingArea:lotSize + livingArea:fuel + livingArea:centralAir + bedrooms:bathrooms + heating:fuel) - pctCollege - sewer - waterfront - landValue - newConstruction, data=saratoga_train)
-rmse(lm_answer, saratoga_test)
+rmse_for_ours=rmse(lm_answer, saratoga_test)
+
+# add not meaningful interaction variable
+lm_notanswer= lm(price ~ . +  (age:livingArea + centralAir:lotSize) - pctCollege - sewer - waterfront - landValue - newConstruction, data=saratoga_train)
+rmse_for_not_meaningful_interaction=rmse(lm_notanswer, saratoga_test)
+
+# medium rmse: 61107.2 , answer rmse: 59942.05 , notanswer rmse: 60834.71
+```
+
+```{r problem 1.1, message=FALSE, echo=FALSE, warning=FALSE}
+medium_rmse<-rmse(lm_medium,saratoga_test)
+answer_rmse<-rmse(lm_answer,saratoga_test)
 
 # add not meaningful interaction variable
 lm_notanswer= lm(price ~ . +  (age:livingArea + centralAir:lotSize) - pctCollege - sewer - waterfront - landValue - newConstruction, data=saratoga_train)
 rmse(lm_notanswer, saratoga_test)
 
 # medium rmse: 61107.2 , answer rmse: 59942.05 , notanswer rmse: 60834.71
+```
+
+`r medium_rmse`
+
+`r answer_rmse`
+
+
+```{r problem 1.2, message=FALSE, echo=FALSE, warning=FALSE}
 
 #2) Best KNN regression model
 
@@ -348,7 +370,7 @@ knitr::kable(head(roc_df),col.names=c("ROC_FPR","ROC_TPR"))
 
 ```
 
-To make ROC curve plot, we made a dataframe for False Positive Rate value and True Postive Rate value for each threshold t.
+To make ROC curve plot, we made a dataframe for False Positive Rate value and True Postive Rate value for each threshold t (shows only parts of the rows with head(df))
 
 
 ```{r problem 3.2.1.2, message=FALSE, echo=FALSE}
@@ -448,7 +470,7 @@ ggplot(df2, aes(x=fold, y=value, fill=variable),ylim=c(0, 40)) +
   scale_y_continuous(expand=expansion(mult=c(0,0.05)))
 
 ```
-**Figure 1:** Generated 20 folds having information of expected number of bookings with children and actual number of bookings with children.
+**Figure 1:** Generated 20 folds having information of expected number of bookings with children and actual number of bookings with children. (Red=expected, Green=actual)
 
 
 
