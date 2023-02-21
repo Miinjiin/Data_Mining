@@ -27,7 +27,10 @@ library(reshape2)
 ** Between linear model and K-nearest-neighbor regression model, which one is better at achieving lower
 out-of-sample mean-squared error? **
 
-First of all, we built the best linear model for price that we can. 
+We will use `SaratogaHouses` data to build optimal pricing model.
+Separating data from SaratogaHouses data into a training set and testing set, and will use testing set for assessing model's out-of-sample performance. 
+
+First of all, we made the best linear model for price by adding some meaningful interaction variables like `livingArea:lotSize` `livingArea:fuel` `livingArea:centralAir` `bedrooms:bathrooms` `heating:fuel`
 To evaluate the model performance we making, we compared the rmse of the model with the medium model.
 
 ```{r problem 1, message=FALSE, echo=FALSE, warning=FALSE}
@@ -56,24 +59,19 @@ rmse_for_ours=rmse(lm_answer, saratoga_test)
 # add not meaningful interaction variable
 lm_notanswer= lm(price ~ . +  (age:livingArea + centralAir:lotSize) - pctCollege - sewer - waterfront - landValue - newConstruction, data=saratoga_train)
 rmse_for_not_meaningful_interaction=rmse(lm_notanswer, saratoga_test)
-
-# medium rmse: 61107.2 , answer rmse: 59942.05 , notanswer rmse: 60834.71
 ```
 
 ```{r problem 1.1, message=FALSE, echo=FALSE, warning=FALSE}
 medium_rmse<-rmse(lm_medium,saratoga_test)
 answer_rmse<-rmse(lm_answer,saratoga_test)
 
-# add not meaningful interaction variable
-lm_notanswer= lm(price ~ . +  (age:livingArea + centralAir:lotSize) - pctCollege - sewer - waterfront - landValue - newConstruction, data=saratoga_train)
-rmse(lm_notanswer, saratoga_test)
+medium_rmse
+answer_rmse
 
-# medium rmse: 61107.2 , answer rmse: 59942.05 , notanswer rmse: 60834.71
 ```
 
-`r medium_rmse`
-
-`r answer_rmse`
+Top one is rmse is for medium_rmse, below one is rmse for model we made.
+Our model seems to do better at achieving lower out-ot-sample mean-squared error.
 
 
 ```{r problem 1.2, message=FALSE, echo=FALSE, warning=FALSE}
@@ -308,7 +306,8 @@ knitr::kables(
   )
 )
 ```
-Model we made has similar result to baseline 2 model
+
+Model we made has slightly higher result to baseline 2 model
 
 
 
