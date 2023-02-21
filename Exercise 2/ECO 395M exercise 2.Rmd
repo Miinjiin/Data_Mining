@@ -266,6 +266,72 @@ plot(perf)
 ```
 ```{r problem 3.2.3, message=FALSE, echo=FALSE}
 
+# create 20 folds
+K=20
+
+# create specific fold IDs for each row
+val=val %>%
+  mutate(fold_id=rep(1:K, length=nrow(val)) %>% sample())
+
+# split into training and testing set
+val_split = initial_split(val, prop = 0.8)
+val_train = training(val_split)
+val_test = testing(val_split)
+
+# making 
+expected_child=c()
+actual_child=c()
+
+fold_cv = foreach(i=1:K, .combine='rbind') %do% {
+  fold=val%>%filter(fold_id==i)
+  model_cv=glm(children ~ . - arrival_date+adults:stays_in_weekend_nights + adults:total_of_special_requests + adults:average_daily_rate + average_daily_rate:total_of_special_requests, data=val_train)
+  phat_cv=predict(model_cv, fold, type="response")
+  sum_phat=sum(phat_cv)
+  expected_child=c(expected_child,sum_phat)
+  sum_actual=sum(fold$children)
+  actual_child=c(actual_child,sum_actual)
+}
+
+fold=c(1:20)
+
+fold_cv_df=data.frame(fold,expected_child,actual_child)
+
+fold_cv_df
+
+ggplot(fold_cv_df, aes(x=fold)) +
+  geom_col(aes(x=fold, y=expected_child, color='expected_child')) +
+  geom_col(aes(x=fold, y=actual_child, color='actual_child')) 
 
 
+
+
+  labs(y="Numbers of Bookings", x = "Fold", title = "Actual vs. Expected number of bookings With Children")+
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))+
+  guides(color = guide_legend(title=""))
+
+
+
+
+
+fold_cv = foreach(i=1:K, .combine='rbind') %do% {
+  train_cv=filter(fold_cv, fold_id==i)
+  test_cv=filter(fold_cv, fold_id !=i)
+  model_cv=glm(children ~ . - arrival_date+adults:stays_in_weekend_nights + adults:total_of_special_requests + adults:average_daily_rate + average_daily_rate:total_of_special_requests, data=val)
+  phat_cv=predict(model_cv, test_cv, type="response")
+  actual_cv=test_cv$children
+  phat_cv
+  actual_cv
+}
 ```
+
+
+
+
+
+
+
+
+
+
+
+
