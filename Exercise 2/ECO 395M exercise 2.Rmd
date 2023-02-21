@@ -2,7 +2,7 @@
 title: "ECO 395M exercise 2"
 author: "Minjin Kang, Paul Park"
 date: "2023-02-18"
-output: html_document
+output: md_document
 ---
 
 ```{r setup, include=FALSE}
@@ -18,6 +18,7 @@ library(tidyverse)
 library(mosaic)
 library(dplyr)
 library(ROCR)
+library(reshape2)
 
 ```
 
@@ -86,9 +87,9 @@ colnames(Xtilde_test)
 #}
 
 # KNN with the optimal value K and getting RMSE
-knn =knnreg(price ~ lotSize+age+livingArea+bedrooms+fireplaces+bathrooms+rooms+heating+fuel+centralAir, data=Xtilde_train, k=k_grid[which.min(finding_smallest_k)])
+#knn =knnreg(price ~ lotSize+age+livingArea+bedrooms+fireplaces+bathrooms+rooms+heating+fuel+centralAir, data=Xtilde_train, k=k_grid[which.min(finding_smallest_k)])
 
-rmse(knn,Xtilde_test)
+#rmse(knn,Xtilde_test)
 
 
 ```
@@ -213,6 +214,8 @@ knitr::kable(confusion_b_best)
 
 ```
 
+
+
 ### Model validation : STEP 1 ### 
 
 ```{r problem 3.2.1, message=FALSE, echo=FALSE}
@@ -223,26 +226,59 @@ val_split = initial_split(val, prop = 0.8)
 val_train = training(val_split)
 val_test = testing(val_split)
 
+dev_split = initial_split(dev, prop = 0.8)
+dev_train = training(dev_split)
+dev_test = testing(dev_split)
+
+b_best_lm=lm(children ~ . - arrival_date + adults:stays_in_weekend_nights + adults:total_of_special_requests + adults:average_daily_rate + average_daily_rate:total_of_special_requests, data=dev_train)
+
 
 phat_val_best=predict(b_best_lm, val_test, type = "response")
 
-roc = foreach(i=1:90, .combine='c') %do% {
+
+roc= foreach(i=1:90, .combine='c') %do% {
   yhat_val_best=ifelse(phat_val_best >= (i/100), 1, 0)
   confusion_val_best=table(y=val_test$children, yhat=yhat_val_best)
   TN=confusion_val_best[1,1]
   FP=confusion_val_best[1,2]
   FN=confusion_val_best[2,1]
   TP=confusion_val_best[2,2]
-  TPR=TP/(FN+TP)
   FPR=FP/(TN+FP)
+  TPR=TP/(FN+TP)
+  TPR
   FPR
+}
+
+roc_tpr= foreach(i=1:90, .combine='c') %do% {
+  yhat_val_best=ifelse(phat_val_best >= (i/100), 1, 0)
+  confusion_val_best=table(y=val_test$children, yhat=yhat_val_best)
+  TN=confusion_val_best[1,1]
+  FP=confusion_val_best[1,2]
+  FN=confusion_val_best[2,1]
+  TP=confusion_val_best[2,2]
+  FPR=FP/(TN+FP)
+  TPR=TP/(FN+TP)
   TPR
 }
 
-roc_df_=data.frame(roc)
+roc_fpr= foreach(i=1:90, .combine='c') %do% {
+  yhat_val_best=ifelse(phat_val_best >= (i/100), 1, 0)
+  confusion_val_best=table(y=val_test$children, yhat=yhat_val_best)
+  TN=confusion_val_best[1,1]
+  FP=confusion_val_best[1,2]
+  FN=confusion_val_best[2,1]
+  TP=confusion_val_best[2,2]
+  FPR=FP/(TN+FP)
+  TPR=TP/(FN+TP)
+  FPR
+  }
 
-roc_df
+roc_df=data.frame(roc_tpr,roc_fpr)
 
+knitr::kable(roc_df)
+
+```
+```{r problem 3.2.1.2, message=FALSE, echo=FALSE}
 ggplot(roc_df)+
   geom_line(aes(x=roc_fpr, y=roc_tpr)) +
   labs(title="ROC curve",
@@ -252,9 +288,8 @@ ggplot(roc_df)+
   theme_classic() +
   theme(plot.title = element_text(face="bold"))
 
-
-
 ```
+
 ```{r problem 3.2.2, message=FALSE, echo=FALSE}
 
 phat_val_best=predict(b_best_lm, val_test, type = "response")
@@ -303,6 +338,8 @@ fold_cv_df=data.frame(fold,expected_child,actual_child)
 knitr::kable(fold_cv_df)
 
 ```
+
+
 
 
 ```{r problem 3.2.4, message=FALSE, echo=FALSE, fig.width = 25}
