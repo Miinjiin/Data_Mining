@@ -215,7 +215,7 @@ knitr::kable(confusion_b_best)
 
 ### Model validation : STEP 1 ### 
 
-```{r problem 3.2, message=FALSE, echo=FALSE}
+```{r problem 3.2.1, message=FALSE, echo=FALSE}
 val=read.csv('Data/hotels_val.csv')
 
 # split into training and testing set
@@ -226,10 +226,8 @@ val_test = testing(val_split)
 
 phat_val_best=predict(b_best_lm, val_test, type = "response")
 
-t_grid=rep(0.05:0.95)
-
-roc = foreach(i=t_grid, .combine='rbind') %do% {
-  yhat_val_best=ifelse(phat_val_best >= i, 1, 0)
+roc = foreach(i=1:90, .combine='c') %do% {
+  yhat_val_best=ifelse(phat_val_best >= (i/100), 1, 0)
   confusion_val_best=table(y=val_test$children, yhat=yhat_val_best)
   TN=confusion_val_best[1,1]
   FP=confusion_val_best[1,2]
@@ -237,13 +235,16 @@ roc = foreach(i=t_grid, .combine='rbind') %do% {
   TP=confusion_val_best[2,2]
   TPR=TP/(FN+TP)
   FPR=FP/(TN+FP)
-  c(i=t_grid, TPR=TPR, FPR=FPR)
-}%>% as.data.frame()
+  FPR
+  TPR
+}
 
+roc_df_=data.frame(roc)
 
+roc_df
 
-ggplot(roc)+
-  geom_line(aes(x=FPR, y=TPR)) +
+ggplot(roc_df)+
+  geom_line(aes(x=roc_fpr, y=roc_tpr)) +
   labs(title="ROC curve",
        x="FPR",
        y="TPR") +
@@ -253,15 +254,18 @@ ggplot(roc)+
 
 
 
+```
+```{r problem 3.2.2, message=FALSE, echo=FALSE}
 
+phat_val_best=predict(b_best_lm, val_test, type = "response")
+val_test$pred_child <- phat_val_best
+pred <- prediction(val_test$pred_child, val_test$children)
+perf <- performance(pred,"tpr","fpr")
+plot(perf)
 
-
-
-
-
-
+```
+```{r problem 3.2.3, message=FALSE, echo=FALSE}
 
 
 
 ```
-
