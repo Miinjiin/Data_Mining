@@ -118,10 +118,17 @@ Xtest_full = data.frame(Xtilde_test,Xtest_add) %>% as.data.frame()
 
 k_grid=2:150
 
+
 finding_smallest_k = foreach(i=k_grid, .combine='c') %do% {
-  knn_k=knnreg(price ~ . - pctCollege - sewer - waterfront - landValue - newConstruction, data=Xtrain_full, k=i)
+  knn_k=knnreg(price ~ ., data=Xtrain_full, k=i)
   rmse_k=rmse(knn_k,Xtest_full)
 }
+
+
+#finding_smallest_k = foreach(i=k_grid, .combine='c') %do% {
+#  knn_k=knnreg(price ~ . - pctCollege - sewer - waterfront - landValue - #newConstruction, data=Xtrain_full, k=i)
+#  rmse_k=rmse(knn_k,Xtest_full)
+#}
 
 #rmse == min(finding_smallest_k$rmse)
 #rmse
@@ -148,7 +155,46 @@ After running the RMSE for different levels of K, we found that consistently one
 of the lowest estimators for Price given our KNN estimate is K=15. We will use
 K=10 as our value in the bakeoff against the the linear model.
 
+```{r problem 1.2.1, message=FALSE, echo=FALSE, warning=FALSE}
 
+compare_two_model= do(150)*{
+  compare_two_split = initial_split(SaratogaHouses, prop = 0.8)
+  compare_two_train = training(compare_two_split)
+  compare_two_test = testing(compare_two_split)
+  
+  Xtrain=model.matrix(~ . - pctCollege - sewer - waterfront - landValue - newConstruction - 1, data=compare_two_train)
+  Xtest=model.matrix(~ . - pctCollege - sewer - waterfront - landValue - newConstruction - 1, data=compare_two_test)
+  
+  ytrain=compare_two_train$price
+  ytest=compare_two_test$price
+  
+  scale_train = apply(Xtrain, 2, sd)
+  Xtilde_train = scale(Xtrain, scale=scale_train)
+  Xtilde_test = scale(Xtest, scale=scale_train)
+  
+  Xtrain_add <- subset(compare_two_train, select = c("pctCollege","sewer","waterfront","landValue","newConstruction"))
+  Xtest_add <- subset(compare_two_test, select = c("pctCollege","sewer","waterfront","landValue","newConstruction"))
+  
+  Xtrain_full = data.frame(Xtilde_train,Xtrain_add) %>% as.data.frame()
+  Xtest_full = data.frame(Xtilde_test,Xtest_add) %>% as.data.frame()
+  
+  knn_compare=knnreg(price ~ ., data=compare_two_train, k=best_k)
+  rmse(knn_compare,compare_two_test)
+
+  
+  lm_compare = lm(price ~ . +  (livingArea:lotSize + livingArea:fuel + livingArea:centralAir + bedrooms:bathrooms + heating:fuel) - pctCollege - sewer - waterfront - landValue - newConstruction, data=compare_two_train)
+  rmse(lm_compare,compare_two_test)
+  
+  c(rmse(knn_compare,compare_two_test),rmse(lm_compare,compare_two_test))
+
+}
+
+knitr:: kable(head(compare_two_model), col.names = c("RMSE_RNN","RMSE_LM"))
+```
+
+```{r problem 1.2.2, message=FALSE, echo=FALSE, warning=FALSE}
+knitr:: kable(colMeans(compare_two_model))
+```
 
 
 ## 2) Classification and retrospective sampling 
