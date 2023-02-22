@@ -70,8 +70,8 @@ answer_rmse
 
 ```
 
-Top one is rmse is for medium_rmse, below one is rmse for model we made.
-Our model seems to do better at achieving lower out-ot-sample mean-squared error.
+Top one is the RMSE is for the "medium_model" from class, while below is the RMSE of the best linear model we made.
+Our model does a slightly better job at achieving lower out-of-sample mean-squared error.
 
 
 ```{r problem 1.2, message=FALSE, echo=FALSE, warning=FALSE}
@@ -150,10 +150,8 @@ best_k
 
 ```
 
+To build the best KNN regression model, we first found the optimal K that produces the lowest RMSE value is `best_k`. This value was used in the "horse race" between the two model classes.
 
-After running the RMSE for different levels of K, we found that consistently one
-of the lowest estimators for Price given our KNN estimate is K=15. We will use
-K=10 as our value in the bakeoff against the the linear model.
 
 ```{r problem 1.2.1, message=FALSE, echo=FALSE, warning=FALSE}
 
@@ -189,12 +187,16 @@ compare_two_model= do(150)*{
 
 }
 
-knitr:: kable(head(compare_two_model), col.names = c("RMSE_RNN","RMSE_LM"))
+knitr:: kable(head(compare_two_model), col.names = c("RMSE_KNN","RMSE_LM"))
 ```
 
 ```{r problem 1.2.2, message=FALSE, echo=FALSE, warning=FALSE}
 knitr:: kable(colMeans(compare_two_model))
 ```
+
+After running 150 random train/test splits, we can observe that our linear model has the lower average out-of-sample RMSE compared to that of the KNN model.
+
+**Report on findings:**  On top of the "medium" model, we added what we considred to be meaningful interaction variables like `livingArea:lotSize` `livingArea:fuel` `livingArea:centralAir` `bedrooms:bathrooms` and `heating:fuel`. We assumed that the relationship between the two variables in each interaction were important in their effect on the housing price. For example, the effect of the living area size on the house price would be different depending on whether or not the house has a central air. Number of bedrooms would affect the house price differently based on how many bathrooms there are. A house with Four bedrooms with four bathrooms would certainly be priced differently compared to one with four bedrooms and one bathroom! Our inclusion of such interactions in the model proved to be a good decision as it out-performed both the "medium" model and the KNN model, achieving the lowest out-of-sample mean-squared error.
 
 
 ## 2) Classification and retrospective sampling 
@@ -257,7 +259,7 @@ knitr::kables(
 
 The bar plot shows that a borrower with a 'good' credit rating history has the highest probability of defaulting on a loan, followed by 'poor,' and 'terrible.' Similar result is again found in the logistic regression model, which shows that 'historyterrible' and 'historybad' are more negatively correlated with 'Default,' than the intercept (historygood). Both results indicate that a borrower with a good credit history is more likely to default on his/her loan, which is **highly counter-intuitive.**
 
-This data set is not appropriate for predicting "high" vs. "low" probably of default when screening prospective borrowers. Sampling defaulted loans and matching similar kinds of loans will inevitably lead to a biased prediction because the majority of samples collected are borrowers with poor and terrible credit rating **as shown above.** Rather, the bank should use a random selection when collecting samples to better predict the probability of defaults.
+This data set is not appropriate for predicting "high" vs. "low" probably of default when screening prospective borrowers. Sampling defaulted loans and matching similar kinds of loans will inevitably lead to a biased prediction because the majority of samples collected are borrowers with poor and terrible credit rating as shown above. Rather, the bank should use a random selection when collecting samples to better predict the probability of defaults.
 
 
 
