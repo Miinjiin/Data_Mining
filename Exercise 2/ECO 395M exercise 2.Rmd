@@ -24,14 +24,11 @@ library(reshape2)
 
 ## 1) Saratoga house prices
 
-** Between linear model and K-nearest-neighbor regression model, which one is better at achieving lower
-out-of-sample mean-squared error? **
+We used `SaratogaHouses` data to build the optimal pricing model.
+We first separated `SaratogaHouses` data into a training and a testing set, then used the testing set to assess the model's out-of-sample performance. 
 
-We will use `SaratogaHouses` data to build optimal pricing model.
-Separating data from SaratogaHouses data into a training set and testing set, and will use testing set for assessing model's out-of-sample performance. 
-
-First of all, we made the best linear model for price by adding some meaningful interaction variables like `livingArea:lotSize` `livingArea:fuel` `livingArea:centralAir` `bedrooms:bathrooms` `heating:fuel`
-To evaluate the model performance we making, we compared the rmse of the model with the medium model.
+For our best linear model, we added some interaction variables like `livingArea:lotSize` `livingArea:fuel` `livingArea:centralAir` `bedrooms:bathrooms` `heating:fuel`.
+We compared the RMSEs of the "medium" model and our model to evaluate the performance.
 
 ```{r problem 1, message=FALSE, echo=FALSE, warning=FALSE}
 # read the data
@@ -70,8 +67,7 @@ answer_rmse
 
 ```
 
-Top one is the RMSE is for the "medium_model" from class, while below is the RMSE of the best linear model we made.
-Our model does a slightly better job at achieving lower out-of-sample mean-squared error.
+Looking at above table, our model does a slightly better job at achieving lower out-of-sample mean-squared error.
 
 
 ```{r problem 1.2, message=FALSE, echo=FALSE, warning=FALSE}
@@ -150,7 +146,7 @@ best_k
 
 ```
 
-To build the best KNN regression model, we first found the optimal K that produces the lowest RMSE value is `best_k`. This value was used in the "horse race" between the two model classes.
+To build the best KNN regression model, we first found the optimal K, **`r best_k`**, that produces the lowest RMSE value. This value was used in the "horse race" between the two model classes.
 
 
 ```{r problem 1.2.1, message=FALSE, echo=FALSE, warning=FALSE}
@@ -194,9 +190,11 @@ knitr:: kable(head(compare_two_model), col.names = c("RMSE_KNN","RMSE_LM"))
 knitr:: kable(colMeans(compare_two_model))
 ```
 
-After running 150 random train/test splits, we can observe that our linear model has the lower average out-of-sample RMSE compared to that of the KNN model.
+For the comparison, we ran 150 random train/test splits. First table shows the first six results, which shows that the RMSE of our model repeatedly beats that of the KNN model.
 
-**Report on findings:**  On top of the "medium" model, we added what we considred to be meaningful interaction variables like `livingArea:lotSize` `livingArea:fuel` `livingArea:centralAir` `bedrooms:bathrooms` and `heating:fuel`. We assumed that the relationship between the two variables in each interaction were important in their effect on the housing price. For example, the effect of the living area size on the house price would be different depending on whether or not the house has a central air. Number of bedrooms would affect the house price differently based on how many bathrooms there are. A house with Four bedrooms with four bathrooms would certainly be priced differently compared to one with four bedrooms and one bathroom! Our inclusion of such interactions in the model proved to be a good decision as it out-performed both the "medium" model and the KNN model, achieving the lowest out-of-sample mean-squared error.
+Looking at the second table, we can observe that our linear model has the lower **average** out-of-sample RMSE compared to that of the KNN model.
+
+**Report on findings:**  On top of the "medium" model, we added what we considered to be meaningful interaction variables like `livingArea:lotSize` `livingArea:fuel` `livingArea:centralAir` `bedrooms:bathrooms` and `heating:fuel`. We assumed that the relationships between the two variables in each interaction were important in their effect on the housing price. For example, the effect of the living area size on the house price would be different depending on whether or not the house has a central air. Number of bedrooms would affect the house price differently based on how many bathrooms there are. A house with four bedrooms with four bathrooms would certainly be priced differently compared to one with four bedrooms and one bathroom! Our inclusion of such interactions in the model proved to be a good decision as it out-performed both the "medium" model and the KNN model, achieving the lowest out-of-sample mean-squared error.
 
 
 ## 2) Classification and retrospective sampling 
@@ -227,7 +225,7 @@ default %>%
 
 ```
 
-**Figure 1:** Bar plot showing average default probability by credit history.
+**Plot 1:** Bar plot showing average default probability by credit history.
 
 
 ```{r problem 2.2, message=FALSE, echo=FALSE, warning=FALSE}
@@ -257,9 +255,9 @@ knitr::kables(
 ```
 
 
-The bar plot shows that a borrower with a 'good' credit rating history has the highest probability of defaulting on a loan, followed by 'poor,' and 'terrible.' Similar result is again found in the logistic regression model, which shows that 'historyterrible' and 'historybad' are more negatively correlated with 'Default,' than the intercept (historygood). Both results indicate that a borrower with a good credit history is more likely to default on his/her loan, which is **highly counter-intuitive.**
+The bar plot shows that a borrower with a 'good' credit rating history has the highest probability of defaulting on a loan, followed by 'poor,' and 'terrible.' Similar result is again found in the logistic regression model, which shows that 'historyterrible' and 'historybad' are more negatively correlated with 'Default,' than the intercept (historygood). Both results indicate that a borrower with a good credit history is more likely to default on his/her loan, which is **highly counter-intuitive,** which made us suspect something was not right.
 
-This data set is not appropriate for predicting "high" vs. "low" probably of default when screening prospective borrowers. Sampling defaulted loans and matching similar kinds of loans will inevitably lead to a biased prediction because the majority of samples collected are borrowers with poor and terrible credit rating as shown above. Rather, the bank should use a random selection when collecting samples to better predict the probability of defaults.
+This data set is not appropriate for predicting "high" vs. "low" probably of default when screening prospective borrowers. Sampling defaulted loans and matching similar kinds of loans will inevitably lead to a biased prediction because the majority of samples collected are borrowers with poor and terrible credit rating as shown in the table above. Rather, the bank should use a random selection (and/or a much larger sample size) when collecting samples to better predict the probability of defaults.
 
 
 
@@ -270,12 +268,9 @@ This data set is not appropriate for predicting "high" vs. "low" probably of def
 
 ### Model building
 
-We will build predictive model for whether a hotel booking will have children on it.
+Here, we will build a predictive model for whether a hotel booking will have children on it. We start by splitting train/test data with `hotels_dev.csv`, and making baseline 1 and baseline 2 models as instructed.
 
-Starting by spliting train/test data with `hotels_dev.csv`, and making baseline 1 and baseline 2 with the requirements given. 
-
-For best linear model, we added some meaningful interaction variables.
-
+For the best linear model, we added what we considered to be meaningful interactions, such as `adults:stays_in_weekend_nights`, `adults:total_of_special_requests`, `adults:average_daily_rate`, and `average_daily_rate:total_of_special_request`.
 
 ```{r problem 3.1, message=FALSE, echo=FALSE, warning=FALSE}
 
@@ -337,8 +332,7 @@ We will use this to measure out-of-sample performance.
 
 
 
-**Table1:** Left table is Confusion matrix for baseline 1 model, a small model that used only four features.
-Right table is Percentage of out-of-sample correct classifications.
+
 ```{r problem 3.1.1, message=FALSE, echo=FALSE}
 
 knitr::kables(
@@ -349,14 +343,17 @@ knitr::kables(
 )
 
 ```
-We can check it never predicted children.
+
+**Table set 1:** Left is a Confusion matrix for baseline 1 model that used only four features.
+On its right is the out-of-sample accuracy.
+
+Looking at above confusion matrix, one may ask why is there a missing column? That is because the baseline 1 model never predicted children!
 
 
 
 
 
-**Table2:** Left table is Confusion matrix for baseline 2 model, a big model that used all possible predictors expect arrival_date.
-Right table is Percentage of out-of-sample correct classifications
+
 ```{r problem 3.1.2, message=FALSE, echo=FALSE}
 
 knitr::kables(
@@ -367,7 +364,10 @@ knitr::kables(
 )
 ```
 
-Having better result than baseline 1 model
+**Table set 2:** Left table is Confusion matrix for baseline 2 model that used all possible predictors except for arrival_date.
+On its right is the out-of-sample accuracy.
+
+One can see that baseline 2 model performs better than base line 1 model.
 
 
 
@@ -375,8 +375,7 @@ Having better result than baseline 1 model
 
 
 
-**Table3:** Left table is Confusion matrix for best linear model we made, adding meaningful interaction variables.
-Right table is Percentage of out-of-sample correct classifications.
+
 ```{r problem 3.1.3, message=FALSE, echo=FALSE}
 
 knitr::kables(
@@ -387,7 +386,10 @@ knitr::kables(
 )
 ```
 
-Model we made has slightly higher result to baseline 2 model
+**Table set 3:** Left table is Confusion matrix for the best linear model we made with additional interaction variables.
+On its right is the out-of-sample accuracy.
+
+Our model has a slightly higher accuracy than baseline 2 model.
 
 
 
@@ -396,7 +398,7 @@ Model we made has slightly higher result to baseline 2 model
 
 ### Model validation : STEP 1 ### 
 
-Validating the model by testing with entirely fresh data, `hotels_val.csv`
+Here, we validate our best model by testing it on an entirely fresh data, `hotels_val.csv`
 
 ```{r problem 3.2.1, message=FALSE, echo=FALSE}
 val=read.csv('Data/hotels_val.csv')
@@ -449,7 +451,7 @@ knitr::kable(head(roc_df),col.names=c("ROC_FPR","ROC_TPR"))
 
 ```
 
-To make ROC curve plot, we made a dataframe for False Positive Rate value and True Postive Rate value for each threshold t (shows only parts of the rows with head(df))
+To produce an ROC curve plot, we first made a dataframe consisting of False Positive Rate values and True Positive Rate values for each threshold t. Above are the first six results using head(df) command.
 
 
 ```{r problem 3.2.1.2, message=FALSE, echo=FALSE}
@@ -463,10 +465,11 @@ ggplot(roc_df)+
 
 ```
 
-**Figure 1:** ROC curve(TPR(t)vsFPR(t)) for our best model, using new dataset `hotels_val.csv`
+**Plot 2:** ROC curve (FPR(t) vs TPR(t)) for our best model, using new dataset `hotels_val.csv`
 
 
-We tried generating ROC with R package `ROCR`
+While working through the problem, we came across a cool package called `ROCR`. Just for the kicks, we tried generating the ROC curve again using this package, which generated a similar curve as above.
+
 ```{r problem 3.2.2, message=FALSE, echo=FALSE}
 
 phat_val_best=predict(b_best_lm, val, type = "response")
@@ -478,7 +481,7 @@ plot(perf, main="ROC curve generated from ROCR package", col='blue')
 ```
 
 
-**Figure 2:** Using ROCR package, plot shows True Positive Rate against the False Postive Rate for different threshold t. This took less time! Simple and Fast!
+**Plot 2:**  ROC curve (using `ROCR` packcage) showing True Positive Rate against the False Positive Rate for different threshold t. This took less time and fewer lines of codes. Simple and fast!
 
 
 
@@ -490,9 +493,9 @@ plot(perf, main="ROC curve generated from ROCR package", col='blue')
 ### Model validation : STEP 2 ### 
 
 Let's create 20 folds of `hotels_val.csv`.
-For each fold set, we will have 250 bookings and will get expected number of childrens and actual number of childrens. Will compare this expected vs actual number of children. 
+For each fold set, we have 250 bookings showing expected number of children and actual number of children.
 
-**Table 1:** Generated 20 folds each having information of expected number of bookings with children and actual number of bookings with children
+
 ```{r problem 3.2.3, message=FALSE, echo=FALSE, error=FALSE, warning=FALSE}
 
 # create 20 folds
@@ -533,7 +536,7 @@ knitr::kable(fold_cv_df)
 
 ```
 
-
+**Table 4:** 20 folds each with expected number of children (left) and actual number of children (right) for comparison.
 
 
 
@@ -549,7 +552,9 @@ ggplot(df2, aes(x=fold, y=value, fill=variable),ylim=c(0, 40)) +
   scale_y_continuous(expand=expansion(mult=c(0,0.05)))
 
 ```
-**Figure 1:** Generated 20 folds having information of expected number of bookings with children and actual number of bookings with children. (Red=expected, Green=actual)
+**Plot 3:** Grouped bar plot showing 20 fold sets comparing expected number of children and actual number of children (Red=expected, Green=actual).
+
+As one can clearly see from **Table 4** and **Plot 3**, our model does a pretty accurate job at predicting the total number of bookings with children in a group of 250 bookings overall.
 
 
 
