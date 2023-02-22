@@ -1,18 +1,14 @@
 ## 1) Saratoga house prices
 
-\*\* Between linear model and K-nearest-neighbor regression model, which
-one is better at achieving lower out-of-sample mean-squared error? \*\*
-
-We will use `SaratogaHouses` data to build optimal pricing model.
-Separating data from SaratogaHouses data into a training set and testing
-set, and will use testing set for assessing model’s out-of-sample
+We used `SaratogaHouses` data to build the optimal pricing model. We
+first separated `SaratogaHouses` data into a training and a testing set,
+then used the testing set to assess the model’s out-of-sample
 performance.
 
-First of all, we made the best linear model for price by adding some
-meaningful interaction variables like `livingArea:lotSize`
-`livingArea:fuel` `livingArea:centralAir` `bedrooms:bathrooms`
-`heating:fuel` To evaluate the model performance we making, we compared
-the rmse of the model with the medium model.
+For our best linear model, we added some interaction variables like
+`livingArea:lotSize` `livingArea:fuel` `livingArea:centralAir`
+`bedrooms:bathrooms` `heating:fuel`. We compared the RMSEs of the
+“medium” model and our model to evaluate the performance.
 
 <table>
 <tbody>
@@ -20,26 +16,25 @@ the rmse of the model with the medium model.
 <td style="text-align: left;">Medium_model_rmse</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">63566.995</td>
+<td style="text-align: left;">64379.8</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Model_made_by_us_rmse</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">63058.906</td>
+<td style="text-align: left;">62574.452</td>
 </tr>
 </tbody>
 </table>
 
-Top one is the RMSE is for the “medium\_model” from class, while below
-is the RMSE of the best linear model we made. Our model does a slightly
-better job at achieving lower out-of-sample mean-squared error.
+Looking at above table, our model does a slightly better job at
+achieving lower out-of-sample mean-squared error.
 
-    ## [1] 21
+    ## [1] 6
 
-To build the best KNN regression model, we first found the optimal K
-that produces the lowest RMSE value is `best_k`. This value was used in
-the “horse race” between the two model classes.
+To build the best KNN regression model, we first found the optimal K,
+**6**, that produces the lowest RMSE value. This value was used in the
+“horse race” between the two model classes.
 
 <table>
 <thead>
@@ -50,28 +45,28 @@ the “horse race” between the two model classes.
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: right;">65990.07</td>
-<td style="text-align: right;">63068.07</td>
+<td style="text-align: right;">68655.94</td>
+<td style="text-align: right;">66413.63</td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">67470.48</td>
-<td style="text-align: right;">64442.49</td>
+<td style="text-align: right;">74664.84</td>
+<td style="text-align: right;">72878.12</td>
 </tr>
 <tr class="odd">
-<td style="text-align: right;">77053.86</td>
-<td style="text-align: right;">71463.72</td>
+<td style="text-align: right;">62025.43</td>
+<td style="text-align: right;">61811.23</td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">72922.43</td>
-<td style="text-align: right;">63631.60</td>
+<td style="text-align: right;">70555.87</td>
+<td style="text-align: right;">70835.25</td>
 </tr>
 <tr class="odd">
-<td style="text-align: right;">72199.71</td>
-<td style="text-align: right;">65798.19</td>
+<td style="text-align: right;">73437.61</td>
+<td style="text-align: right;">66007.71</td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">72389.32</td>
-<td style="text-align: right;">70106.63</td>
+<td style="text-align: right;">64177.92</td>
+<td style="text-align: right;">61501.73</td>
 </tr>
 </tbody>
 </table>
@@ -86,38 +81,39 @@ the “horse race” between the two model classes.
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Mean KNN RMSE</td>
-<td style="text-align: right;">71554.98</td>
+<td style="text-align: right;">68382.31</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Mean LM RMSE</td>
-<td style="text-align: right;">65495.27</td>
+<td style="text-align: right;">65135.29</td>
 </tr>
 </tbody>
 </table>
 
-After running 150 random train/test splits, we can observe that our
-linear model has the lower average out-of-sample RMSE compared to that
-of the KNN model.
+For the comparison, we ran 150 random train/test splits. First table
+shows the first six results, which shows that the RMSE of our model
+repeatedly beats that of the KNN model.
+
+Looking at the second table, we can observe that our linear model has
+the lower **average** out-of-sample RMSE compared to that of the KNN
+model.
 
 **Report on findings:** On top of the “medium” model, we added what we
-considred to be meaningful interaction variables like
+considered to be meaningful interaction variables like
 `livingArea:lotSize` `livingArea:fuel` `livingArea:centralAir`
 `bedrooms:bathrooms` and `heating:fuel`. We assumed that the
-relationship between the two variables in each interaction were
+relationships between the two variables in each interaction were
 important in their effect on the housing price. For example, the effect
 of the living area size on the house price would be different depending
 on whether or not the house has a central air. Number of bedrooms would
 affect the house price differently based on how many bathrooms there
-are. A house with Four bedrooms with four bathrooms would certainly be
+are. A house with four bedrooms with four bathrooms would certainly be
 priced differently compared to one with four bedrooms and one bathroom!
 Our inclusion of such interactions in the model proved to be a good
 decision as it out-performed both the “medium” model and the KNN model,
 achieving the lowest out-of-sample mean-squared error.
 
 ## 2) Classification and retrospective sampling
-
-Likelihood that one will default based on their credit
-history(Good,Poor,Terrible).
 
 ![](ECO-395M-exercise-2_files/figure-markdown_strict/problem%202.1-1.png)
 
@@ -139,7 +135,7 @@ history.
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">(Intercept)</td>
-<td style="text-align: right;">-0.97</td>
+<td style="text-align: right;">-0.66</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">duration</td>
@@ -151,39 +147,39 @@ history.
 </tr>
 <tr class="even">
 <td style="text-align: left;">installment</td>
-<td style="text-align: right;">0.18</td>
+<td style="text-align: right;">0.19</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">age</td>
-<td style="text-align: right;">-0.01</td>
+<td style="text-align: right;">-0.02</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">historypoor</td>
-<td style="text-align: right;">-1.02</td>
+<td style="text-align: right;">-1.10</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">historyterrible</td>
-<td style="text-align: right;">-1.68</td>
+<td style="text-align: right;">-1.86</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">purposeedu</td>
-<td style="text-align: right;">0.35</td>
+<td style="text-align: right;">0.72</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">purposegoods/repair</td>
-<td style="text-align: right;">0.07</td>
+<td style="text-align: right;">0.10</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">purposenewcar</td>
-<td style="text-align: right;">0.77</td>
+<td style="text-align: right;">0.80</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">purposeusedcar</td>
-<td style="text-align: right;">-0.69</td>
+<td style="text-align: right;">-0.63</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">foreigngerman</td>
-<td style="text-align: right;">-1.58</td>
+<td style="text-align: right;">-1.01</td>
 </tr>
 </tbody>
 </table>
@@ -226,34 +222,33 @@ model, which shows that ‘historyterrible’ and ‘historybad’ are more
 negatively correlated with ‘Default,’ than the intercept (historygood).
 Both results indicate that a borrower with a good credit history is more
 likely to default on his/her loan, which is **highly
-counter-intuitive.**
+counter-intuitive,** which made us suspect something was not right.
 
 This data set is not appropriate for predicting “high” vs. “low”
 probably of default when screening prospective borrowers. Sampling
 defaulted loans and matching similar kinds of loans will inevitably lead
 to a biased prediction because the majority of samples collected are
-borrowers with poor and terrible credit rating as shown above. Rather,
-the bank should use a random selection when collecting samples to better
-predict the probability of defaults.
+borrowers with poor and terrible credit rating as shown in the table
+above. Rather, the bank should use a random selection (and/or a much
+larger sample size) when collecting samples to better predict the
+probability of defaults.
 
 ## 3) Children and hotel reservations
 
 ### Model building
 
-We will build predictive model for whether a hotel booking will have
-children on it.
+Here, we will build a predictive model for whether a hotel booking will
+have children on it. We start by splitting train/test data with
+`hotels_dev.csv`, and making baseline 1 and baseline 2 models as
+instructed.
 
-Starting by spliting train/test data with `hotels_dev.csv`, and making
-baseline 1 and baseline 2 with the requirements given.
+For the best linear model, we added what we considered to be meaningful
+interactions, such as `adults:stays_in_weekend_nights`,
+`adults:total_of_special_requests`, `adults:average_daily_rate`, and
+`average_daily_rate:total_of_special_request`.
 
-For best linear model, we added some meaningful interaction variables.
-
-Under is the predictions on the testing set. We will use this to measure
-out-of-sample performance.
-
-**Table1:** Left table is Confusion matrix for baseline 1 model, a small
-model that used only four features. Right table is Percentage of
-out-of-sample correct classifications.
+Below are the predictions on the testing set. We will use this to
+measure out-of-sample performance.
 
 <table class="kable_wrapper">
 <tbody>
@@ -270,11 +265,11 @@ out-of-sample correct classifications.
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">0</td>
-<td style="text-align: right;">8298</td>
+<td style="text-align: right;">8306</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">1</td>
-<td style="text-align: right;">702</td>
+<td style="text-align: right;">694</td>
 </tr>
 </tbody>
 </table>
@@ -290,7 +285,7 @@ out-of-sample correct classifications.
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: right;">92.2</td>
+<td style="text-align: right;">92.29</td>
 </tr>
 </tbody>
 </table>
@@ -300,65 +295,11 @@ out-of-sample correct classifications.
 </tbody>
 </table>
 
-We can check it never predicted children.
+**Table set 1:** Left is a Confusion matrix for baseline 1 model that
+used only four features. On its right is the out-of-sample accuracy.
 
-**Table2:** Left table is Confusion matrix for baseline 2 model, a big
-model that used all possible predictors expect arrival\_date. Right
-table is Percentage of out-of-sample correct classifications
-
-<table class="kable_wrapper">
-<tbody>
-<tr>
-<td>
-
-<table>
-<thead>
-<tr class="header">
-<th style="text-align: left;"></th>
-<th style="text-align: right;">0</th>
-<th style="text-align: right;">1</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">0</td>
-<td style="text-align: right;">8184</td>
-<td style="text-align: right;">114</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">1</td>
-<td style="text-align: right;">458</td>
-<td style="text-align: right;">244</td>
-</tr>
-</tbody>
-</table>
-
-</td>
-<td>
-
-<table>
-<thead>
-<tr class="header">
-<th style="text-align: right;">Accuracy(%)</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: right;">93.64</td>
-</tr>
-</tbody>
-</table>
-
-</td>
-</tr>
-</tbody>
-</table>
-
-Having better result than baseline 1 model
-
-**Table3:** Left table is Confusion matrix for best linear model we
-made, adding meaningful interaction variables. Right table is Percentage
-of out-of-sample correct classifications.
+Looking at above confusion matrix, one may ask why is there a missing
+column? That is because the baseline 1 model never predicted children!
 
 <table class="kable_wrapper">
 <tbody>
@@ -376,13 +317,13 @@ of out-of-sample correct classifications.
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">0</td>
-<td style="text-align: right;">8189</td>
-<td style="text-align: right;">109</td>
+<td style="text-align: right;">8196</td>
+<td style="text-align: right;">110</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">1</td>
-<td style="text-align: right;">467</td>
-<td style="text-align: right;">235</td>
+<td style="text-align: right;">446</td>
+<td style="text-align: right;">248</td>
 </tr>
 </tbody>
 </table>
@@ -398,7 +339,7 @@ of out-of-sample correct classifications.
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: right;">93.6</td>
+<td style="text-align: right;">93.82</td>
 </tr>
 </tbody>
 </table>
@@ -408,12 +349,71 @@ of out-of-sample correct classifications.
 </tbody>
 </table>
 
-Model we made has slightly higher result to baseline 2 model
+**Table set 2:** Left table is Confusion matrix for baseline 2 model
+that used all possible predictors except for arrival\_date. On its right
+is the out-of-sample accuracy.
+
+One can see that baseline 2 model performs better than base line 1
+model.
+
+<table class="kable_wrapper">
+<tbody>
+<tr>
+<td>
+
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">0</th>
+<th style="text-align: right;">1</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: right;">8202</td>
+<td style="text-align: right;">104</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">455</td>
+<td style="text-align: right;">239</td>
+</tr>
+</tbody>
+</table>
+
+</td>
+<td>
+
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Accuracy(%)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">93.79</td>
+</tr>
+</tbody>
+</table>
+
+</td>
+</tr>
+</tbody>
+</table>
+
+**Table set 3:** Left table is Confusion matrix for the best linear
+model we made with additional interaction variables. On its right is the
+out-of-sample accuracy.
+
+Our model has a slightly higher accuracy than baseline 2 model.
 
 ### Model validation : STEP 1
 
-Validating the model by testing with entirely fresh data,
-`hotels_val.csv`
+Here, we validate our best model by testing it on an entirely fresh
+data, `hotels_val.csv`
 
 <table>
 <thead>
@@ -424,58 +424,56 @@ Validating the model by testing with entirely fresh data,
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: right;">0.7198173</td>
+<td style="text-align: right;">0.7180770</td>
 <td style="text-align: right;">0.9726368</td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">0.6641288</td>
-<td style="text-align: right;">0.9676617</td>
+<td style="text-align: right;">0.6595606</td>
+<td style="text-align: right;">0.9651741</td>
 </tr>
 <tr class="odd">
-<td style="text-align: right;">0.5997390</td>
+<td style="text-align: right;">0.5964760</td>
 <td style="text-align: right;">0.9527363</td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">0.5268653</td>
-<td style="text-align: right;">0.9427861</td>
+<td style="text-align: right;">0.5259952</td>
+<td style="text-align: right;">0.9452736</td>
 </tr>
 <tr class="odd">
-<td style="text-align: right;">0.4583424</td>
-<td style="text-align: right;">0.9253731</td>
+<td style="text-align: right;">0.4587775</td>
+<td style="text-align: right;">0.9303483</td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">0.3887318</td>
-<td style="text-align: right;">0.9029851</td>
+<td style="text-align: right;">0.3950402</td>
+<td style="text-align: right;">0.9079602</td>
 </tr>
 </tbody>
 </table>
 
-To make ROC curve plot, we made a dataframe for False Positive Rate
-value and True Postive Rate value for each threshold t (shows only parts
-of the rows with head(df))
+To produce an ROC curve plot, we first made a dataframe consisting of
+False Positive Rate values and True Positive Rate values for each
+threshold t. Above are the first six results using head(df) command.
 
 ![](ECO-395M-exercise-2_files/figure-markdown_strict/problem%203.2.1.2-1.png)
 
-**Figure 1:** ROC curve(TPR(t)vsFPR(t)) for our best model, using new
+**Plot 2:** ROC curve (FPR(t) vs TPR(t)) for our best model, using new
 dataset `hotels_val.csv`
 
-We tried generating ROC with R package `ROCR`
+While working through the problem, we came across a cool package called
+`ROCR`. Just for the kicks, we tried generating the ROC curve again
+using this package, which generated a similar curve as above.
+
 ![](ECO-395M-exercise-2_files/figure-markdown_strict/problem%203.2.2-1.png)
 
-**Figure 2:** Using ROCR package, plot shows True Positive Rate against
-the False Postive Rate for different threshold t. This took less time!
-Simple and Fast!
+**Plot 2:** ROC curve (using `ROCR` packcage) showing True Positive Rate
+against the False Positive Rate for different threshold t. This took
+less time and fewer lines of codes. Simple and fast!
 
 ### Model validation : STEP 2
 
-Let’s create 20 folds of `hotels_val.csv`. For each fold set, we will
-have 250 bookings and will get expected number of childrens and actual
-number of childrens. Will compare this expected vs actual number of
+Let’s create 20 folds of `hotels_val.csv`. For each fold set, we have
+250 bookings showing expected number of children and actual number of
 children.
-
-**Table 1:** Generated 20 folds each having information of expected
-number of bookings with children and actual number of bookings with
-children
 
 <table>
 <thead>
@@ -488,108 +486,116 @@ children
 <tbody>
 <tr class="odd">
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">26.88582</td>
-<td style="text-align: right;">27</td>
+<td style="text-align: right;">16.40334</td>
+<td style="text-align: right;">20</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">2</td>
-<td style="text-align: right;">18.09452</td>
-<td style="text-align: right;">21</td>
+<td style="text-align: right;">18.16573</td>
+<td style="text-align: right;">18</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">3</td>
-<td style="text-align: right;">25.09315</td>
-<td style="text-align: right;">24</td>
+<td style="text-align: right;">20.39877</td>
+<td style="text-align: right;">15</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">4</td>
-<td style="text-align: right;">20.58579</td>
-<td style="text-align: right;">21</td>
+<td style="text-align: right;">15.01240</td>
+<td style="text-align: right;">15</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">5</td>
-<td style="text-align: right;">22.09823</td>
-<td style="text-align: right;">17</td>
+<td style="text-align: right;">17.96607</td>
+<td style="text-align: right;">14</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">6</td>
-<td style="text-align: right;">19.00764</td>
-<td style="text-align: right;">21</td>
+<td style="text-align: right;">21.72503</td>
+<td style="text-align: right;">19</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">7</td>
-<td style="text-align: right;">18.81545</td>
+<td style="text-align: right;">18.77925</td>
 <td style="text-align: right;">22</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">8</td>
-<td style="text-align: right;">18.56033</td>
-<td style="text-align: right;">15</td>
+<td style="text-align: right;">16.70954</td>
+<td style="text-align: right;">18</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">9</td>
-<td style="text-align: right;">16.15241</td>
-<td style="text-align: right;">15</td>
+<td style="text-align: right;">20.95884</td>
+<td style="text-align: right;">21</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">10</td>
-<td style="text-align: right;">21.22386</td>
-<td style="text-align: right;">15</td>
+<td style="text-align: right;">21.14338</td>
+<td style="text-align: right;">21</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">11</td>
-<td style="text-align: right;">17.41258</td>
-<td style="text-align: right;">24</td>
+<td style="text-align: right;">22.78244</td>
+<td style="text-align: right;">26</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">12</td>
-<td style="text-align: right;">18.27971</td>
+<td style="text-align: right;">18.92772</td>
 <td style="text-align: right;">22</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">13</td>
-<td style="text-align: right;">18.39141</td>
+<td style="text-align: right;">20.29002</td>
 <td style="text-align: right;">17</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">14</td>
-<td style="text-align: right;">20.18885</td>
-<td style="text-align: right;">18</td>
+<td style="text-align: right;">22.80875</td>
+<td style="text-align: right;">25</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">15</td>
-<td style="text-align: right;">18.16207</td>
-<td style="text-align: right;">18</td>
+<td style="text-align: right;">19.94441</td>
+<td style="text-align: right;">24</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">16</td>
-<td style="text-align: right;">17.15280</td>
-<td style="text-align: right;">21</td>
+<td style="text-align: right;">20.33205</td>
+<td style="text-align: right;">22</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">17</td>
-<td style="text-align: right;">18.29203</td>
-<td style="text-align: right;">20</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">18</td>
-<td style="text-align: right;">22.11956</td>
-<td style="text-align: right;">21</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">19</td>
-<td style="text-align: right;">23.33099</td>
+<td style="text-align: right;">21.53771</td>
 <td style="text-align: right;">22</td>
 </tr>
 <tr class="even">
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">23.95544</td>
 <td style="text-align: right;">20</td>
-<td style="text-align: right;">22.15281</td>
-<td style="text-align: right;">21</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">21.18790</td>
+<td style="text-align: right;">25</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">22.97120</td>
+<td style="text-align: right;">16</td>
 </tr>
 </tbody>
 </table>
 
+**Table 4:** 20 folds each with expected number of children (left) and
+actual number of children (right) for comparison.
+
 ![](ECO-395M-exercise-2_files/figure-markdown_strict/problem%203.2.4-1.png)
-**Figure 1:** Generated 20 folds having information of expected number
-of bookings with children and actual number of bookings with children.
-(Red=expected, Green=actual)
+
+**Plot 3:** Grouped bar plot showing 20 fold sets comparing expected
+number of children and actual number of children (Red=expected,
+Green=actual).
+
+As one can clearly see from **Table 4** and **Plot 3**, our model does a
+pretty accurate job at predicting the total number of bookings with
+children in a group of 250 bookings overall.
