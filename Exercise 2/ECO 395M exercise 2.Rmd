@@ -209,6 +209,9 @@ default %>%
 **Figure 1:** Bar plot showing average default probability by credit history.
 
 
+
+
+
 ```{r problem 2.2, message=FALSE, echo=FALSE, warning=FALSE}
 
 # split training and testing data
@@ -308,8 +311,7 @@ confusion_b_best=table(y=dev_test$children, yhat=yhat_b_best)
 
 ```
 
-Below are the predictions on the testing set.
-We will use this to measure out-of-sample performance.
+Below are the predictions on the testing set, which we will use this to measure out-of-sample performance.
 
 
 
@@ -330,7 +332,11 @@ knitr::kables(
 **Table set 1:** Left is a Confusion matrix for baseline 1 model that used only four features.
 On its right is the out-of-sample accuracy.
 
-Looking at above confusion matrix, one may ask why is there a missing column? That is because the baseline 1 model never predicted children!
+Looking at above confusion matrix, one may ask why is there a missing column? That is because the baseline 1 model never predicted children.
+
+
+
+
 
 
 
@@ -352,6 +358,8 @@ knitr::kables(
 On its right is the out-of-sample accuracy.
 
 One can see that baseline 2 model performs better than base line 1 model.
+
+
 
 
 
