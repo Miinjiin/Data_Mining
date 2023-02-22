@@ -173,7 +173,7 @@ knitr:: kable(dataset_mean_1)
 
 ```
 
-For the comparison, we ran 150 random train/test splits. First table shows the first six results, which shows that the RMSE of our model repeatedly beats that of the KNN model.
+For the comparison, we ran 150 random train/test splits. First table shows the first six results, which shows that the RMSE of our model beats that of the KNN model overall.
 
 Looking at the second table, we can observe that our linear model has the lower **average** out-of-sample RMSE compared to that of the KNN model.
 

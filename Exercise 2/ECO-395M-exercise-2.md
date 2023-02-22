@@ -16,13 +16,13 @@ For our best linear model, we added some interaction variables like
 <td style="text-align: left;">Medium_model_rmse</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">62568.339</td>
+<td style="text-align: left;">81688.259</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Model_made_by_us_rmse</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">62087.762</td>
+<td style="text-align: left;">80367.378</td>
 </tr>
 </tbody>
 </table>
@@ -30,10 +30,10 @@ For our best linear model, we added some interaction variables like
 Looking at above table, our model does a slightly better job at
 achieving lower out-of-sample mean-squared error.
 
-    ## [1] 7
+    ## [1] 49
 
 To build the best KNN regression model, we first found the optimal K,
-**7**, that produces the lowest RMSE value. This value was used in the
+**49**, that produces the lowest RMSE value. This value was used in the
 “horse race” between the two model classes.
 
 <table>
@@ -45,28 +45,28 @@ To build the best KNN regression model, we first found the optimal K,
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: right;">76718.33</td>
-<td style="text-align: right;">75484.76</td>
+<td style="text-align: right;">80994.89</td>
+<td style="text-align: right;">72145.95</td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">70881.88</td>
-<td style="text-align: right;">63432.97</td>
+<td style="text-align: right;">78850.93</td>
+<td style="text-align: right;">74137.02</td>
 </tr>
 <tr class="odd">
-<td style="text-align: right;">67626.21</td>
-<td style="text-align: right;">73258.19</td>
+<td style="text-align: right;">77112.65</td>
+<td style="text-align: right;">75144.71</td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">70579.89</td>
-<td style="text-align: right;">64069.57</td>
+<td style="text-align: right;">73967.97</td>
+<td style="text-align: right;">65485.90</td>
 </tr>
 <tr class="odd">
-<td style="text-align: right;">66204.00</td>
-<td style="text-align: right;">68681.53</td>
+<td style="text-align: right;">76818.37</td>
+<td style="text-align: right;">61535.89</td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">71649.52</td>
-<td style="text-align: right;">61938.47</td>
+<td style="text-align: right;">72814.63</td>
+<td style="text-align: right;">70756.28</td>
 </tr>
 </tbody>
 </table>
@@ -81,18 +81,18 @@ To build the best KNN regression model, we first found the optimal K,
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Mean KNN RMSE</td>
-<td style="text-align: right;">69060.09</td>
+<td style="text-align: right;">74777.01</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Mean LM RMSE</td>
-<td style="text-align: right;">66033.70</td>
+<td style="text-align: right;">65523.38</td>
 </tr>
 </tbody>
 </table>
 
 For the comparison, we ran 150 random train/test splits. First table
 shows the first six results, which shows that the RMSE of our model
-repeatedly beats that of the KNN model.
+beats that of the KNN model overall.
 
 Looking at the second table, we can observe that our linear model has
 the lower **average** out-of-sample RMSE compared to that of the KNN
@@ -135,11 +135,11 @@ history.
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">(Intercept)</td>
-<td style="text-align: right;">-0.84</td>
+<td style="text-align: right;">-0.32</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">duration</td>
-<td style="text-align: right;">0.03</td>
+<td style="text-align: right;">0.02</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">amount</td>
@@ -147,7 +147,7 @@ history.
 </tr>
 <tr class="even">
 <td style="text-align: left;">installment</td>
-<td style="text-align: right;">0.26</td>
+<td style="text-align: right;">0.21</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">age</td>
@@ -155,31 +155,31 @@ history.
 </tr>
 <tr class="even">
 <td style="text-align: left;">historypoor</td>
-<td style="text-align: right;">-1.18</td>
+<td style="text-align: right;">-1.24</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">historyterrible</td>
-<td style="text-align: right;">-1.89</td>
+<td style="text-align: right;">-1.95</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">purposeedu</td>
-<td style="text-align: right;">0.67</td>
+<td style="text-align: right;">0.79</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">purposegoods/repair</td>
-<td style="text-align: right;">0.08</td>
+<td style="text-align: right;">0.01</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">purposenewcar</td>
-<td style="text-align: right;">0.70</td>
+<td style="text-align: right;">0.74</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">purposeusedcar</td>
-<td style="text-align: right;">-1.16</td>
+<td style="text-align: right;">-0.73</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">foreigngerman</td>
-<td style="text-align: right;">-1.57</td>
+<td style="text-align: right;">-1.35</td>
 </tr>
 </tbody>
 </table>
@@ -265,11 +265,11 @@ measure out-of-sample performance.
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">0</td>
-<td style="text-align: right;">8298</td>
+<td style="text-align: right;">8297</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">1</td>
-<td style="text-align: right;">702</td>
+<td style="text-align: right;">703</td>
 </tr>
 </tbody>
 </table>
@@ -285,7 +285,7 @@ measure out-of-sample performance.
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: right;">92.2</td>
+<td style="text-align: right;">92.19</td>
 </tr>
 </tbody>
 </table>
@@ -317,13 +317,13 @@ column? That is because the baseline 1 model never predicted children.
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">0</td>
-<td style="text-align: right;">8197</td>
-<td style="text-align: right;">101</td>
+<td style="text-align: right;">8178</td>
+<td style="text-align: right;">119</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">1</td>
-<td style="text-align: right;">452</td>
-<td style="text-align: right;">250</td>
+<td style="text-align: right;">456</td>
+<td style="text-align: right;">247</td>
 </tr>
 </tbody>
 </table>
@@ -339,7 +339,7 @@ column? That is because the baseline 1 model never predicted children.
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: right;">93.86</td>
+<td style="text-align: right;">93.61</td>
 </tr>
 </tbody>
 </table>
@@ -372,13 +372,13 @@ model.
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">0</td>
-<td style="text-align: right;">8203</td>
-<td style="text-align: right;">95</td>
+<td style="text-align: right;">8178</td>
+<td style="text-align: right;">119</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">1</td>
-<td style="text-align: right;">443</td>
-<td style="text-align: right;">259</td>
+<td style="text-align: right;">464</td>
+<td style="text-align: right;">239</td>
 </tr>
 </tbody>
 </table>
@@ -394,7 +394,7 @@ model.
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: right;">94.02</td>
+<td style="text-align: right;">93.52</td>
 </tr>
 </tbody>
 </table>
@@ -424,28 +424,28 @@ data, `hotels_val.csv`
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: right;">0.7230803</td>
-<td style="text-align: right;">0.9800995</td>
+<td style="text-align: right;">0.7206874</td>
+<td style="text-align: right;">0.9726368</td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">0.6639112</td>
-<td style="text-align: right;">0.9701493</td>
+<td style="text-align: right;">0.6619534</td>
+<td style="text-align: right;">0.9626866</td>
 </tr>
 <tr class="odd">
-<td style="text-align: right;">0.5984338</td>
-<td style="text-align: right;">0.9601990</td>
+<td style="text-align: right;">0.5975636</td>
+<td style="text-align: right;">0.9502488</td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">0.5268653</td>
+<td style="text-align: right;">0.5312160</td>
 <td style="text-align: right;">0.9427861</td>
 </tr>
 <tr class="odd">
-<td style="text-align: right;">0.4587775</td>
+<td style="text-align: right;">0.4618229</td>
 <td style="text-align: right;">0.9303483</td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">0.3976506</td>
-<td style="text-align: right;">0.9154229</td>
+<td style="text-align: right;">0.3956928</td>
+<td style="text-align: right;">0.9104478</td>
 </tr>
 </tbody>
 </table>
@@ -486,103 +486,103 @@ children.
 <tbody>
 <tr class="odd">
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">18.18843</td>
-<td style="text-align: right;">20</td>
+<td style="text-align: right;">17.88993</td>
+<td style="text-align: right;">14</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">2</td>
-<td style="text-align: right;">14.43807</td>
-<td style="text-align: right;">19</td>
+<td style="text-align: right;">22.32168</td>
+<td style="text-align: right;">15</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">3</td>
-<td style="text-align: right;">15.70845</td>
-<td style="text-align: right;">15</td>
+<td style="text-align: right;">19.73801</td>
+<td style="text-align: right;">20</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">4</td>
-<td style="text-align: right;">20.05566</td>
-<td style="text-align: right;">16</td>
+<td style="text-align: right;">21.72738</td>
+<td style="text-align: right;">23</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">5</td>
-<td style="text-align: right;">16.12218</td>
-<td style="text-align: right;">17</td>
+<td style="text-align: right;">16.65853</td>
+<td style="text-align: right;">22</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">6</td>
-<td style="text-align: right;">20.93835</td>
-<td style="text-align: right;">17</td>
+<td style="text-align: right;">18.89830</td>
+<td style="text-align: right;">18</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">7</td>
-<td style="text-align: right;">17.13298</td>
-<td style="text-align: right;">15</td>
+<td style="text-align: right;">20.88628</td>
+<td style="text-align: right;">25</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">8</td>
-<td style="text-align: right;">21.89252</td>
-<td style="text-align: right;">24</td>
+<td style="text-align: right;">17.04914</td>
+<td style="text-align: right;">19</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">9</td>
-<td style="text-align: right;">18.22775</td>
-<td style="text-align: right;">18</td>
+<td style="text-align: right;">20.49589</td>
+<td style="text-align: right;">17</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">10</td>
-<td style="text-align: right;">21.41741</td>
-<td style="text-align: right;">25</td>
+<td style="text-align: right;">21.50539</td>
+<td style="text-align: right;">21</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">11</td>
-<td style="text-align: right;">18.94795</td>
-<td style="text-align: right;">21</td>
+<td style="text-align: right;">22.24502</td>
+<td style="text-align: right;">28</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">12</td>
-<td style="text-align: right;">20.63054</td>
-<td style="text-align: right;">21</td>
+<td style="text-align: right;">17.97516</td>
+<td style="text-align: right;">19</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">13</td>
-<td style="text-align: right;">21.61132</td>
-<td style="text-align: right;">17</td>
+<td style="text-align: right;">15.04382</td>
+<td style="text-align: right;">16</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">14</td>
-<td style="text-align: right;">20.33701</td>
-<td style="text-align: right;">20</td>
+<td style="text-align: right;">18.52779</td>
+<td style="text-align: right;">23</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">15</td>
-<td style="text-align: right;">23.97456</td>
-<td style="text-align: right;">23</td>
+<td style="text-align: right;">21.11329</td>
+<td style="text-align: right;">21</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">16</td>
-<td style="text-align: right;">22.36013</td>
-<td style="text-align: right;">20</td>
+<td style="text-align: right;">26.35855</td>
+<td style="text-align: right;">27</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">17</td>
-<td style="text-align: right;">18.46943</td>
-<td style="text-align: right;">15</td>
+<td style="text-align: right;">21.01795</td>
+<td style="text-align: right;">17</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">18</td>
-<td style="text-align: right;">25.95919</td>
-<td style="text-align: right;">31</td>
+<td style="text-align: right;">22.36749</td>
+<td style="text-align: right;">18</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">19</td>
-<td style="text-align: right;">22.99509</td>
+<td style="text-align: right;">16.77294</td>
 <td style="text-align: right;">22</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">20</td>
-<td style="text-align: right;">22.59296</td>
-<td style="text-align: right;">26</td>
+<td style="text-align: right;">23.40743</td>
+<td style="text-align: right;">17</td>
 </tr>
 </tbody>
 </table>
