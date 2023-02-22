@@ -62,8 +62,11 @@ rmse_for_ours=rmse(lm_answer, saratoga_test)
 medium_rmse<-rmse(lm_medium,saratoga_test)
 answer_rmse<-rmse(lm_answer,saratoga_test)
 
-medium_rmse
-answer_rmse
+medium=medium_rmse%>% round(3)
+answer=answer_rmse%>% round(3)
+
+tab <- c("Medium_model_rmse",medium,"Model_made_by_us_rmse",answer) %>% as.data.frame()
+knitr:: kable(tab, col.names = "")
 
 ```
 
