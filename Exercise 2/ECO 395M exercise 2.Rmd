@@ -34,6 +34,7 @@ First of all, we made the best linear model for price by adding some meaningful 
 To evaluate the model performance we making, we compared the rmse of the model with the medium model.
 
 ```{r problem 1, message=FALSE, echo=FALSE, warning=FALSE}
+
 # read the data
 data(SaratogaHouses)
 
@@ -49,16 +50,12 @@ lm_medium = lm(price ~ . - pctCollege - sewer - waterfront - landValue - newCons
 rmse_for_med = rmse(lm_medium, saratoga_test)
 #coef(lm_medium) %>% round(0)
 
-# medium model we did in AIC class
-#lm_medium = lm(price ~ lotSize + age + livingArea + pctCollege + bedrooms + fireplaces + bathrooms + rooms + heating + fuel + centralAir, data=saratoga_train)
 
 # add meaningful interaction variable 
 lm_answer = lm(price ~ . +  (livingArea:lotSize + livingArea:fuel + livingArea:centralAir + bedrooms:bathrooms + heating:fuel) - pctCollege - sewer - waterfront - landValue - newConstruction, data=saratoga_train)
 rmse_for_ours=rmse(lm_answer, saratoga_test)
 
-# add not meaningful interaction variable
-lm_notanswer= lm(price ~ . +  (age:livingArea + centralAir:lotSize) - pctCollege - sewer - waterfront - landValue - newConstruction, data=saratoga_train)
-rmse_for_not_meaningful_interaction=rmse(lm_notanswer, saratoga_test)
+
 ```
 
 ```{r problem 1.1, message=FALSE, echo=FALSE, warning=FALSE}
@@ -95,57 +92,30 @@ scale_train = apply(Xtrain, 2, sd)
 Xtilde_train = scale(Xtrain, scale=scale_train)
 Xtilde_test = scale(Xtest, scale=scale_train)
 
-
-#Xtilde_test=data.frame(Xtilde_test)%>%
-#  mutate(price=c(ytest))
-#Xtilde_train=data.frame(Xtilde_train)%>%
-#  mutate(price=c(ytrain))
-
+# make subset dataframe for the values we didn't include 
 Xtrain_add <- subset(knn_saratoga_train, select = c("pctCollege","sewer","waterfront","landValue","newConstruction"))
 Xtest_add <- subset(knn_saratoga_test, select = c("pctCollege","sewer","waterfront","landValue","newConstruction"))
 
-# add chr value columns again
+# make full dataframe that we will use
 Xtrain_full = data.frame(Xtilde_train,Xtrain_add) %>% as.data.frame()
 Xtest_full = data.frame(Xtilde_test,Xtest_add) %>% as.data.frame()
 
-
-#rmse_out_saratoga=foreach(i=2:150, .combine='c') %do% {
-#  knn_model_saratoga= knnreg(price ~ . - pctCollege - sewer - waterfront - landValue - newConstruction, #data=Xtrain_full, k=i)
-#  modelr::rmse(knn_model_saratoga,Xtest_full)
-#}
-
-#rmse_out_saratoga
-
+# set the grid of k 
 k_grid=2:150
 
-
+# with the range of 2 to 150 for k, make a forloop to get rmse for each k value
 finding_smallest_k = foreach(i=k_grid, .combine='c') %do% {
   knn_k=knnreg(price ~ ., data=Xtrain_full, k=i)
   rmse_k=rmse(knn_k,Xtest_full)
 }
 
-
-#finding_smallest_k = foreach(i=k_grid, .combine='c') %do% {
-#  knn_k=knnreg(price ~ . - pctCollege - sewer - waterfront - landValue - #newConstruction, data=Xtrain_full, k=i)
-#  rmse_k=rmse(knn_k,Xtest_full)
-#}
-
-#rmse == min(finding_smallest_k$rmse)
-#rmse
-
+# make dataframe
 finding_smallest_k = finding_smallest_k %>% as.data.frame()
 
+# find k value which has the minimum value of rmse
 best_k=which(finding_smallest_k == min(finding_smallest_k))
 
 best_k
-
-#knn_best_k=knnreg(price ~ . - pctCollege - sewer - waterfront - landValue - newConstruction, data=Xtrain_full, k=2)
-#rmse(knn_best_k,Xtest_full)
-
-# KNN with the optimal value K and getting RMSE
-#knn =knnreg(price ~ lotSize+age+livingArea+bedrooms+fireplaces+bathrooms+rooms+heating+fuel+centralAir, data=Xtilde_train, k=k_grid[which.min(finding_smallest_k)])
-
-#rmse(knn,Xtilde_test)
 
 
 ```
@@ -155,6 +125,8 @@ To build the best KNN regression model, we first found the optimal K that produc
 
 ```{r problem 1.2.1, message=FALSE, echo=FALSE, warning=FALSE}
 
+# there exists random variation due to the particular choice of data points that end up in your train/test split
+# make 150 train/test split and measuring out-of-sample performance
 compare_two_model= do(150)*{
   compare_two_split = initial_split(SaratogaHouses, prop = 0.8)
   compare_two_train = training(compare_two_split)
@@ -191,7 +163,15 @@ knitr:: kable(head(compare_two_model), col.names = c("RMSE_KNN","RMSE_LM"))
 ```
 
 ```{r problem 1.2.2, message=FALSE, echo=FALSE, warning=FALSE}
-knitr:: kable(colMeans(compare_two_model))
+
+# getting mean value of 150 rmse sets for knn and lm model we made
+dataset_mean_1 <- data.frame(colMeans(compare_two_model))
+rownames(dataset_mean_1) <- c("Mean KNN RMSE","Mean LM RMSE")
+colnames(dataset_mean_1) <- "x"
+
+knitr:: kable(dataset_mean_1)
+
+
 ```
 
 After running 150 random train/test splits, we can observe that our linear model has the lower average out-of-sample RMSE compared to that of the KNN model.
@@ -250,7 +230,7 @@ credit_history = credit %>%
 
 knitr::kables(
   list(
-  knitr:: kable(coef_df, valign='t'),
+  knitr:: kable(coef_df, col.names="coefficient",valign='t'),
   knitr:: kable(credit_history,col.names = c("history", "count"))
   )
 )
@@ -311,7 +291,6 @@ coef2= coef(b1_lm) %>% round(3)
 b_best_lm=lm(children ~ . - arrival_date + adults:stays_in_weekend_nights + adults:total_of_special_requests + adults:average_daily_rate + average_daily_rate:total_of_special_requests, data=dev_train)
 
 
-
 # calculating the confusion matrix which tabulates predicted class versus actual class , tresholding predicted probabilities at 0.5
 
 # Confusion matrix for baseline 1
@@ -341,10 +320,11 @@ We will use this to measure out-of-sample performance.
 Right table is Percentage of out-of-sample correct classifications.
 ```{r problem 3.1.1, message=FALSE, echo=FALSE}
 
+# baseline1 : confusion matrix and accuracy
 knitr::kables(
   list(
   knitr:: kable(confusion_b1, valign='t'),
-  knitr:: kable(round(sum(diag(confusion_b1))/sum(confusion_b1) * 100, 2))
+  knitr:: kable(round(sum(diag(confusion_b1))/sum(confusion_b1) * 100, 2),col.names = "Accuracy(%)")
   )
 )
 
@@ -359,10 +339,11 @@ We can check it never predicted children.
 Right table is Percentage of out-of-sample correct classifications
 ```{r problem 3.1.2, message=FALSE, echo=FALSE}
 
+# baseline2 : confusion matrix and accuracy
 knitr::kables(
   list(
   knitr:: kable(confusion_b2, valign='t'),
-  knitr:: kable(round(sum(diag(confusion_b2))/sum(confusion_b2) * 100, 2))
+  knitr:: kable(round(sum(diag(confusion_b2))/sum(confusion_b2) * 100, 2),col.names = "Accuracy(%)")
   )
 )
 ```
@@ -379,10 +360,11 @@ Having better result than baseline 1 model
 Right table is Percentage of out-of-sample correct classifications.
 ```{r problem 3.1.3, message=FALSE, echo=FALSE}
 
+# model we made : confusion matrix and accuracy
 knitr::kables(
   list(
   knitr:: kable(confusion_b_best, valign='t'),
-  knitr:: kable(round(sum(diag(confusion_b_best))/sum(confusion_b_best) * 100, 2))
+  knitr:: kable(round(sum(diag(confusion_b_best))/sum(confusion_b_best) * 100, 2),col.names = "Accuracy(%)")
   )
 )
 ```
@@ -399,28 +381,13 @@ Model we made has slightly higher result to baseline 2 model
 Validating the model by testing with entirely fresh data, `hotels_val.csv`
 
 ```{r problem 3.2.1, message=FALSE, echo=FALSE}
+# import the dataset
 val=read.csv('Data/hotels_val.csv')
-
-#b_best_lm=lm(children ~ . - arrival_date + adults:stays_in_weekend_nights + adults:total_of_special_requests + adults:average_daily_rate + average_daily_rate:total_of_special_requests, data=dev_train)
 
 
 phat_val_best=predict(b_best_lm, val, type = "response")
 
-
-#roc= foreach(i=1:90, .combine='c') %do% {
-#  yhat_val_best=ifelse(phat_val_best >= (i/100), 1, 0)
-#  confusion_val_best=table(y=val$children, yhat=yhat_val_best)
-#  TN=confusion_val_best[1,1]
-#  FP=confusion_val_best[1,2]
-#  FN=confusion_val_best[2,1]
-#  TP=confusion_val_best[2,2]
-#  FPR=FP/(TN+FP)
-#  TPR=TP/(FN+TP)
-#  TPR
-#  FPR
-#}
-#roc
-
+# get tpr value to build roc curve
 roc_tpr= foreach(i=1:90, .combine='c') %do% {
   yhat_val_best=ifelse(phat_val_best >= (i/100), 1, 0)
   confusion_val_best=table(y=val$children, yhat=yhat_val_best)
@@ -432,6 +399,7 @@ roc_tpr= foreach(i=1:90, .combine='c') %do% {
   TPR
 }
 
+# get fpr value to build roc curve
 roc_fpr= foreach(i=1:90, .combine='c') %do% {
   yhat_val_best=ifelse(phat_val_best >= (i/100), 1, 0)
   confusion_val_best=table(y=val$children, yhat=yhat_val_best)
@@ -453,6 +421,7 @@ To make ROC curve plot, we made a dataframe for False Positive Rate value and Tr
 
 
 ```{r problem 3.2.1.2, message=FALSE, echo=FALSE}
+# plot roc curve
 ggplot(roc_df)+
   geom_line(aes(x=roc_fpr, y=roc_tpr), color="blue") +
   labs(title="ROC curve for best linear model we built",
@@ -468,7 +437,7 @@ ggplot(roc_df)+
 
 We tried generating ROC with R package `ROCR`
 ```{r problem 3.2.2, message=FALSE, echo=FALSE}
-
+# plot roc curve with ROCR package
 phat_val_best=predict(b_best_lm, val, type = "response")
 val$pred_child <- phat_val_best
 pred <- prediction(val$pred_child, val$children)
@@ -539,6 +508,7 @@ knitr::kable(fold_cv_df)
 
 ```{r problem 3.2.4, message=FALSE, echo=FALSE, fig.width = 17}
 
+# plot expected vs actual bookings
 df2 <- melt(fold_cv_df, id.vars='fold')
 ggplot(df2, aes(x=fold, y=value, fill=variable),ylim=c(0, 40)) +
   geom_bar(stat='identity', position=position_dodge(), width=0.8) + 
