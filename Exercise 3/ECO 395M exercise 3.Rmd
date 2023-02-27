@@ -27,7 +27,9 @@ library(reshape2)
 ## 1) What causes what?
 
 Podcast notetaking
-__________________
+
+__________________________________
+
 Charlie: Teaching policy in Univ of Chicago and thinking of sending daughter Chicago public school. Mom thought Public school in Chicago is not good. 
 
 Charlie made argument with mom : what causes what?
@@ -52,7 +54,8 @@ Yale, IVY league will make kid's life better?
 problem: people not randomly assigned to ACC and Harvard, highly talented people go to Harvard. Wage/income comparison is hard here. Hard to study value added to this prestigious school. Large group of student going IVY league/Large group of student going ACC. 10-15 years later they compared. No real huge statistically significant different between income. 
 
 Charlie convinced mom about Chicago Public School
-________________
+
+____________________________
 
 ** Question 1 ** Why I can't just get data from a few different cities and run the regression of "crime" on "police" to understand how more cops in the streets affect crime?
 
