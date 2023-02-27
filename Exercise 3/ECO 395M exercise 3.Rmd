@@ -1,0 +1,152 @@
+---
+title: "ECO 395M exercise 3"
+author: "Minjin Kang, Paul Park"
+date: "2023-02-27"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(rpart)
+library(rpart.plot)
+library(ggplot2)
+library(rsample)  
+library(caret)
+library(modelr)
+library(parallel)
+library(foreach)
+library(tidyverse)
+library(mosaic)
+library(dplyr)
+library(ROCR)
+library(reshape2)
+
+```
+
+## 1) What causes what?
+
+Podcast notetaking
+__________________
+Charlie: Teaching policy in Univ of Chicago and thinking of sending daughter Chicago public school. Mom thought Public school in Chicago is not good. 
+
+Charlie made argument with mom : what causes what?
+
+Correlation and causation in decisions 
+When woman ages, estrogen going down and people getting estrogen therapy to solve this problem and it figured out that this therapy - lowering heart disease!
+With this, people came up with idea that "let's give estrogen to reduce heart disease"
+But there can exist other factors: what if people going hospital and getting estrogen is healthier people compare to others who not going hospital? (=selection bias)
+They did randomized trial
+Randomly assigned people to one of the group(control/treatment)
+!!Experiment result!! Women who getting estrogen having higher risk of heart disease(attack/strock) : estrogen is actually bad for heart
+This is everywhere. it's correlation, not causation.
+Statistic is amazing at finding causation but statistic itself is not enough for figuring out causation. 
+
+Cops and crime? will high cops lead to low crime?
+When terrorism alert goes to orange then extra cops will be on the mall etc to protect people
+Orange alert goes up then street crime goes down
+Causal relationship at least in Washington DC high cops lead to low crime
+but isn't it because less people on the street(num of victim) from terrorism alert?
+
+Yale, IVY league will make kid's life better?
+problem: people not randomly assigned to ACC and Harvard, highly talented people go to Harvard. Wage/income comparison is hard here. Hard to study value added to this prestigious school. Large group of student going IVY league/Large group of student going ACC. 10-15 years later they compared. No real huge statistically significant different between income. 
+
+Charlie convinced mom about Chicago Public School
+________________
+
+** Question 1 ** Why I can't just get data from a few different cities and run the regression of "crime" on "police" to understand how more cops in the streets affect crime?
+
+Running regression is not enough to find causation. The number of cops can't explain all about the crime rate. There can be other factors(confounders) affecting the crime rate, for example, drug/alcohol regulations, access to weapons, the criminal justice system, income inequality, and population density. Plus, there exist inherent differences for each city, and there can be a selection bias problem from collecting different cities in the sample. If there's a selection bias problem, we can't generalize the result of the regression. 
+
+
+** Question 2 ** How UPenn able to isolate this effect?
+
+UPenn added instrumental variable 'High Alert' and 'Mid day Ridership'. In a High Alert day, more cops will be on the street and shops and less people will be in public who can be targeted as victim. If we see the table, controlling High Alert,total daily crime lowered by 7. Mid day Ridership is dummy variable controlling METRO ridership. Including Mid day Ridership, there's still a negative relationship between high alert and crime, total daily crime lowered by 6. 
+
+
+## 2) Tree modeling: dengue cases
+
+** CART to predict dengue cases **
+
+```{r problem 2.CART, message=FALSE, echo=FALSE, warning=FALSE}
+# import data set
+dengue=read.csv('Data/dengue.csv')
+
+# find the count of missing values
+sum(is.na(dengue))
+dengue=na.omit(dengue)
+sum(is.na(dengue))
+
+# categorize the data and store it as levels (as city and season is character)
+dengue$city = factor(dengue$city)
+dengue$season = factor(dengue$season)
+
+# split into training and testing set
+dengue_split = initial_split(dengue, prop = 0.8)
+dengue_train = training(dengue_split)
+dengue_test = testing(dengue_split)
+
+# use default control settings
+dengue_tree=rpart(total_cases ~ city+season+specific_humidity+tdtr_k+precipitation_amt, data=dengue_train, control=rpart.control(cp=0.00002,minsplit=30))
+
+# the various summaries of the tree
+print(dengue_tree) # the structure
+summary(dengue_tree)  # more detail on the splits
+
+## plot the tree 
+# rpart.plot(dengue_tree)
+## for some reason it's not giving me an answer:/
+
+
+
+```
+
+** Random Forests to predict dengue cases **
+
+```{r problem 2.Random_forest, message=FALSE, echo=FALSE, warning=FALSE}
+
+
+#
+
+
+
+
+```
+
+** Gradient Boosted trees to predict dengue cases **
+
+```{r problem 2.Gradient_boosted, message=FALSE, echo=FALSE, warning=FALSE}
+
+
+#
+
+
+
+
+```
+
+
+## 3) Predictive model building: green certification
+
+
+```{r problem 3, message=FALSE, echo=FALSE, warning=FALSE}
+
+
+
+
+
+
+```
+
+
+## 4) Predictive model building: California housing 
+
+
+```{r problem 4, message=FALSE, echo=FALSE, warning=FALSE}
+
+
+
+
+
+
+```
