@@ -69,9 +69,9 @@ class and adopted in my base model to evaluate performance.
 
 Out-of-sample RMSEs for un-pruned CART and pruned CART is,
 
-    ## [1] 19.44889
+    ## [1] 23.12968
 
-    ## [1] 22.97364
+    ## [1] 21.68437
 
 Result shows pruned CART gives a little bit higher RMSE compared to
 un-pruned CART. This is due to the fact that pruned CART has higher bias
@@ -93,7 +93,7 @@ of random forest eliminates need for cross validation.
 
 Out-of-sample RMSEs for random forests is,
 
-    ## [1] 17.88604
+    ## [1] 21.28611
 
 #### Gradient Boosted trees to predict dengue cases
 
@@ -104,7 +104,7 @@ plotted error curve, which is deviance plot.
 
 ![](ECO-395M-exercise-3_files/figure-markdown_strict/problem%202.Gradient_boosted.1-1.png)
 
-    ## [1] 57
+    ## [1] 38
 
 The green line is our cross validated error. The x-axis of error curve
 is number of iterations and y-axis of error curve is deviance of the
@@ -113,7 +113,7 @@ best number of iteration minimizing error.
 
 Out-of-sample RMSEs for Gradient boosted tree is,
 
-    ## [1] 18.01396
+    ## [1] 20.11898
 
 ##### Checking model performance with out-of-sample RMSEs for each models
 
@@ -134,7 +134,7 @@ RMSE
 Un-pruned Tree
 </td>
 <td style="text-align:right;">
-19.44889
+23.12968
 </td>
 </tr>
 <tr>
@@ -142,7 +142,7 @@ Un-pruned Tree
 Pruned Tree
 </td>
 <td style="text-align:right;">
-22.97364
+21.68437
 </td>
 </tr>
 <tr>
@@ -150,7 +150,7 @@ Pruned Tree
 Random Forest
 </td>
 <td style="text-align:right;">
-17.88604
+21.28611
 </td>
 </tr>
 <tr>
@@ -158,7 +158,7 @@ Random Forest
 Gradient Boosting
 </td>
 <td style="text-align:right;">
-18.01396
+20.11898
 </td>
 </tr>
 </tbody>
@@ -231,8 +231,6 @@ We tried the random forest model and the gradient-boosted model with the
 interactions I used earlier, but the tree models without them give me
 the lowest rmse model.
 
-    ## Distribution not specified, assuming gaussian ...
-
 We then drew a variable importance plot of random forest model. The plot
 shows that City\_Market\_Rent, Size, and age contribute the most to our
 prediction.
@@ -264,7 +262,7 @@ RMSE
 Linear model
 </td>
 <td style="text-align:right;">
-923.4702
+1027.5862
 </td>
 </tr>
 <tr>
@@ -272,7 +270,7 @@ Linear model
 Improved linear model
 </td>
 <td style="text-align:right;">
-917.6019
+1023.1660
 </td>
 </tr>
 <tr>
@@ -280,7 +278,7 @@ Improved linear model
 Tree model
 </td>
 <td style="text-align:right;">
-888.4214
+1035.5146
 </td>
 </tr>
 <tr>
@@ -288,7 +286,7 @@ Tree model
 Pruned tree model
 </td>
 <td style="text-align:right;">
-932.7711
+1065.2214
 </td>
 </tr>
 <tr>
@@ -296,7 +294,7 @@ Pruned tree model
 Random forest model
 </td>
 <td style="text-align:right;">
-667.2420
+838.7580
 </td>
 </tr>
 <tr>
@@ -304,7 +302,7 @@ Random forest model
 Boosted model
 </td>
 <td style="text-align:right;">
-709.6704
+882.1738
 </td>
 </tr>
 </tbody>
@@ -319,8 +317,6 @@ CART, random forests, and gradient-boosted trees using all of the
 available features from the dataset. As one can see from below table
 comparing the RMSE of each model, random forest has the best overall
 out-of-sample accuracy of our proposed model.
-
-    ## Distribution not specified, assuming gaussian ...
 
 <table>
 <thead>
@@ -339,7 +335,7 @@ RMSE
 CART
 </td>
 <td style="text-align:right;">
-67790.42
+68975.13
 </td>
 </tr>
 <tr>
@@ -347,7 +343,7 @@ CART
 Random Forest
 </td>
 <td style="text-align:right;">
-50403.98
+50412.71
 </td>
 </tr>
 <tr>
@@ -355,7 +351,7 @@ Random Forest
 Gradient-Boosted Tree
 </td>
 <td style="text-align:right;">
-55540.44
+56176.19
 </td>
 </tr>
 </tbody>

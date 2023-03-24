@@ -342,7 +342,7 @@ We tried the random forest model and the gradient-boosted model with the interac
 random_forest_green <- randomForest(revenue~.- CS_PropertyID - Rent - leasing_rate - LEED - Energystar, data = green_train, proximity =TRUE, na.action = na.omit)
 
 #boosting
-green_boost = gbm(revenue ~ . - CS_PropertyID - Rent - leasing_rate - LEED - Energystar, data = green_train, interaction.depth=10, n.trees=500, shrinkage=.2, cv.folds = 10)
+green_boost = gbm(revenue ~ . - CS_PropertyID - Rent - leasing_rate - LEED - Energystar, data = green_train, distribution='gaussian', interaction.depth=10, n.trees=500, shrinkage=.2, cv.folds = 10)
 
 ```
 
@@ -412,7 +412,7 @@ rmse_CART = rmse(cahousing.tree_prune, cahousing_test)
 cahousing.forest = randomForest(medianHouseValue ~ ., data=cahousing_train, importance = TRUE)
 
 ##Prediction using Gradient-Boosted Trees
-cahousing.gbm = gbm(medianHouseValue ~ ., data=cahousing_train, 
+cahousing.gbm = gbm(medianHouseValue ~ ., data=cahousing_train, distribution='gaussian',
                interaction.depth=2, n.trees=500, shrinkage=.05)
 
 
