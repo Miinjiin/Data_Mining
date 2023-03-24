@@ -260,7 +260,7 @@ First, I created a new variable called "revenue" by multiplying Rent and leasing
 
 ```{r problem 3.1, message=FALSE, echo=FALSE, warning=FALSE}
 #Open the data
-green = read.csv('C:/Users/USER/Desktop/Data_Mining/greenbuildings.csv')
+green = read.csv('Data/greenbuildings.csv')
 
 ##First, I created a new variable called "revenue" by multiplying Rent and leasing_rate
 
