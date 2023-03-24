@@ -69,9 +69,9 @@ class and adopted in my base model to evaluate performance.
 
 Out-of-sample RMSEs for un-pruned CART and pruned CART is,
 
-    ## [1] 25.95948
+    ## [1] 21.98293
 
-    ## [1] 27.6704
+    ## [1] 25.47372
 
 Result shows pruned CART gives a little bit higher RMSE compared to
 un-pruned CART. This is due to the fact that pruned CART has higher bias
@@ -93,7 +93,7 @@ of random forest eliminates need for cross validation.
 
 Out-of-sample RMSEs for random forests is,
 
-    ## [1] 23.61748
+    ## [1] 23.0624
 
 #### Gradient Boosted trees to predict dengue cases
 
@@ -104,7 +104,7 @@ plotted error curve, which is deviance plot.
 
 ![](ECO-395M-exercise-3_files/figure-markdown_strict/problem%202.Gradient_boosted.1-1.png)
 
-    ## [1] 63
+    ## [1] 55
 
 The green line is our cross validated error. The x-axis of error curve
 is number of iterations and y-axis of error curve is deviance of the
@@ -113,7 +113,7 @@ best number of iteration minimizing error.
 
 Out-of-sample RMSEs for Gradient boosted tree is,
 
-    ## [1] 24.74216
+    ## [1] 22.26786
 
 ##### Checking model performance with out-of-sample RMSEs for each models
 
@@ -132,7 +132,7 @@ Out-of-sample RMSEs for Gradient boosted tree is,
 Tree
 </td>
 <td style="text-align:right;">
-25.95948
+21.98293
 </td>
 </tr>
 <tr>
@@ -140,7 +140,7 @@ Tree
 Pruned Tree
 </td>
 <td style="text-align:right;">
-27.67040
+25.47372
 </td>
 </tr>
 <tr>
@@ -148,7 +148,7 @@ Pruned Tree
 Random Forest
 </td>
 <td style="text-align:right;">
-23.61748
+23.06240
 </td>
 </tr>
 <tr>
@@ -156,7 +156,7 @@ Random Forest
 Gradient Boosting
 </td>
 <td style="text-align:right;">
-24.74216
+22.26786
 </td>
 </tr>
 </tbody>
@@ -191,34 +191,59 @@ positive effect on predicted outcome.
 
 ## 3) Predictive model building: green certification
 
-First, I created a new variable called “revenue” by multiplying Rent and
-leasing\_rate Next, I split the data into train and test set
+1.  Overview This question attempts to build the best predictive model
+    for revenue per square foot per calender year and to use this model
+    to possibly quantify the average change in rental income per square
+    foot associated with green certification, holding other features of
+    the building constant.
 
-I then started out with linear models on green\_train dataset We took
-out Rent and leasing\_rate as they are already taken into account. We
-also chose to take out LEED and Energystar and collapsed them into a
-single “green certified” category.
+2.  Modeling First, I created a new variable called “revenue” by
+    multiplying Rent and leasing\_rate Next, I split the data into train
+    and test set
 
-I improved my linear regression by adding interactions between
+We started out by fitting a linear regression model to predict revenue
+that included every variable in the data set as predictors.  
+We took out Rent and leasing\_rate as they are already taken into
+account as revenue. We also chose to take out LEED and Energystar and
+collapsed them into a single “green certified” category.
+
+We improved our linear regression model by adding interactions between
 Gas\_Costs, Electricity Costs with possible sources of the costs.
+Specifically, we figured that gas and electricity costs are associated
+with number of heating/cooling degree days, precipitation, city market
+rent, stories, age, amenities, renovation status by correlation tests.
 
-We then created a tree model with basic independent variables
+We then created a CART model with basic independent variables
 
 Next, we built a pruned tree model
-
-![](ECO-395M-exercise-3_files/figure-markdown_strict/problem%203.6-1.png)![](ECO-395M-exercise-3_files/figure-markdown_strict/problem%203.6-2.png)
 
 We then drew tree plots for the simple tree model and the pruned tree
 model.
 
-    ## Distribution not specified, assuming gaussian ...
+![](ECO-395M-exercise-3_files/figure-markdown_strict/problem%203.6-1.png)![](ECO-395M-exercise-3_files/figure-markdown_strict/problem%203.6-2.png)
 
 We used random forest and boosting and created more models for
 comparison
 
-I tried the random forest model and the boosted model with the
+We tried the random forest model and the gradient-boosted model with the
 interactions I used earlier, but the tree models without them give me
 the lowest rmse model.
+
+    ## Distribution not specified, assuming gaussian ...
+
+We then drew a variable importance plot of random forest model. The plot
+shows that City\_Market\_Rent, Size, and age contribute the most to our
+prediction.
+
+![](ECO-395M-exercise-3_files/figure-markdown_strict/problem%203.8-1.png)
+
+1.  Conclusion
+
+We fit linear models, tree models, random forests models and boosted
+random forests models. As we develop more sophisticated models, we find
+that the predictive power of the models get better and better. However,
+testing on the test data set, based on the out-of-sample rmse values, we
+find that the random forest model perform the best above all.
 
 <table>
 <thead>
@@ -237,7 +262,7 @@ RMSE
 Linear model
 </td>
 <td style="text-align:right;">
-1082.1636
+1039.9444
 </td>
 </tr>
 <tr>
@@ -245,7 +270,7 @@ Linear model
 Improved linear model
 </td>
 <td style="text-align:right;">
-1075.8765
+1025.8530
 </td>
 </tr>
 <tr>
@@ -253,7 +278,7 @@ Improved linear model
 Tree model
 </td>
 <td style="text-align:right;">
-1023.8860
+1003.6552
 </td>
 </tr>
 <tr>
@@ -261,7 +286,7 @@ Tree model
 Pruned tree model
 </td>
 <td style="text-align:right;">
-1072.9637
+1052.7127
 </td>
 </tr>
 <tr>
@@ -269,7 +294,7 @@ Pruned tree model
 Random forest model
 </td>
 <td style="text-align:right;">
-737.0622
+702.8681
 </td>
 </tr>
 <tr>
@@ -277,25 +302,21 @@ Random forest model
 Boosted model
 </td>
 <td style="text-align:right;">
-925.3471
+775.3381
 </td>
 </tr>
 </tbody>
 </table>
 
-Ranking the models from the lowest rmse to highest rmse, Random forest
-model &gt; Boosted model &gt; Pruned tree model ~ Tree model &gt;
-Improved linear model &gt; Linear model
-
 ## 4) Predictive model building: California housing
 
     ## Distribution not specified, assuming gaussian ...
 
-    ## [1] 67762.48
+    ## [1] 66382.74
 
-    ## [1] 50305.99
+    ## [1] 50857.71
 
-    ## [1] 55613.72
+    ## [1] 56258.76
 
 <table>
 <thead>
@@ -314,7 +335,7 @@ RMSE
 CART
 </td>
 <td style="text-align:right;">
-67762.48
+66382.74
 </td>
 </tr>
 <tr>
@@ -322,7 +343,7 @@ CART
 Random Forest
 </td>
 <td style="text-align:right;">
-50305.99
+50857.71
 </td>
 </tr>
 <tr>
@@ -330,7 +351,7 @@ Random Forest
 Gradient-Boosted Tree
 </td>
 <td style="text-align:right;">
-55613.72
+56258.76
 </td>
 </tr>
 </tbody>
