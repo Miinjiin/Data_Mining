@@ -61,15 +61,15 @@ ridership control, it is expected have 6 less total daily crime.
 
 \*\* RMSE value for CART \*\*
 
-    ## [1] 27.91309
+    ## [1] 28.69914
 
-    ## [1] 28.34896
+    ## [1] 29.24436
 
 \*\* Random Forests to predict dengue cases \*\*
 
 ![](ECO-395M-exercise-3_files/figure-markdown_strict/problem%202.Random_forest.1-1.png)![](ECO-395M-exercise-3_files/figure-markdown_strict/problem%202.Random_forest.1-2.png)
 
-    ## [1] 27.76481
+    ## [1] 29.66747
 
 \*\* Gradient Boosted trees to predict dengue cases \*\*
 
@@ -77,7 +77,7 @@ ridership control, it is expected have 6 less total daily crime.
 
 ![](ECO-395M-exercise-3_files/figure-markdown_strict/problem%202.Gradient_boosted.1-1.png)![](ECO-395M-exercise-3_files/figure-markdown_strict/problem%202.Gradient_boosted.1-2.png)
 
-    ## [1] 46
+    ## [1] 39
     ## attr(,"smoother")
     ## Call:
     ## loess(formula = object$oobag.improve ~ x, enp.target = min(max(4, 
@@ -85,28 +85,28 @@ ridership control, it is expected have 6 less total daily crime.
     ## 
     ## Number of Observations: 500 
     ## Equivalent Number of Parameters: 39.85 
-    ## Residual Standard Error: 0.7668
+    ## Residual Standard Error: 0.7734
 
-    ## [1] 29.78914
+    ## [1] 30.7305
 
 <table>
 <caption>Result RMSE for each model</caption>
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Tree</td>
-<td style="text-align: right;">27.91309</td>
+<td style="text-align: right;">28.69914</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Pruned Tree</td>
-<td style="text-align: right;">28.34896</td>
+<td style="text-align: right;">29.24436</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Random Forest</td>
-<td style="text-align: right;">27.76481</td>
+<td style="text-align: right;">29.66747</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Gradient Boosting</td>
-<td style="text-align: right;">29.78914</td>
+<td style="text-align: right;">30.73050</td>
 </tr>
 </tbody>
 </table>
@@ -175,27 +175,27 @@ the lowest rmse model.
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Linear model</td>
-<td style="text-align: right;">1004.8403</td>
+<td style="text-align: right;">986.5210</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Improved linear model</td>
-<td style="text-align: right;">998.0371</td>
+<td style="text-align: right;">982.4042</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Tree model</td>
-<td style="text-align: right;">930.7297</td>
+<td style="text-align: right;">995.6774</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Pruned tree model</td>
-<td style="text-align: right;">960.7391</td>
+<td style="text-align: right;">1015.1652</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Random forest model</td>
-<td style="text-align: right;">663.1446</td>
+<td style="text-align: right;">715.2350</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Boosted model</td>
-<td style="text-align: right;">851.2329</td>
+<td style="text-align: right;">868.8011</td>
 </tr>
 </tbody>
 </table>
@@ -208,11 +208,11 @@ Improved linear model &gt; Linear model
 
     ## Distribution not specified, assuming gaussian ...
 
-    ## [1] 65804.5
+    ## [1] 68462.16
 
-    ## [1] 48031.34
+    ## [1] 53186.71
 
-    ## [1] 53206.41
+    ## [1] 58374.96
 
 <table>
 <thead>
@@ -224,19 +224,17 @@ Improved linear model &gt; Linear model
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">CART</td>
-<td style="text-align: right;">65804.50</td>
+<td style="text-align: right;">68462.16</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Random Forest</td>
-<td style="text-align: right;">48031.34</td>
+<td style="text-align: right;">53186.71</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Gradient-Boosted Tree</td>
-<td style="text-align: right;">53206.41</td>
+<td style="text-align: right;">58374.96</td>
 </tr>
 </tbody>
 </table>
 
-![](ECO-395M-exercise-3_files/figure-markdown_strict/problem%204-1.png)
-
-![](ECO-395M-exercise-3_files/figure-markdown_strict/problem%204ggmap-1.png)
+![](ECO-395M-exercise-3_files/figure-markdown_strict/problem%204ggmap-1.png)![](ECO-395M-exercise-3_files/figure-markdown_strict/problem%204ggmap-2.png)![](ECO-395M-exercise-3_files/figure-markdown_strict/problem%204ggmap-3.png)
