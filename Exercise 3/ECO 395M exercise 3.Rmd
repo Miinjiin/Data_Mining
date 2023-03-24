@@ -1,6 +1,6 @@
 ---
 title: "ECO 395M exercise 3"
-author: "Minjin Kang, Paul Park, Phillip Ahn"
+author: "Minjin Kang, Paul Park, Phillip An"
 date: "2023-02-27"
 output: md_document
 ---
@@ -22,35 +22,40 @@ library(pdp)
 library(knitr)
 library(scales)
 library(ggmap)
+library(kableExtra)
 
 ```
 
 ## 1) What causes what?
 
 
-** Question 1 ** Why I can't just get data from a few different cities and run the regression of "crime" on "police" to understand how more cops in the streets affect crime?
+**Question 1 Why I can't just get data from a few different cities and run the regression of "crime" on "police" to understand how more cops in the streets affect crime?**
 
 Running regression is not enough to find causation. The number of cops can't explain all about the crime rate. There can be other factors(confounders) affecting the crime rate, for example, drug/alcohol regulations, access to weapons, the criminal justice system, income inequality, and population density. Plus, there exist inherent differences for each city, and there can be a selection bias problem from collecting different cities in the sample. If there's a selection bias problem, we can't generalize the result of the regression. 
 
 
-** Question 2 ** How UPenn able to isolate this effect?
+**Question 2 How UPenn able to isolate this effect?**
 
 UPenn added instrumental variable 'High Alert' and 'Midday Ridership'. In a High Alert day, more cops will be on the street and shops and less people will be in public who can be targeted as victim. If we see the table, controlling High Alert, total daily crime lowered by 7. Mid day Ridership is dummy variable controlling METRO ridership. Including Mid day Ridership, there's still a negative relationship between high alert and crime, total daily crime lowered by 6. 
 
 
-** Question 3 ** Why did they have to control for Metro ridership? 
+**Question 3 Why did they have to control for Metro ridership?** 
 
 To get a true effect of police presence on crime rate in D.C., the researchers decided to control Metro ridership, as adding this IV variable can control the probability that the crime rate goes up/down from the fact that more/less people on the street. We can mitigate the potential biases caused by METRO ridership usage and can obtain clearer estimate of causal effect of police presence on crime rate. 
 
 
-** Question 4 ** What was that trying to capture?
+**Question 4 What was that trying to capture?**
 
-The first column of the table is about linear model using robust regression with dependent variable daily total number of crimes in D.C. Here, on top of two instrumental variable 'High Alert' and 'Midday ridership', researchers added 'District 1' dummy variable, which demonstrates that crime happened in the first policy district area. Interaction term 'High Alert x District 1''s coefficient -2.6 illustrates the differential effect of the high alert on the first policy district area compared to non-fist policy district area. Holding all else fixed, this interaction variable is associated with 2.6 less total daily crime. Interaction term 'High Alert x Other Districts''s coefficient -0.57 implies the differential effect of the high alert on the other disticts compared to non-other districts. Holding all else fixed, this interaction variable is associated with 0.57 less total daily crime. The coefficient of 'Midday ridership' means, with the METRO ridership control, it is expected have 6 less total daily crime.  
+The first column of the table is about linear model using robust regression with the dependent variable daily total number of crimes in D.C. Here, on top of two instrumental variables 'High Alert' and 'Midday ridership', researchers added 'District 1' dummy variable, which demonstrates that crime happened in the first policy district area. Interaction term 'High Alert x District 1''s coefficient -2.6 illustrates the differential effect of the high alert on the first policy district area compared to non-first policy district area. Holding all else fixed, this interaction variable is associated with 2.6 less total daily crime. Interaction term 'High Alert x Other Districts''s coefficient -0.57 implies the differential effect of the high alert on the other districts compared to non-other districts. Holding all else fixed, this interaction variable is associated with 0.57 less total daily crime. The coefficient of 'Midday ridership' means, with the METRO ridership control, it is expected to have 6 less total daily crime.  
 
 
 ## 2) Tree modeling: dengue cases
 
-** Classification and Regression Trees (CART) to predict dengue cases **
+\newline
+
+#### Classification and Regression Trees (CART) to predict dengue cases
+
+After dropping missing values from `dengue.csv`, I created base model regressing total_cases for all other variables, and with `rpart()` function, plotted the result tree. This is un-pruned tree which allows tree to grow its maximum size, includes all possible splits in the training data.
 
 ```{r problem 2.CART.1, message=FALSE, echo=FALSE, warning=FALSE}
 # import data set
@@ -70,18 +75,20 @@ dengue_split = initial_split(dengue, prop = 0.8)
 dengue_train = training(dengue_split)
 dengue_test = testing(dengue_split)
 
-# fit a tree
+# make base model
 dengue_tree_CART=rpart(total_cases ~ . , data=dengue_train, control=rpart.control(cp=0.002,minsplit=30))
 
 # the various summaries of the tree
 # print(dengue_tree_CART) # the structure
 # summary(dengue_tree_CART)  # more detail on the splits
 
-# plot the tree 
+# plot the decision tree 
 rpart.plot(dengue_tree_CART, digits=-5, type=4, extra=1)
 
 
 ```
+
+To perform cross-validation, I used prune function given during the class and adopted in my base model to evaluate performance.
 
 ```{r problem 2.CART.2, message=FALSE, echo=FALSE, warning=FALSE}
 
@@ -98,11 +105,12 @@ prune_1se = function(my_tree) {
 dengue_tree_prune1se = prune_1se(dengue_tree_CART)
 
 # plot the tree 
-rpart.plot(dengue_tree_prune1se, digits=-5, type=4, extra=1)
+rpart.plot(dengue_tree_prune1se, digits=4, type=4, extra=1, fallen.leaves = TRUE)
 ```
 
+\newline
 
-** RMSE value for CART **
+Out-of-sample RMSEs for un-pruned CART and pruned CART is, 
 
 ```{r problem 2.CART.3, message=FALSE, echo=FALSE, warning=FALSE}
 # check the rmse
@@ -114,10 +122,13 @@ rmse_CART_nonprune
 rmse_CART_prune
 ```
 
+Result shows pruned CART gives a little bit higher RMSE compared to un-pruned CART. This is due to the fact that pruned CART has higher bias and lower variance as it is less flexible then un-pruned CART. 
 
+\newline\newline
 
+#### Random Forests to predict dengue cases
 
-** Random Forests to predict dengue cases **
+I created base model regressing total_cases for all other variables and plotted a variable importance plot.
 
 ```{r problem 2.Random_forest.1, message=FALSE, echo=FALSE, warning=FALSE}
 
@@ -125,12 +136,20 @@ rmse_CART_prune
 dengue_tree_RF = randomForest(total_cases ~ . , data=dengue_train, important=TRUE)
 
 # performance as a function of iteration number
-plot(dengue_tree_RF)
+# plot(dengue_tree_RF)
 
 # a variable importance plot: how much SSE decreases from including each var
 varImpPlot(dengue_tree_RF)
 
 ```
+
+Will use this plot later to pick the variable for partial dependence plot. 
+
+Cross validation is not strictly needed for building a random forest model, as random forest combines multiple decision trees. The randomness of random forest eliminates need for cross validation. 
+
+\newline
+
+Out-of-sample RMSEs for random forests is, 
 
 ```{r problem 2.Random_forest.2, message=FALSE, echo=FALSE, warning=FALSE}
 
@@ -142,20 +161,31 @@ rmse_RF
 
 ```
 
+\newline\newline
 
-** Gradient Boosted trees to predict dengue cases **
+#### Gradient Boosted trees to predict dengue cases
+
+After fitting tree for gradient boosted trees model, for cross validation, I added `cv.folds()` in `gbm` package. I searched common choice for the number of folds is between 5 and 10, so I chose 8. I plotted error curve, which is deviance plot. 
 
 ```{r problem 2.Gradient_boosted.1, message=FALSE, echo=FALSE, warning=FALSE}
 
 # fit a tree for gradient boosted trees
-dengue_tree_Boost= gbm(total_cases ~ . , data=dengue_train,interaction.depth=4, n.trees=500, shrinkage=.05)
-
+dengue_tree_Boost= gbm(total_cases ~ . ,distribution='gaussian', data=dengue_train,interaction.depth=4, n.trees=500, shrinkage=.05, cv.folds = 8)
+  
 # plot for gradient boosting 
-plot(dengue_tree_Boost)
+# plot(dengue_tree_Boost)
 
 # Look at error curve -- stops decreasing much after ~300
 gbm.perf(dengue_tree_Boost)
 ```
+
+The green line is our cross validated error. 
+The x-axis of error curve is number of iterations and y-axis of error curve is deviance of the model, which measures goodness of the fit.
+The blue dashed line is the best number of iteration minimizing error. 
+
+\newline
+
+Out-of-sample RMSEs for Gradient boosted tree is, 
 
 ```{r problem 2.Gradient_boosted.2, message=FALSE, echo=FALSE, warning=FALSE}
 
@@ -167,6 +197,9 @@ rmse_Boost
 
 ```
 
+\newline\newline
+
+##### Checking model performance with out-of-sample RMSEs for each models
 
 ```{r problem 2.RMSE_table, message=FALSE, echo=FALSE, warning=FALSE}
 
@@ -174,24 +207,27 @@ first_col= c("Tree","Pruned Tree","Random Forest","Gradient Boosting")
 second_col= c(rmse_CART_nonprune,rmse_CART_prune,rmse_RF,rmse_Boost)
 
 df = data.frame(first_col, second_col)
-knitr::kable(df,col.names = c("",""), caption="Result RMSE for each model")
+
+knitr::kable(df,col.names = c("",""))%>%
+  kable_styling(bootstrap_options = "striped", full_width = F)
 
 ```
 We can check that the Random Forest is the best performance on the testing data.
 
+\newline\newline
 
-** Partial dependence plots **
+#### Partial dependence plots
 
-With selected best performance model, Random Forest, we will plot the partial dependence plots to isolate the partial effect of specific features on the outcome. Will make four partial dependence plots about `specific_humidity`, `precipitation_amt` and our group's choices `min_air_temp_k` and `tdtr_k`. These were chosen from a variable importance plot made from Random Forest part.
+With selected best performance model, Random Forest, we will plot the partial dependence plots to isolate the partial effect of specific features on the outcome. Will make three partial dependence plots about `specific_humidity`, `precipitation_amt` and our group's choice `min_air_temp_k`. This variable was chosen from a variable importance plot made from Random Forest part.
 
-** specific_humidity **
+##### `specific_humidity`
 ```{r problem 2.partial_plots.1, message=FALSE, echo=FALSE, warning=FALSE}
 
 partialPlot(dengue_tree_RF, dengue_test, 'specific_humidity', las=1)
 
 ```
 
-** precipitation_amt **
+##### `precipitation_amt`
 ```{r problem 2.partial_plots.2, message=FALSE, echo=FALSE, warning=FALSE}
 
 partialPlot(dengue_tree_RF, dengue_test, 'precipitation_amt', las=1)
@@ -199,14 +235,16 @@ partialPlot(dengue_tree_RF, dengue_test, 'precipitation_amt', las=1)
 ```
 
 
-** min_air_temp_k and tdtr_k **
+##### `min_air_temp_k`
 ```{r problem 2.partial_plots.3, message=FALSE, echo=FALSE, warning=FALSE}
 
 partialPlot(dengue_tree_RF, dengue_test, 'min_air_temp_k', las=1)
-partialPlot(dengue_tree_RF, dengue_test, 'tdtr_k', las=1)
 
 ```
 
+Plots shows increasing graph, we can interpret this these features has a positive effect on predicted outcome. 
+
+\newline\newline
 
 ## 3) Predictive model building: green certification
 
