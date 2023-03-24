@@ -61,15 +61,15 @@ ridership control, it is expected have 6 less total daily crime.
 
 \*\* RMSE value for CART \*\*
 
-    ## [1] 32.11021
+    ## [1] 27.91309
 
-    ## [1] 32.9381
+    ## [1] 28.34896
 
 \*\* Random Forests to predict dengue cases \*\*
 
 ![](ECO-395M-exercise-3_files/figure-markdown_strict/problem%202.Random_forest.1-1.png)![](ECO-395M-exercise-3_files/figure-markdown_strict/problem%202.Random_forest.1-2.png)
 
-    ## [1] 30.43331
+    ## [1] 27.76481
 
 \*\* Gradient Boosted trees to predict dengue cases \*\*
 
@@ -77,7 +77,7 @@ ridership control, it is expected have 6 less total daily crime.
 
 ![](ECO-395M-exercise-3_files/figure-markdown_strict/problem%202.Gradient_boosted.1-1.png)![](ECO-395M-exercise-3_files/figure-markdown_strict/problem%202.Gradient_boosted.1-2.png)
 
-    ## [1] 34
+    ## [1] 46
     ## attr(,"smoother")
     ## Call:
     ## loess(formula = object$oobag.improve ~ x, enp.target = min(max(4, 
@@ -85,28 +85,28 @@ ridership control, it is expected have 6 less total daily crime.
     ## 
     ## Number of Observations: 500 
     ## Equivalent Number of Parameters: 39.85 
-    ## Residual Standard Error: 0.783
+    ## Residual Standard Error: 0.7668
 
-    ## [1] 31.01587
+    ## [1] 29.78914
 
 <table>
 <caption>Result RMSE for each model</caption>
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Tree</td>
-<td style="text-align: right;">32.11021</td>
+<td style="text-align: right;">27.91309</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Pruned Tree</td>
-<td style="text-align: right;">32.93810</td>
+<td style="text-align: right;">28.34896</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Random Forest</td>
-<td style="text-align: right;">30.43331</td>
+<td style="text-align: right;">27.76481</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Gradient Boosting</td>
-<td style="text-align: right;">31.01587</td>
+<td style="text-align: right;">29.78914</td>
 </tr>
 </tbody>
 </table>
@@ -175,27 +175,27 @@ the lowest rmse model.
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Linear model</td>
-<td style="text-align: right;">990.9241</td>
+<td style="text-align: right;">1004.8403</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Improved linear model</td>
-<td style="text-align: right;">985.9410</td>
+<td style="text-align: right;">998.0371</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Tree model</td>
-<td style="text-align: right;">996.3283</td>
+<td style="text-align: right;">930.7297</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Pruned tree model</td>
-<td style="text-align: right;">1032.0956</td>
+<td style="text-align: right;">960.7391</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Random forest model</td>
-<td style="text-align: right;">739.4765</td>
+<td style="text-align: right;">663.1446</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Boosted model</td>
-<td style="text-align: right;">895.5239</td>
+<td style="text-align: right;">851.2329</td>
 </tr>
 </tbody>
 </table>
@@ -205,3 +205,38 @@ model &gt; Boosted model &gt; Pruned tree model ~ Tree model &gt;
 Improved linear model &gt; Linear model
 
 ## 4) Predictive model building: California housing
+
+    ## Distribution not specified, assuming gaussian ...
+
+    ## [1] 65804.5
+
+    ## [1] 48031.34
+
+    ## [1] 53206.41
+
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Model</th>
+<th style="text-align: right;">RMSE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">CART</td>
+<td style="text-align: right;">65804.50</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Random Forest</td>
+<td style="text-align: right;">48031.34</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Gradient-Boosted Tree</td>
+<td style="text-align: right;">53206.41</td>
+</tr>
+</tbody>
+</table>
+
+![](ECO-395M-exercise-3_files/figure-markdown_strict/problem%204-1.png)
+
+![](ECO-395M-exercise-3_files/figure-markdown_strict/problem%204ggmap-1.png)
