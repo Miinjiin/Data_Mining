@@ -250,9 +250,17 @@ Plots shows increasing graph, we can interpret this these features has a positiv
 ## 3) Predictive model building: green certification
 
 
+1) Overview
+This question attempts to build the best predictive model for revenue per square foot per calender year and to use this model to possibly quantify the average change in rental income per square foot associated with green certification, holding other features of the building constant. 
+
+
+2) Modeling
+First, I created a new variable called "revenue" by multiplying Rent and leasing_rate
+ Next, I split the data into train and test set
+
 ```{r problem 3.1, message=FALSE, echo=FALSE, warning=FALSE}
 #Open the data
-green = read.csv('Data/greenbuildings.csv')
+green = read.csv('C:/Users/USER/Desktop/Data_Mining/greenbuildings.csv')
 
 ##First, I created a new variable called "revenue" by multiplying Rent and leasing_rate
 
@@ -265,9 +273,10 @@ green_train = training(green_split)
 green_test = testing(green_split)
 
 ```
-First, I created a new variable called "revenue" by multiplying Rent and leasing_rate
- Next, I split the data into train and test set
 
+We started out by fitting a linear regression model to predict revenue that included every variable in the data set as predictors.  
+We took out Rent and leasing_rate as they are already taken into account as revenue.
+We also chose to take out LEED and Energystar and collapsed them into a single "green certified" category.
 
 
 ```{r problem 3.2, message=FALSE, echo=FALSE, warning=FALSE}
@@ -276,19 +285,17 @@ lm_green1 = lm(revenue ~ . - Rent - leasing_rate - CS_PropertyID - LEED - Energy
 
 ```
 
-I then started out with linear models on green_train dataset
-We took out Rent and leasing_rate as they are already taken into account.
-We also chose to take out LEED and Energystar and collapsed them into a single "green certified" category.
+
+We improved our linear regression model by adding interactions between Gas_Costs, Electricity Costs with possible sources of the costs. Specifically, we figured that gas and electricity costs are associated with number of heating/cooling degree days, precipitation, city market rent, stories, age, amenities, renovation status by correlation tests.
 
 ```{r problem 3.3, message=FALSE, echo=FALSE, warning=FALSE}
 
-lm_green_improved = lm(revenue ~ . - Rent - leasing_rate - CS_PropertyID - LEED - Energystar + Gas_Costs:renovated + Gas_Costs:total_dd_07 + Gas_Costs:Precipitation + Gas_Costs:amenities + Gas_Costs:City_Market_Rent + Electricity_Costs:renovated + Electricity_Costs:total_dd_07 + Electricity_Costs:Precipitation + Electricity_Costs:City_Market_Rent + Electricity_Costs:amenities, data = green_train)
+# creating a new improved linear regression model
+lm_green_improved = lm(revenue ~ . - Rent - leasing_rate - CS_PropertyID - LEED - Energystar + Gas_Costs:total_dd_07 + Gas_Costs:Precipitation + Gas_Costs:amenities + Gas_Costs:City_Market_Rent +  Gas_Costs:stories +  Electricity_Costs:renovated + Electricity_Costs:total_dd_07 + Electricity_Costs:Precipitation + Electricity_Costs:Gas_Costs + Electricity_Costs:stories + Electricity_Costs:age + Electricity_Costs:City_Market_Rent + Electricity_Costs:amenities, data = green_train)
 
 ```
 
-I improved my linear regression by adding interactions between Gas_Costs, Electricity Costs with possible sources of the costs. 
-
-
+We then created a CART model with basic independent variables
 
 ```{r problem 3.4, message=FALSE, echo=FALSE, warning=FALSE}
 
@@ -297,8 +304,7 @@ green_tree = rpart(revenue ~ . - CS_PropertyID - Rent - leasing_rate - LEED - En
 
 ```
 
-We then created a tree model with basic independent variables
-
+Next, we built a pruned tree model
 
 ```{r problem 3.5, message=FALSE, echo=FALSE, warning=FALSE}
 
@@ -315,7 +321,7 @@ pruned_green_tree = prune_1se(green_tree)
 
 ```
 
-Next, we built a pruned tree model
+We then drew tree plots for the simple tree model and the pruned tree model.
 
 ```{r problem 3.6, message=FALSE, echo=FALSE, warning=FALSE}
 
@@ -324,24 +330,35 @@ rpart.plot(pruned_green_tree, type=4, extra=1)
 
 ```
 
-We then drew tree plots for the simple tree model and the pruned tree model.
+
+We used random forest and boosting and created more models for comparison
+
+We tried the random forest model and the gradient-boosted model with the interactions I used earlier, but the tree models without them give me the lowest rmse model.
 
 
 ```{r problem 3.7, message=FALSE, echo=FALSE, warning=FALSE}
 
 #Random forest
-rf_green <- randomForest(revenue~.- CS_PropertyID - Rent - leasing_rate - LEED - Energystar, data = green_train, proximity =TRUE, na.action = na.omit)
+random_forest_green <- randomForest(revenue~.- CS_PropertyID - Rent - leasing_rate - LEED - Energystar, data = green_train, proximity =TRUE, na.action = na.omit)
 
 #boosting
-green_boost = gbm(revenue ~ . - CS_PropertyID - Rent - leasing_rate - LEED - Energystar, data = green_train, interaction.depth=4, n.trees=500, shrinkage=.05)
+green_boost = gbm(revenue ~ . - CS_PropertyID - Rent - leasing_rate - LEED - Energystar, data = green_train, interaction.depth=10, n.trees=500, shrinkage=.2, cv.folds = 10)
 
 ```
 
-We used random forest and boosting and created more models for comparison
-
-I tried the random forest model and the boosted model with the interactions I used earlier, but the tree models without them give me the lowest rmse model.
+We then drew a variable importance plot of random forest model. The plot shows that City_Market_Rent, Size, and age contribute the most to our prediction. 
 
 ```{r problem 3.8, message=FALSE, echo=FALSE, warning=FALSE}
+
+vi = varImpPlot(random_forest_green, type=2)
+
+```
+
+3) Conclusion
+
+We fit linear models, tree models, random forests models and boosted random forests models. As we develop more sophisticated models, we find that the predictive power of the models get better and better. However, testing on the test data set, based on the out-of-sample rmse values, we find that the random forest model perform the best above all.
+
+```{r problem 3.9, message=FALSE, echo=FALSE, warning=FALSE}
 
 ###Testing on test dataset
 rmse_outcome = data.frame(
@@ -351,15 +368,12 @@ rmse_outcome = data.frame(
            rmse(lm_green_improved, green_test),
            rmse(green_tree, green_test),
            rmse(pruned_green_tree, green_test),
-           rmse(rf_green, green_test),
+           rmse(random_forest_green, green_test),
            rmse(green_boost, green_test))
 )
 
 kable(rmse_outcome)
 ```
-
-Ranking the models from the lowest rmse to highest rmse,
-Random forest model > Boosted model > Pruned tree model ~ Tree model > Improved linear model > Linear model
 
 
 ## 4) Predictive model building: California housing 
