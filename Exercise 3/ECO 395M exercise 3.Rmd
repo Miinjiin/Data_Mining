@@ -21,6 +21,7 @@ library(gbm)
 library(pdp)
 library(knitr)
 library(scales)
+library(ggmap)
 
 ```
 
@@ -331,9 +332,67 @@ Random forest model > Boosted model > Pruned tree model ~ Tree model > Improved 
 
 ```{r problem 4, message=FALSE, echo=FALSE, warning=FALSE}
 
+cahousing=read.csv('Data/CAhousing.csv')
+
+cahousing_split = initial_split(cahousing, prop = 0.8)
+cahousing_train = training(cahousing_split)
+cahousing_test = testing(cahousing_split)
 
 
+#Prediction using CART / fitting a single tree
+cahousing.tree = rpart(medianHouseValue ~ ., data=cahousing_train,
+                  control = rpart.control(cp = 0.002, minsplit=30))
+
+  #Prune the tree at which level CV error is within 1 std err of the minimum
+prune_1se = function(my_tree) {
+  out = as.data.frame(my_tree$cptable)
+  thresh = min(out$xerror + out$xstd)
+  cp_opt = max(out$CP[out$xerror <= thresh])
+  prune(my_tree, cp=cp_opt)
+}
+
+  #Prune our tree at the 1se complexity level
+cahousing.tree_prune = prune_1se(cahousing.tree)
+
+  #RMSE of CART
+rmse_CART = rmse(cahousing.tree_prune, cahousing_test)
+
+#Prediction using Random Forest
+cahousing.forest = randomForest(medianHouseValue ~ ., data=cahousing_train, importance = TRUE)
+
+##Prediction using Gradient-Boosted Trees
+cahousing.gbm = gbm(medianHouseValue ~ ., data=cahousing_train, 
+               interaction.depth=2, n.trees=500, shrinkage=.05)
 
 
+#compare RMSE among the three models
+rmse_cart = modelr::rmse(cahousing.tree_prune, cahousing_test)
+rmse_rf = modelr::rmse(cahousing.forest, cahousing_test)
+rmse_gbm = modelr::rmse(cahousing.gbm, cahousing_test)
+
+rmse_cart
+rmse_rf
+rmse_gbm
+
+# Create a comparison table
+rmse_comparison = data.frame (
+  Model = c("CART","Random Forest","Gradient-Boosted Tree"),
+  RMSE = c(rmse_cart, rmse_rf,rmse_gbm)
+)
+
+kable(rmse_comparison)
+
+# variable importance measures
+vi = varImpPlot(cahousing.forest, type=1)
+
+
+```
+
+```{r problem 4ggmap, message=FALSE, echo=FALSE, warning=FALSE}
+
+#get a map of CA
+bbox <- c(bottom = 32.213, top = 42.163 , right = -113.95, left = -124.585)
+camap <- get_stamenmap(bbox = bbox, zoom = 8)
+ggmap(camap)
 
 ```
