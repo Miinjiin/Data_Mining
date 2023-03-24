@@ -136,7 +136,6 @@ summary(dengue_tree)  # more detail on the splits
 
 ## 3) Predictive model building: green certification
 
-
 ```{r problem 3.1, message=FALSE, echo=FALSE, warning=FALSE}
 #Open the data
 green = read.csv('C:/Users/USER/Desktop/Data_Mining/greenbuildings.csv')
@@ -221,7 +220,6 @@ rf_green <- randomForest(revenue~.- CS_PropertyID - Rent - leasing_rate - LEED -
 
 #boosting
 green_boost = gbm(revenue ~ . - CS_PropertyID - Rent - leasing_rate - LEED - Energystar, data = green_train, interaction.depth=4, n.trees=1000, shrinkage=.05)
-_green_tree, type=4, extra=1)
 
 ````
 
