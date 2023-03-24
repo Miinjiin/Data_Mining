@@ -1,66 +1,31 @@
 ---
 title: "ECO 395M exercise 3"
-author: "Minjin Kang, Paul Park"
+author: "Minjin Kang, Paul Park, Phillip Ahn"
 date: "2023-02-27"
-output: html_document
+output: md_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
+library(rpart)
+library(rpart.plot)
 library(ggplot2)
+library(dplyr)
 library(rsample)  
 library(caret)
 library(modelr)
-library(parallel)
-library(foreach)
-library(tidyverse)
-library(mosaic)
-library(dplyr)
-library(ROCR)
-library(reshape2)
-library(rpart)
+library(lubridate)
+library(randomForest)
 library(gbm)
-library(rpart.plot)
+library(pdp)
 library(knitr)
 library(scales)
-library(ggmap)
-library(pdp)
-library(randomForest)
 
 ```
 
 ## 1) What causes what?
 
-Podcast notetaking
-
-__________________________________
-
-Charlie: Teaching policy in Univ of Chicago and thinking of sending daughter Chicago public school. Mom thought Public school in Chicago is not good. 
-
-Charlie made argument with mom : what causes what?
-
-Correlation and causation in decisions 
-When woman ages, estrogen going down and people getting estrogen therapy to solve this problem and it figured out that this therapy - lowering heart disease!
-With this, people came up with idea that "let's give estrogen to reduce heart disease"
-But there can exist other factors: what if people going hospital and getting estrogen is healthier people compare to others who not going hospital? (=selection bias)
-They did randomized trial
-Randomly assigned people to one of the group(control/treatment)
-!!Experiment result!! Women who getting estrogen having higher risk of heart disease(attack/strock) : estrogen is actually bad for heart
-This is everywhere. it's correlation, not causation.
-Statistic is amazing at finding causation but statistic itself is not enough for figuring out causation. 
-
-Cops and crime? will high cops lead to low crime?
-When terrorism alert goes to orange then extra cops will be on the mall etc to protect people
-Orange alert goes up then street crime goes down
-Causal relationship at least in Washington DC high cops lead to low crime
-but isn't it because less people on the street(num of victim) from terrorism alert?
-
-Yale, IVY league will make kid's life better?
-problem: people not randomly assigned to ACC and Harvard, highly talented people go to Harvard. Wage/income comparison is hard here. Hard to study value added to this prestigious school. Large group of student going IVY league/Large group of student going ACC. 10-15 years later they compared. No real huge statistically significant different between income. 
-
-Charlie convinced mom about Chicago Public School
-____________________________
 
 ** Question 1 ** Why I can't just get data from a few different cities and run the regression of "crime" on "police" to understand how more cops in the streets affect crime?
 
@@ -69,21 +34,31 @@ Running regression is not enough to find causation. The number of cops can't exp
 
 ** Question 2 ** How UPenn able to isolate this effect?
 
-UPenn added instrumental variable 'High Alert' and 'Mid day Ridership'. In a High Alert day, more cops will be on the street and shops and less people will be in public who can be targeted as victim. If we see the table, controlling High Alert,total daily crime lowered by 7. Mid day Ridership is dummy variable controlling METRO ridership. Including Mid day Ridership, there's still a negative relationship between high alert and crime, total daily crime lowered by 6. 
+UPenn added instrumental variable 'High Alert' and 'Midday Ridership'. In a High Alert day, more cops will be on the street and shops and less people will be in public who can be targeted as victim. If we see the table, controlling High Alert, total daily crime lowered by 7. Mid day Ridership is dummy variable controlling METRO ridership. Including Mid day Ridership, there's still a negative relationship between high alert and crime, total daily crime lowered by 6. 
+
+
+** Question 3 ** Why did they have to control for Metro ridership? 
+
+To get a true effect of police presence on crime rate in D.C., the researchers decided to control Metro ridership, as adding this IV variable can control the probability that the crime rate goes up/down from the fact that more/less people on the street. We can mitigate the potential biases caused by METRO ridership usage and can obtain clearer estimate of causal effect of police presence on crime rate. 
+
+
+** Question 4 ** What was that trying to capture?
+
+The first column of the table is about linear model using robust regression with dependent variable daily total number of crimes in D.C. Here, on top of two instrumental variable 'High Alert' and 'Midday ridership', researchers added 'District 1' dummy variable, which demonstrates that crime happened in the first policy district area. Interaction term 'High Alert x District 1''s coefficient -2.6 illustrates the differential effect of the high alert on the first policy district area compared to non-fist policy district area. Holding all else fixed, this interaction variable is associated with 2.6 less total daily crime. Interaction term 'High Alert x Other Districts''s coefficient -0.57 implies the differential effect of the high alert on the other disticts compared to non-other districts. Holding all else fixed, this interaction variable is associated with 0.57 less total daily crime. The coefficient of 'Midday ridership' means, with the METRO ridership control, it is expected have 6 less total daily crime.  
 
 
 ## 2) Tree modeling: dengue cases
 
-** CART to predict dengue cases **
+** Classification and Regression Trees (CART) to predict dengue cases **
 
-```{r problem 2.CART, message=FALSE, echo=FALSE, warning=FALSE}
+```{r problem 2.CART.1, message=FALSE, echo=FALSE, warning=FALSE}
 # import data set
 dengue=read.csv('Data/dengue.csv')
 
 # find the count of missing values
-sum(is.na(dengue))
+a=sum(is.na(dengue))
 dengue=na.omit(dengue)
-sum(is.na(dengue))
+b=sum(is.na(dengue))
 
 # categorize the data and store it as levels (as city and season is character)
 dengue$city = factor(dengue$city)
@@ -94,42 +69,140 @@ dengue_split = initial_split(dengue, prop = 0.8)
 dengue_train = training(dengue_split)
 dengue_test = testing(dengue_split)
 
-# use default control settings
-dengue_tree=rpart(total_cases ~ city+season+specific_humidity+tdtr_k+precipitation_amt, data=dengue_train, control=rpart.control(cp=0.00002,minsplit=30))
+# fit a tree
+dengue_tree_CART=rpart(total_cases ~ . , data=dengue_train, control=rpart.control(cp=0.002,minsplit=30))
 
 # the various summaries of the tree
-print(dengue_tree) # the structure
-summary(dengue_tree)  # more detail on the splits
+# print(dengue_tree_CART) # the structure
+# summary(dengue_tree_CART)  # more detail on the splits
 
-## plot the tree 
-# rpart.plot(dengue_tree)
-## for some reason it's not giving me an answer:/
-
+# plot the tree 
+rpart.plot(dengue_tree_CART, digits=-5, type=4, extra=1)
 
 
 ```
+
+```{r problem 2.CART.2, message=FALSE, echo=FALSE, warning=FALSE}
+
+# use the code in the tree slide 
+prune_1se = function(my_tree) {
+  require(rpart)
+  out = as.data.frame(my_tree$cptable)
+  thresh = min(out$xerror + out$xstd)
+  cp_opt = max(out$CP[out$xerror <= thresh])
+  prune(my_tree, cp=cp_opt)
+}
+
+# prune with the tree model we made
+dengue_tree_prune1se = prune_1se(dengue_tree_CART)
+
+# plot the tree 
+rpart.plot(dengue_tree_prune1se, digits=-5, type=4, extra=1)
+```
+
+
+** RMSE value for CART **
+
+```{r problem 2.CART.3, message=FALSE, echo=FALSE, warning=FALSE}
+# check the rmse
+rmse_CART_nonprune=rmse(dengue_tree_CART,dengue_test)
+rmse_CART_prune=rmse(dengue_tree_prune1se,dengue_test)
+
+# print the rmse
+rmse_CART_nonprune
+rmse_CART_prune
+```
+
+
+
 
 ** Random Forests to predict dengue cases **
 
-```{r problem 2.Random_forest, message=FALSE, echo=FALSE, warning=FALSE}
+```{r problem 2.Random_forest.1, message=FALSE, echo=FALSE, warning=FALSE}
 
+# fit a tree for random forest
+dengue_tree_RF = randomForest(total_cases ~ . , data=dengue_train, important=TRUE)
 
-#
+# performance as a function of iteration number
+plot(dengue_tree_RF)
 
-
-
+# a variable importance plot: how much SSE decreases from including each var
+varImpPlot(dengue_tree_RF)
 
 ```
 
+```{r problem 2.Random_forest.2, message=FALSE, echo=FALSE, warning=FALSE}
+
+# check the rmse
+rmse_RF=rmse(dengue_tree_RF,dengue_test)
+
+# print the rmse
+rmse_RF
+
+```
+
+
 ** Gradient Boosted trees to predict dengue cases **
 
-```{r problem 2.Gradient_boosted, message=FALSE, echo=FALSE, warning=FALSE}
+```{r problem 2.Gradient_boosted.1, message=FALSE, echo=FALSE, warning=FALSE}
+
+# fit a tree for gradient boosted trees
+dengue_tree_Boost= gbm(total_cases ~ . , data=dengue_train,interaction.depth=4, n.trees=500, shrinkage=.05)
+
+# plot for gradient boosting 
+plot(dengue_tree_Boost)
+
+# Look at error curve -- stops decreasing much after ~300
+gbm.perf(dengue_tree_Boost)
+```
+
+```{r problem 2.Gradient_boosted.2, message=FALSE, echo=FALSE, warning=FALSE}
+
+# check the rmse
+rmse_Boost=rmse(dengue_tree_Boost,dengue_test)
+
+# print the rmse
+rmse_Boost
+
+```
 
 
-#
+```{r problem 2.RMSE_table, message=FALSE, echo=FALSE, warning=FALSE}
+
+first_col= c("Tree","Pruned Tree","Random Forest","Gradient Boosting")
+second_col= c(rmse_CART_nonprune,rmse_CART_prune,rmse_RF,rmse_Boost)
+
+df = data.frame(first_col, second_col)
+knitr::kable(df,col.names = c("",""), caption="Result RMSE for each model")
+
+```
+We can check that the Random Forest is the best performance on the testing data.
 
 
+** Partial dependence plots **
 
+With selected best performance model, Random Forest, we will plot the partial dependence plots to isolate the partial effect of specific features on the outcome. Will make four partial dependence plots about `specific_humidity`, `precipitation_amt` and our group's choices `min_air_temp_k` and `tdtr_k`. These were chosen from a variable importance plot made from Random Forest part.
+
+** specific_humidity **
+```{r problem 2.partial_plots.1, message=FALSE, echo=FALSE, warning=FALSE}
+
+partialPlot(dengue_tree_RF, dengue_test, 'specific_humidity', las=1)
+
+```
+
+** precipitation_amt **
+```{r problem 2.partial_plots.2, message=FALSE, echo=FALSE, warning=FALSE}
+
+partialPlot(dengue_tree_RF, dengue_test, 'precipitation_amt', las=1)
+
+```
+
+
+** min_air_temp_k and tdtr_k **
+```{r problem 2.partial_plots.3, message=FALSE, echo=FALSE, warning=FALSE}
+
+partialPlot(dengue_tree_RF, dengue_test, 'min_air_temp_k', las=1)
+partialPlot(dengue_tree_RF, dengue_test, 'tdtr_k', las=1)
 
 ```
 
@@ -139,7 +212,7 @@ summary(dengue_tree)  # more detail on the splits
 
 ```{r problem 3.1, message=FALSE, echo=FALSE, warning=FALSE}
 #Open the data
-green = read.csv('C:/Users/USER/Desktop/Data_Mining/greenbuildings.csv')
+green = read.csv('Data/greenbuildings.csv')
 
 ##First, I created a new variable called "revenue" by multiplying Rent and leasing_rate
 
@@ -161,7 +234,7 @@ First, I created a new variable called "revenue" by multiplying Rent and leasing
 lm_green1 = lm(revenue ~ . - Rent - leasing_rate - CS_PropertyID - LEED - Energystar, data = green_train)
 
 
-````
+```
 
 I then started out with linear models on green_train dataset
 We took out Rent and leasing_rate as they are already taken into account.
@@ -171,7 +244,7 @@ We also chose to take out LEED and Energystar and collapsed them into a single "
 
 lm_green_improved = lm(revenue ~ . - Rent - leasing_rate - CS_PropertyID - LEED - Energystar + Gas_Costs:renovated + Gas_Costs:total_dd_07 + Gas_Costs:Precipitation + Gas_Costs:amenities + Gas_Costs:City_Market_Rent + Electricity_Costs:renovated + Electricity_Costs:total_dd_07 + Electricity_Costs:Precipitation + Electricity_Costs:City_Market_Rent + Electricity_Costs:amenities, data = green_train)
 
-````
+```
 
 I improved my linear regression by adding interactions between Gas_Costs, Electricity Costs with possible sources of the costs. 
 
@@ -182,7 +255,7 @@ I improved my linear regression by adding interactions between Gas_Costs, Electr
 green_tree = rpart(revenue ~ . - CS_PropertyID - Rent - leasing_rate - LEED - Energystar, data=green_train, control = rpart.control(cp = 0.002, minsplit = 30))
 
 
-````
+```
 
 We then created a tree model with basic independent variables
 
@@ -200,7 +273,7 @@ prune_1se = function(my_tree) {
 
 pruned_green_tree = prune_1se(green_tree)
 
-````
+```
 
 Next, we built a pruned tree model
 
@@ -209,7 +282,7 @@ Next, we built a pruned tree model
 rpart.plot(green_tree, type=4, extra=1)
 rpart.plot(pruned_green_tree, type=4, extra=1)
 
-````
+```
 
 We then drew tree plots for the simple tree model and the pruned tree model.
 
@@ -221,9 +294,8 @@ rf_green <- randomForest(revenue~.- CS_PropertyID - Rent - leasing_rate - LEED -
 
 #boosting
 green_boost = gbm(revenue ~ . - CS_PropertyID - Rent - leasing_rate - LEED - Energystar, data = green_train, interaction.depth=4, n.trees=1000, shrinkage=.05)
-_green_tree, type=4, extra=1)
 
-````
+```
 
 We used random forest and boosting and created more models for comparison
 
@@ -244,7 +316,7 @@ rmse_outcome = data.frame(
 )
 
 kable(rmse_outcome)
-````
+```
 
 Ranking the models from the lowest rmse to highest rmse,
 Random forest model > Boosted model > Pruned tree model ~ Tree model > Improved linear model > Linear model
