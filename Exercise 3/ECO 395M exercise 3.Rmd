@@ -390,9 +390,16 @@ vi = varImpPlot(cahousing.forest, type=1)
 
 ```{r problem 4ggmap, message=FALSE, echo=FALSE, warning=FALSE}
 
-#get a map of CA
+#fetch a map of CA
 bbox <- c(bottom = 32.213, top = 42.163 , right = -113.95, left = -124.585)
-camap <- get_stamenmap(bbox = bbox, zoom = 8)
-ggmap(camap)
+camap <- get_stamenmap(bbox = bbox, zoom = 9)
+
+#a plot of the original data, using a color scale to show medianHouseValue (or log medianHouseValue) versus longitude (x) and latitude (y).
+ggmap(camap) + geom_point(data=cahousing, aes(x = longitude, y = latitude, color = medianHouseValue))
+                                              
+
+#a plot of your model's predictions of medianHouseValue (or log medianHouseValue) versus longitude (x) and latitude (y).
+
+#a plot of your model's errors/residuals (or log residuals) versus longitude (x) and latitude (y).
 
 ```
