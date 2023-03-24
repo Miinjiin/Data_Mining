@@ -170,11 +170,11 @@ rmse_Boost
 
 ```{r problem 2.RMSE_table, message=FALSE, echo=FALSE, warning=FALSE}
 
-first_col= c("Tree","Pruned Tree","Random Forest","Gradient Boosting")
+first_col= c("Un-pruned Tree","Pruned Tree","Random Forest","Gradient Boosting")
 second_col= c(rmse_CART_nonprune,rmse_CART_prune,rmse_RF,rmse_Boost)
 
 df = data.frame(first_col, second_col)
-knitr::kable(df,col.names = c("",""), caption="Result RMSE for each model")
+knitr::kable(df,col.names = c("Model","RMSE"), caption="Result RMSE for each model")
 
 ```
 We can check that the Random Forest is the best performance on the testing data.
@@ -325,6 +325,9 @@ Random forest model > Boosted model > Pruned tree model ~ Tree model > Improved 
 
 ## 4) Predictive model building: California housing 
 
+###Short Report Detailing The Method
+
+To build the best predictive model for `medianhouseValue`, we compared CART, random forests, and gradient-boosted trees using all of the available features from the dataset. As one can see from below table comparing the RMSE of each model, random forest has the best overall out-of-sample accuracy of our proposed model.
 
 ```{r problem 4, message=FALSE, echo=FALSE, warning=FALSE}
 cahousing=read.csv('Data/CAhousing.csv')
@@ -365,10 +368,6 @@ rmse_cart = modelr::rmse(cahousing.tree_prune, cahousing_test)
 rmse_rf = modelr::rmse(cahousing.forest, cahousing_test)
 rmse_gbm = modelr::rmse(cahousing.gbm, cahousing_test)
 
-rmse_cart
-rmse_rf
-rmse_gbm
-
 # Create a comparison table
 rmse_comparison = data.frame (
   Model = c("CART","Random Forest","Gradient-Boosted Tree"),
@@ -379,6 +378,9 @@ kable(rmse_comparison)
 
 ```
 
+Next, we plot below three figures, showing the actual median house value from the original data, predictions and residuals using the model. In plotting the figures, we first used `ggmap` to import the map of the state of California. We can see that the actual median values are the highest around San Francisco and Los Angeles areas. Our prediction using random forest is pretty accurate, and the residuals are small.
+
+**Plot A:**
 ```{r problem 4ggmap, message=FALSE, echo=FALSE, warning=FALSE}
 
 #fetch a map of CA
@@ -387,7 +389,10 @@ camap <- get_stamenmap(bbox = bbox, zoom = 9)
 
 #Plot A: plot of the original data, using a color scale to show medianHouseValue (or log medianHouseValue) versus longitude (x) and latitude (y).
 ggmap(camap) + geom_point(data = cahousing, aes(x = longitude, y = latitude, color = medianHouseValue)) + scale_color_continuous() + labs(title="Median House Value from the Original Data", x="Longitude" , y ="Latitude")
-                                              
+```
+
+**Plot B:**
+```{r problem 4plot2, message=FALSE, echo=FALSE, warning=FALSE}
 #finding predictions of medianhouseValue and residuals using random forest model
 
 medianhouseValue_pred = predict(cahousing.forest, cahousing)
@@ -399,7 +404,10 @@ cahousing$resid = cahousing$medianhouseValue - medianhouseValue_pred
 #Plot B: model's predictions of medianHouseValue (or log medianHouseValue) versus longitude (x) and latitude (y).
 
 ggmap(camap) + geom_point(data = cahousing, aes(x = longitude, y = latitude, color = medianhouseValue_pred)) + scale_color_continuous() + labs(title="Prediction of Median House Value ", x="Longitude" , y ="Latitude")
+```
 
+**Plot C:**
+```{r problem 4plot3, message=FALSE, echo=FALSE, warning=FALSE}
 #Plot C: model's errors/residuals (or log residuals) versus longitude (x) and latitude (y).
 
 ggmap(camap) + geom_point(data = cahousing, aes(x = longitude, y = latitude, color = resid)) + scale_color_continuous() + labs(title="Model's Residuals", x="Longitude" , y ="Latitude")
