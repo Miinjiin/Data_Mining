@@ -378,7 +378,7 @@ kable(rmse_outcome)
 
 ## 4) Predictive model building: California housing 
 
-###Short Report Detailing The Method
+#### Report Detailing The Method
 
 To build the best predictive model for `medianhouseValue`, we compared CART, random forests, and gradient-boosted trees using all of the available features from the dataset. As one can see from below table comparing the RMSE of each model, random forest has the best overall out-of-sample accuracy of our proposed model.
 
@@ -431,9 +431,10 @@ kable(rmse_comparison)
 
 ```
 
-Next, we plot below three figures, showing the actual median house value from the original data, predictions and residuals using the model. In plotting the figures, we first used `ggmap` to import the map of the state of California. We can see that the actual median values are the highest around San Francisco and Los Angeles areas. Our prediction using random forest is pretty accurate, and the residuals are small.
+Next, we plot below three figures, showing the actual median house value from the original data, predictions and residuals using the model. In plotting the figures, we first used `ggmap` to import the map of the state of California. We can see that the actual median values are the highest around San Francisco and Los Angeles areas, indicated by the lighter blue colors. Our prediction using random forest is pretty accurate, and the residuals are small.
 
 **Plot A:**
+
 ```{r problem 4ggmap, message=FALSE, echo=FALSE, warning=FALSE}
 
 #fetch a map of CA
@@ -444,7 +445,9 @@ camap <- get_stamenmap(bbox = bbox, zoom = 9)
 ggmap(camap) + geom_point(data = cahousing, aes(x = longitude, y = latitude, color = medianHouseValue)) + scale_color_continuous() + labs(title="Median House Value from the Original Data", x="Longitude" , y ="Latitude")
 ```
 
+
 **Plot B:**
+
 ```{r problem 4plot2, message=FALSE, echo=FALSE, warning=FALSE}
 #finding predictions of medianhouseValue and residuals using random forest model
 
@@ -459,7 +462,9 @@ cahousing$resid = cahousing$medianhouseValue - medianhouseValue_pred
 ggmap(camap) + geom_point(data = cahousing, aes(x = longitude, y = latitude, color = medianhouseValue_pred)) + scale_color_continuous() + labs(title="Prediction of Median House Value ", x="Longitude" , y ="Latitude")
 ```
 
+
 **Plot C:**
+
 ```{r problem 4plot3, message=FALSE, echo=FALSE, warning=FALSE}
 #Plot C: model's errors/residuals (or log residuals) versus longitude (x) and latitude (y).
 
