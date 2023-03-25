@@ -69,9 +69,9 @@ class and adopted in my base model to evaluate performance.
 
 Out-of-sample RMSEs for un-pruned CART and pruned CART is,
 
-    ## [1] 28.8792
+    ## [1] 20.83567
 
-    ## [1] 28.28074
+    ## [1] 21.61547
 
 Result shows pruned CART gives a little bit higher RMSE compared to
 un-pruned CART. This is due to the fact that pruned CART has higher bias
@@ -93,7 +93,7 @@ of random forest eliminates need for cross validation.
 
 Out-of-sample RMSEs for random forests is,
 
-    ## [1] 26.58218
+    ## [1] 20.13438
 
 #### Gradient Boosted trees to predict dengue cases
 
@@ -104,7 +104,7 @@ plotted error curve, which is deviance plot.
 
 ![](ECO-395M-exercise-3_files/figure-markdown_strict/problem%202.Gradient_boosted.1-1.png)
 
-    ## [1] 53
+    ## [1] 55
 
 The green line is our cross validated error. The x-axis of error curve
 is number of iterations and y-axis of error curve is deviance of the
@@ -113,7 +113,7 @@ best number of iteration minimizing error.
 
 Out-of-sample RMSEs for Gradient boosted tree is,
 
-    ## [1] 26.79056
+    ## [1] 19.62217
 
 ##### Checking model performance with out-of-sample RMSEs for each models
 
@@ -134,7 +134,7 @@ RMSE
 Un-pruned Tree
 </td>
 <td style="text-align:right;">
-28.87920
+20.83567
 </td>
 </tr>
 <tr>
@@ -142,7 +142,7 @@ Un-pruned Tree
 Pruned Tree
 </td>
 <td style="text-align:right;">
-28.28074
+21.61547
 </td>
 </tr>
 <tr>
@@ -150,7 +150,7 @@ Pruned Tree
 Random Forest
 </td>
 <td style="text-align:right;">
-26.58218
+20.13438
 </td>
 </tr>
 <tr>
@@ -158,7 +158,7 @@ Random Forest
 Gradient Boosting
 </td>
 <td style="text-align:right;">
-26.79056
+19.62217
 </td>
 </tr>
 </tbody>
@@ -262,7 +262,7 @@ RMSE
 Linear model
 </td>
 <td style="text-align:right;">
-1202.4009
+1010.4864
 </td>
 </tr>
 <tr>
@@ -270,7 +270,7 @@ Linear model
 Improved linear model
 </td>
 <td style="text-align:right;">
-1189.5189
+1007.7794
 </td>
 </tr>
 <tr>
@@ -278,7 +278,7 @@ Improved linear model
 Tree model
 </td>
 <td style="text-align:right;">
-1119.1228
+938.2899
 </td>
 </tr>
 <tr>
@@ -286,7 +286,7 @@ Tree model
 Pruned tree model
 </td>
 <td style="text-align:right;">
-1169.8178
+997.6447
 </td>
 </tr>
 <tr>
@@ -294,7 +294,7 @@ Pruned tree model
 Random forest model
 </td>
 <td style="text-align:right;">
-853.0619
+746.7080
 </td>
 </tr>
 <tr>
@@ -302,7 +302,7 @@ Random forest model
 Boosted model
 </td>
 <td style="text-align:right;">
-860.2004
+795.8239
 </td>
 </tr>
 </tbody>
@@ -335,7 +335,7 @@ RMSE
 CART
 </td>
 <td style="text-align:right;">
-69646.40
+65769.62
 </td>
 </tr>
 <tr>
@@ -343,7 +343,7 @@ CART
 Random Forest
 </td>
 <td style="text-align:right;">
-52600.44
+50537.04
 </td>
 </tr>
 <tr>
@@ -351,7 +351,7 @@ Random Forest
 Gradient-Boosted Tree
 </td>
 <td style="text-align:right;">
-57416.56
+55383.28
 </td>
 </tr>
 </tbody>
@@ -365,14 +365,14 @@ highest around San Francisco and Los Angeles areas, indicated by the
 lighter blue colors. Our prediction using random forest is pretty
 accurate, and the residuals are small.
 
-**Plot A:**
+**Plot A**
 
 ![](ECO-395M-exercise-3_files/figure-markdown_strict/problem%204ggmap-1.png)
 
-**Plot B:**
+**Plot B**
 
 ![](ECO-395M-exercise-3_files/figure-markdown_strict/problem%204plot2-1.png)
 
-**Plot C:**
+**Plot C**
 
 ![](ECO-395M-exercise-3_files/figure-markdown_strict/problem%204plot3-1.png)

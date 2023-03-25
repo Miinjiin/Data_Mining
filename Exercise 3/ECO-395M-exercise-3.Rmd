@@ -438,8 +438,8 @@ Next, we plot below three figures, showing the actual median house value from th
 ```{r problem 4ggmap, message=FALSE, echo=FALSE, warning=FALSE}
 
 #fetch a map of CA
-bbox <- c(bottom = 32.213, top = 42.163 , right = -113.95, left = -124.585)
-camap <- get_stamenmap(bbox = bbox, zoom = 9)
+cabox <- c(bottom = 32.213, top = 42.163 , right = -113.95, left = -124.585)
+camap <- get_stamenmap(bbox = cabox, zoom = 6, maptype = 'terrain')
 
 #Plot A: plot of the original data, using a color scale to show medianHouseValue (or log medianHouseValue) versus longitude (x) and latitude (y).
 ggmap(camap) + geom_point(data = cahousing, aes(x = longitude, y = latitude, color = medianHouseValue)) + scale_color_continuous() + labs(title="Median House Value from the Original Data", x="Longitude" , y ="Latitude")
