@@ -433,7 +433,7 @@ kable(rmse_comparison)
 
 Next, we plot below three figures, showing the actual median house value from the original data, predictions and residuals using the model. In plotting the figures, we first used `ggmap` to import the map of the state of California. We can see that the actual median values are the highest around San Francisco and Los Angeles areas, indicated by the lighter blue colors. Our prediction using random forest is pretty accurate, and the residuals are small.
 
-**Plot A:**
+**Plot A**
 
 ```{r problem 4ggmap, message=FALSE, echo=FALSE, warning=FALSE}
 
@@ -446,7 +446,7 @@ ggmap(camap) + geom_point(data = cahousing, aes(x = longitude, y = latitude, col
 ```
 
 
-**Plot B:**
+**Plot B**
 
 ```{r problem 4plot2, message=FALSE, echo=FALSE, warning=FALSE}
 #finding predictions of medianhouseValue and residuals using random forest model
@@ -463,7 +463,7 @@ ggmap(camap) + geom_point(data = cahousing, aes(x = longitude, y = latitude, col
 ```
 
 
-**Plot C:**
+**Plot C**
 
 ```{r problem 4plot3, message=FALSE, echo=FALSE, warning=FALSE}
 #Plot C: model's errors/residuals (or log residuals) versus longitude (x) and latitude (y).
