@@ -250,17 +250,20 @@ Plots shows increasing graph, we can interpret this these features has a positiv
 ## 3) Predictive model building: green certification
 
 
-1) Overview
+#### Overview
+
+
 This question attempts to build the best predictive model for revenue per square foot per calender year and to use this model to possibly quantify the average change in rental income per square foot associated with green certification, holding other features of the building constant. 
 
 
-2) Modeling
+#### Modeling
+
 First, I created a new variable called "revenue" by multiplying Rent and leasing_rate
  Next, I split the data into train and test set
 
 ```{r problem 3.1, message=FALSE, echo=FALSE, warning=FALSE}
 #Open the data
-green = read.csv('C:/Users/USER/Desktop/Data_Mining/greenbuildings.csv')
+green = read.csv('Data/greenbuildings.csv')
 
 ##First, I created a new variable called "revenue" by multiplying Rent and leasing_rate
 
@@ -282,6 +285,7 @@ We also chose to take out LEED and Energystar and collapsed them into a single "
 ```{r problem 3.2, message=FALSE, echo=FALSE, warning=FALSE}
 lm_green1 = lm(revenue ~ . - Rent - leasing_rate - CS_PropertyID - LEED - Energystar, data = green_train)
 
+print(lm_green1)
 
 ```
 
@@ -292,6 +296,7 @@ We improved our linear regression model by adding interactions between Gas_Costs
 
 # creating a new improved linear regression model
 lm_green_improved = lm(revenue ~ . - Rent - leasing_rate - CS_PropertyID - LEED - Energystar + Gas_Costs:total_dd_07 + Gas_Costs:Precipitation + Gas_Costs:amenities + Gas_Costs:City_Market_Rent +  Gas_Costs:stories +  Electricity_Costs:renovated + Electricity_Costs:total_dd_07 + Electricity_Costs:Precipitation + Electricity_Costs:Gas_Costs + Electricity_Costs:stories + Electricity_Costs:age + Electricity_Costs:City_Market_Rent + Electricity_Costs:amenities, data = green_train)
+print(lm_green_improved)
 
 ```
 
@@ -339,14 +344,14 @@ We tried the random forest model and the gradient-boosted model with the interac
 ```{r problem 3.7, message=FALSE, echo=FALSE, warning=FALSE}
 
 #Random forest
-random_forest_green <- randomForest(revenue~.- CS_PropertyID - Rent - leasing_rate - LEED - Energystar, data = green_train, proximity =TRUE, na.action = na.omit)
+random_forest_green <- randomForest(revenue~.- CS_PropertyID - Rent - leasing_rate - LEED - Energystar, data = green_train, proximity =TRUE, na.action = na.omit, assumption = "gaussian")
 
 #boosting
 green_boost = gbm(revenue ~ . - CS_PropertyID - Rent - leasing_rate - LEED - Energystar, data = green_train, interaction.depth=10, n.trees=500, shrinkage=.2, cv.folds = 10)
 
 ```
 
-We then drew a variable importance plot of random forest model. The plot shows that City_Market_Rent, Size, and age contribute the most to our prediction. 
+We then drew a variable importance plot of random forest model. This plot list the variables included in the random forest model in order of 'importance' to the model. As you can see, City Market rent contributes to the random forest model the most and so on. 
 
 ```{r problem 3.8, message=FALSE, echo=FALSE, warning=FALSE}
 
@@ -354,7 +359,7 @@ vi = varImpPlot(random_forest_green, type=2)
 
 ```
 
-3) Conclusion
+#### Conclusion
 
 We fit linear models, tree models, random forests models and boosted random forests models. As we develop more sophisticated models, we find that the predictive power of the models get better and better. However, testing on the test data set, based on the out-of-sample rmse values, we find that the random forest model perform the best above all.
 
