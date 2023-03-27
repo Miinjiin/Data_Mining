@@ -79,9 +79,9 @@ class and adopted in my base model to evaluate performance.
 
 Out-of-sample RMSEs for un-pruned CART and pruned CART is,
 
-    ## [1] 27.0909
+    ## [1] 29.98221
 
-    ## [1] 28.78253
+    ## [1] 26.71775
 
 Result shows pruned CART gives a little bit higher RMSE compared to
 un-pruned CART. This is due to the fact that pruned CART has higher bias
@@ -103,7 +103,7 @@ of random forest eliminates need for cross validation.
 
 Out-of-sample RMSEs for random forests is,
 
-    ## [1] 25.78279
+    ## [1] 25.10599
 
 #### Gradient Boosted trees to predict dengue cases
 
@@ -114,7 +114,7 @@ plotted error curve, which is deviance plot.
 
 ![](ECO-395M-exercise-3_files/figure-markdown_strict/problem%202.Gradient_boosted.1-1.png)
 
-    ## [1] 78
+    ## [1] 67
 
 The green line is our cross validated error. The x-axis of error curve
 is number of iterations and y-axis of error curve is deviance of the
@@ -123,7 +123,7 @@ best number of iteration minimizing error.
 
 Out-of-sample RMSEs for Gradient boosted tree is,
 
-    ## [1] 25.88387
+    ## [1] 24.87059
 
 ##### Checking model performance with out-of-sample RMSEs for each models
 
@@ -144,7 +144,7 @@ RMSE
 Un-pruned Tree
 </td>
 <td style="text-align:right;">
-27.09090
+29.98221
 </td>
 </tr>
 <tr>
@@ -152,7 +152,7 @@ Un-pruned Tree
 Pruned Tree
 </td>
 <td style="text-align:right;">
-28.78253
+26.71775
 </td>
 </tr>
 <tr>
@@ -160,7 +160,7 @@ Pruned Tree
 Random Forest
 </td>
 <td style="text-align:right;">
-25.78279
+25.10599
 </td>
 </tr>
 <tr>
@@ -168,7 +168,7 @@ Random Forest
 Gradient Boosting
 </td>
 <td style="text-align:right;">
-25.88387
+24.87059
 </td>
 </tr>
 </tbody>
@@ -222,22 +222,7 @@ We took out Rent and leasing\_rate as they are already taken into
 account as revenue. We also chose to take out LEED and Energystar and
 collapsed them into a single “green certified” category.
 
-    ## 
-    ## Call:
-    ## lm(formula = revenue ~ . - Rent - leasing_rate - CS_PropertyID - 
-    ##     LEED - Energystar, data = green_train)
-    ## 
-    ## Coefficients:
-    ##       (Intercept)            cluster               size            empl_gr  
-    ##        -1.488e+03          8.248e-02          8.003e-04          2.568e+00  
-    ##           stories                age          renovated            class_a  
-    ##        -1.035e+00         -1.153e+00          3.328e+01          5.013e+02  
-    ##           class_b       green_rating                net          amenities  
-    ##         2.820e+02          1.472e+02         -2.466e+02          1.607e+02  
-    ##       cd_total_07         hd_total07        total_dd_07      Precipitation  
-    ##        -4.793e-03          7.062e-02                 NA          2.713e-01  
-    ##         Gas_Costs  Electricity_Costs   City_Market_Rent  
-    ##        -1.073e+04          1.508e+04          9.779e+01
+    lm_green1 = lm(revenue ~ . - Rent - leasing_rate - CS_PropertyID - LEED - Energystar, data = green_train)
 
 We improved our linear regression model by adding interactions between
 Gas\_Costs, Electricity Costs with possible sources of the costs.
@@ -245,49 +230,8 @@ Specifically, we figured that gas and electricity costs are associated
 with number of heating/cooling degree days, precipitation, city market
 rent, stories, age, amenities, renovation status by correlation tests.
 
-    ## 
-    ## Call:
-    ## lm(formula = revenue ~ . - Rent - leasing_rate - CS_PropertyID - 
-    ##     LEED - Energystar + Gas_Costs:total_dd_07 + Gas_Costs:Precipitation + 
-    ##     Gas_Costs:amenities + Gas_Costs:City_Market_Rent + Gas_Costs:stories + 
-    ##     Electricity_Costs:renovated + Electricity_Costs:total_dd_07 + 
-    ##     Electricity_Costs:Precipitation + Electricity_Costs:Gas_Costs + 
-    ##     Electricity_Costs:stories + Electricity_Costs:age + Electricity_Costs:City_Market_Rent + 
-    ##     Electricity_Costs:amenities, data = green_train)
-    ## 
-    ## Coefficients:
-    ##                        (Intercept)                             cluster  
-    ##                         -1.101e+03                           9.331e-02  
-    ##                               size                             empl_gr  
-    ##                          8.122e-04                           2.872e+00  
-    ##                            stories                                 age  
-    ##                         -4.222e+01                          -8.250e-01  
-    ##                          renovated                             class_a  
-    ##                          4.027e+01                           3.969e+02  
-    ##                            class_b                        green_rating  
-    ##                          2.334e+02                           1.607e+02  
-    ##                                net                           amenities  
-    ##                         -2.410e+02                          -6.940e+02  
-    ##                        cd_total_07                          hd_total07  
-    ##                          5.586e-02                           1.652e-01  
-    ##                        total_dd_07                       Precipitation  
-    ##                                 NA                           1.848e+01  
-    ##                          Gas_Costs                   Electricity_Costs  
-    ##                          1.330e+05                          -3.347e+04  
-    ##                   City_Market_Rent               total_dd_07:Gas_Costs  
-    ##                          6.956e+01                          -2.107e+01  
-    ##            Precipitation:Gas_Costs                 amenities:Gas_Costs  
-    ##                         -5.112e+02                           5.142e+04  
-    ##         Gas_Costs:City_Market_Rent                   stories:Gas_Costs  
-    ##                         -4.929e+02                           1.174e+02  
-    ##        renovated:Electricity_Costs       total_dd_07:Electricity_Costs  
-    ##                          7.804e+02                           4.138e+00  
-    ##    Precipitation:Electricity_Costs         Gas_Costs:Electricity_Costs  
-    ##                         -6.468e+02                           3.449e+05  
-    ##          stories:Electricity_Costs               age:Electricity_Costs  
-    ##                          1.318e+03                          -6.171e+01  
-    ## Electricity_Costs:City_Market_Rent         amenities:Electricity_Costs  
-    ##                          9.019e+02                           1.004e+04
+    # creating a new improved linear regression model
+    lm_green_improved = lm(revenue ~ . - Rent - leasing_rate - CS_PropertyID - LEED - Energystar + Gas_Costs:total_dd_07 + Gas_Costs:Precipitation + Gas_Costs:amenities + Gas_Costs:City_Market_Rent +  Gas_Costs:stories +  Electricity_Costs:renovated + Electricity_Costs:total_dd_07 + Electricity_Costs:Precipitation + Electricity_Costs:Gas_Costs + Electricity_Costs:stories + Electricity_Costs:age + Electricity_Costs:City_Market_Rent + Electricity_Costs:amenities, data = green_train)
 
 We then created a CART model with basic independent variables
 
@@ -337,7 +281,7 @@ RMSE
 Linear model
 </td>
 <td style="text-align:right;">
-1077.7588
+889.6209
 </td>
 </tr>
 <tr>
@@ -345,7 +289,7 @@ Linear model
 Improved linear model
 </td>
 <td style="text-align:right;">
-1078.0633
+877.6338
 </td>
 </tr>
 <tr>
@@ -353,7 +297,7 @@ Improved linear model
 Tree model
 </td>
 <td style="text-align:right;">
-1102.3409
+877.7752
 </td>
 </tr>
 <tr>
@@ -361,7 +305,7 @@ Tree model
 Pruned tree model
 </td>
 <td style="text-align:right;">
-1120.0305
+915.8561
 </td>
 </tr>
 <tr>
@@ -369,7 +313,7 @@ Pruned tree model
 Random forest model
 </td>
 <td style="text-align:right;">
-878.1369
+665.8572
 </td>
 </tr>
 <tr>
@@ -377,7 +321,7 @@ Random forest model
 Boosted model
 </td>
 <td style="text-align:right;">
-905.7466
+722.9812
 </td>
 </tr>
 </tbody>
@@ -410,7 +354,7 @@ RMSE
 CART
 </td>
 <td style="text-align:right;">
-69479.37
+68910.50
 </td>
 </tr>
 <tr>
@@ -418,7 +362,7 @@ CART
 Random Forest
 </td>
 <td style="text-align:right;">
-51662.43
+52802.45
 </td>
 </tr>
 <tr>
@@ -426,7 +370,7 @@ Random Forest
 Gradient-Boosted Tree
 </td>
 <td style="text-align:right;">
-56969.33
+57751.01
 </td>
 </tr>
 </tbody>

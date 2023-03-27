@@ -276,21 +276,20 @@ We took out Rent and leasing_rate as they are already taken into account as reve
 We also chose to take out LEED and Energystar and collapsed them into a single "green certified" category.
 
 
-```{r problem 3.2, message=FALSE, echo=FALSE, warning=FALSE}
+```{r}
+
 lm_green1 = lm(revenue ~ . - Rent - leasing_rate - CS_PropertyID - LEED - Energystar, data = green_train)
 
-print(lm_green1)
 ```
 
 
 We improved our linear regression model by adding interactions between Gas_Costs, Electricity Costs with possible sources of the costs. Specifically, we figured that gas and electricity costs are associated with number of heating/cooling degree days, precipitation, city market rent, stories, age, amenities, renovation status by correlation tests.
 
-```{r problem 3.3, message=FALSE, echo=FALSE, warning=FALSE}
+```{r}
 
 # creating a new improved linear regression model
 lm_green_improved = lm(revenue ~ . - Rent - leasing_rate - CS_PropertyID - LEED - Energystar + Gas_Costs:total_dd_07 + Gas_Costs:Precipitation + Gas_Costs:amenities + Gas_Costs:City_Market_Rent +  Gas_Costs:stories +  Electricity_Costs:renovated + Electricity_Costs:total_dd_07 + Electricity_Costs:Precipitation + Electricity_Costs:Gas_Costs + Electricity_Costs:stories + Electricity_Costs:age + Electricity_Costs:City_Market_Rent + Electricity_Costs:amenities, data = green_train)
 
-print(lm_green_improved)
 ```
 
 We then created a CART model with basic independent variables
