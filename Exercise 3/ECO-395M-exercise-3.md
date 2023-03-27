@@ -79,9 +79,9 @@ class and adopted in my base model to evaluate performance.
 
 Out-of-sample RMSEs for un-pruned CART and pruned CART is,
 
-    ## [1] 29.98221
+    ## [1] 20.49833
 
-    ## [1] 26.71775
+    ## [1] 20.88102
 
 Result shows pruned CART gives a little bit higher RMSE compared to
 un-pruned CART. This is due to the fact that pruned CART has higher bias
@@ -103,7 +103,7 @@ of random forest eliminates need for cross validation.
 
 Out-of-sample RMSEs for random forests is,
 
-    ## [1] 25.10599
+    ## [1] 18.97562
 
 #### Gradient Boosted trees to predict dengue cases
 
@@ -114,7 +114,7 @@ plotted error curve, which is deviance plot.
 
 ![](ECO-395M-exercise-3_files/figure-markdown_strict/problem%202.Gradient_boosted.1-1.png)
 
-    ## [1] 67
+    ## [1] 60
 
 The green line is our cross validated error. The x-axis of error curve
 is number of iterations and y-axis of error curve is deviance of the
@@ -123,7 +123,7 @@ best number of iteration minimizing error.
 
 Out-of-sample RMSEs for Gradient boosted tree is,
 
-    ## [1] 24.87059
+    ## [1] 18.3927
 
 ##### Checking model performance with out-of-sample RMSEs for each models
 
@@ -144,7 +144,7 @@ RMSE
 Un-pruned Tree
 </td>
 <td style="text-align:right;">
-29.98221
+20.49833
 </td>
 </tr>
 <tr>
@@ -152,7 +152,7 @@ Un-pruned Tree
 Pruned Tree
 </td>
 <td style="text-align:right;">
-26.71775
+20.88102
 </td>
 </tr>
 <tr>
@@ -160,7 +160,7 @@ Pruned Tree
 Random Forest
 </td>
 <td style="text-align:right;">
-25.10599
+18.97562
 </td>
 </tr>
 <tr>
@@ -168,7 +168,7 @@ Random Forest
 Gradient Boosting
 </td>
 <td style="text-align:right;">
-24.87059
+18.39270
 </td>
 </tr>
 </tbody>
@@ -281,7 +281,7 @@ RMSE
 Linear model
 </td>
 <td style="text-align:right;">
-889.6209
+1008.0680
 </td>
 </tr>
 <tr>
@@ -289,7 +289,7 @@ Linear model
 Improved linear model
 </td>
 <td style="text-align:right;">
-877.6338
+991.4529
 </td>
 </tr>
 <tr>
@@ -297,7 +297,7 @@ Improved linear model
 Tree model
 </td>
 <td style="text-align:right;">
-877.7752
+961.2680
 </td>
 </tr>
 <tr>
@@ -305,7 +305,7 @@ Tree model
 Pruned tree model
 </td>
 <td style="text-align:right;">
-915.8561
+976.4041
 </td>
 </tr>
 <tr>
@@ -313,7 +313,7 @@ Pruned tree model
 Random forest model
 </td>
 <td style="text-align:right;">
-665.8572
+731.4888
 </td>
 </tr>
 <tr>
@@ -321,7 +321,7 @@ Random forest model
 Boosted model
 </td>
 <td style="text-align:right;">
-722.9812
+816.2464
 </td>
 </tr>
 </tbody>
@@ -354,7 +354,7 @@ RMSE
 CART
 </td>
 <td style="text-align:right;">
-68910.50
+66708.59
 </td>
 </tr>
 <tr>
@@ -362,7 +362,7 @@ CART
 Random Forest
 </td>
 <td style="text-align:right;">
-52802.45
+49158.53
 </td>
 </tr>
 <tr>
@@ -370,7 +370,7 @@ Random Forest
 Gradient-Boosted Tree
 </td>
 <td style="text-align:right;">
-57751.01
+54048.97
 </td>
 </tr>
 </tbody>
