@@ -37,17 +37,17 @@ Running regression is not enough to find causation. The number of cops can't exp
 
 **Question 2 How UPenn able to isolate this effect?**
 
-UPenn added instrumental variable 'High Alert' and 'Midday Ridership'. In a High Alert day, more cops will be on the street and shops and less people will be in public who can be targeted as victim. If we see the table, controlling High Alert, total daily crime lowered by 7. Mid day Ridership is dummy variable controlling METRO ridership. Including Mid day Ridership, there's still a negative relationship between high alert and crime, total daily crime lowered by 6. 
+UPenn added 'High Alert' variable to isolate the effect. In a High Alert day, more cops will be on the street and shops and less people will be in public who can be targeted as victim. If we see the table, on high alert days, expected number of crimes is lowered by 7. If you see the second column of the table, when controlling Metro Ridership, expected number of crimes is still lowered by 6 on high alert days. By adding high alert, researchers can more accurately estimate the causal effect of police on crime.
 
 
 **Question 3 Why did they have to control for Metro ridership?** 
 
-To get a true effect of police presence on crime rate in D.C., the researchers decided to control Metro ridership, as adding this IV variable can control the probability that the crime rate goes up/down from the fact that more/less people on the street. We can mitigate the potential biases caused by METRO ridership usage and can obtain clearer estimate of causal effect of police presence on crime rate. 
+To get a true effect of police presence on crime rate in D.C., the researchers decided to control Metro ridership, as adding this variable can control the probability that the crime rate goes up/down from the fact that more/less people on the street. We can mitigate the potential biases caused by METRO ridership usage and can obtain clearer estimate of causal effect of police presence on crime rate. In conclusion, high alert days lowers the number of people on the street (metro usage). By controlling for metro ridership, researchers made sure that lower crimes is not merely resulting from less people on the street.
 
 
 **Question 4 What was that trying to capture?**
 
-The first column of the table is about linear model using robust regression with the dependent variable daily total number of crimes in D.C. Here, on top of two instrumental variables 'High Alert' and 'Midday ridership', researchers added 'District 1' dummy variable, which demonstrates that crime happened in the first policy district area. Interaction term 'High Alert x District 1''s coefficient -2.6 illustrates the differential effect of the high alert on the first policy district area compared to non-first policy district area. Holding all else fixed, this interaction variable is associated with 2.6 less total daily crime. Interaction term 'High Alert x Other Districts''s coefficient -0.57 implies the differential effect of the high alert on the other districts compared to non-other districts. Holding all else fixed, this interaction variable is associated with 0.57 less total daily crime. The coefficient of 'Midday ridership' means, with the METRO ridership control, it is expected to have 6 less total daily crime.  
+The first column of the table is about linear model using robust regression with the dependent variable daily total number of crimes in D.C. Here, on top of 'High Alert' and 'Midday ridership', researchers added 'District 1' dummy variable, which demonstrates that crime happened in the first police district area which having . Interaction term 'High Alert x District 1''s coefficient -2.6 illustrates the differential effect of the high alert on the first police district area compared to non-first police district area. Holding all else fixed, this interaction variable is associated with 2.6 less total daily crime. Interaction term 'High Alert x Other Districts''s coefficient -0.57 implies the differential effect of the high alert on the other districts compared to non-other districts. Holding all else fixed, this interaction variable is associated with 0.57 less total daily crime. To sum up, these two interaction variables shows the reduction of crime rates on high alert days depending on the district. Interaction variable 'High Alert x District 1' the crime of the first police district goes down by 2.6 when it is a high alert day, on the other hand, interaction variable 'High Alert x Other Districts' shows the crime decreased only by -0.57. What this shows is reduction on crimes on high alert days is more strong on first police district than all other districts. We can conclude through 'High alert' more police reduces crime rates. The coefficient of 'Midday ridership' means, with the METRO ridership control, it is expected to have 6 less total daily crime. 
 
 
 ## 2) Tree modeling: dengue cases
@@ -95,7 +95,6 @@ To perform cross-validation, I used prune function given during the class and ad
 
 # use the code in the tree slide 
 prune_1se = function(my_tree) {
-  require(rpart)
   out = as.data.frame(my_tree$cptable)
   thresh = min(out$xerror + out$xstd)
   cp_opt = max(out$CP[out$xerror <= thresh])
@@ -106,7 +105,7 @@ prune_1se = function(my_tree) {
 dengue_tree_prune1se = prune_1se(dengue_tree_CART)
 
 # plot the tree 
-rpart.plot(dengue_tree_prune1se, digits=4, type=4, extra=1, fallen.leaves = TRUE)
+rpart.plot(dengue_tree_prune1se, digits=-5, type=4, extra=1)
 ```
 
 \newline

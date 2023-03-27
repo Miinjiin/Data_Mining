@@ -15,40 +15,52 @@ bias problem, we can’t generalize the result of the regression.
 
 **Question 2 How UPenn able to isolate this effect?**
 
-UPenn added instrumental variable ‘High Alert’ and ‘Midday Ridership’.
-In a High Alert day, more cops will be on the street and shops and less
-people will be in public who can be targeted as victim. If we see the
-table, controlling High Alert, total daily crime lowered by 7. Mid day
-Ridership is dummy variable controlling METRO ridership. Including Mid
-day Ridership, there’s still a negative relationship between high alert
-and crime, total daily crime lowered by 6.
+UPenn added ‘High Alert’ variable to isolate the effect. In a High Alert
+day, more cops will be on the street and shops and less people will be
+in public who can be targeted as victim. If we see the table, on high
+alert days, expected number of crimes is lowered by 7. If you see the
+second column of the table, when controlling Metro Ridership, expected
+number of crimes is still lowered by 6 on high alert days. By adding
+high alert, researchers can more accurately estimate the causal effect
+of police on crime.
 
 **Question 3 Why did they have to control for Metro ridership?**
 
 To get a true effect of police presence on crime rate in D.C., the
-researchers decided to control Metro ridership, as adding this IV
-variable can control the probability that the crime rate goes up/down
-from the fact that more/less people on the street. We can mitigate the
-potential biases caused by METRO ridership usage and can obtain clearer
-estimate of causal effect of police presence on crime rate.
+researchers decided to control Metro ridership, as adding this variable
+can control the probability that the crime rate goes up/down from the
+fact that more/less people on the street. We can mitigate the potential
+biases caused by METRO ridership usage and can obtain clearer estimate
+of causal effect of police presence on crime rate. In conclusion, high
+alert days lowers the number of people on the street (metro usage). By
+controlling for metro ridership, researchers made sure that lower crimes
+is not merely resulting from less people on the street.
 
 **Question 4 What was that trying to capture?**
 
 The first column of the table is about linear model using robust
 regression with the dependent variable daily total number of crimes in
-D.C. Here, on top of two instrumental variables ‘High Alert’ and ‘Midday
-ridership’, researchers added ‘District 1’ dummy variable, which
-demonstrates that crime happened in the first policy district area.
-Interaction term ‘High Alert x District 1’‘s coefficient -2.6
-illustrates the differential effect of the high alert on the first
-policy district area compared to non-first policy district area. Holding
-all else fixed, this interaction variable is associated with 2.6 less
-total daily crime. Interaction term ’High Alert x Other Districts’‘s
-coefficient -0.57 implies the differential effect of the high alert on
-the other districts compared to non-other districts. Holding all else
-fixed, this interaction variable is associated with 0.57 less total
-daily crime. The coefficient of ’Midday ridership’ means, with the METRO
-ridership control, it is expected to have 6 less total daily crime.
+D.C. Here, on top of ‘High Alert’ and ‘Midday ridership’, researchers
+added ‘District 1’ dummy variable, which demonstrates that crime
+happened in the first police district area which having . Interaction
+term ‘High Alert x District 1’‘s coefficient -2.6 illustrates the
+differential effect of the high alert on the first police district area
+compared to non-first police district area. Holding all else fixed, this
+interaction variable is associated with 2.6 less total daily crime.
+Interaction term ’High Alert x Other Districts’‘s coefficient -0.57
+implies the differential effect of the high alert on the other districts
+compared to non-other districts. Holding all else fixed, this
+interaction variable is associated with 0.57 less total daily crime. To
+sum up, these two interaction variables shows the reduction of crime
+rates on high alert days depending on the district. Interaction variable
+’High Alert x District 1’ the crime of the first police district goes
+down by 2.6 when it is a high alert day, on the other hand, interaction
+variable ‘High Alert x Other Districts’ shows the crime decreased only
+by -0.57. What this shows is reduction on crimes on high alert days is
+more strong on first police district than all other districts. We can
+conclude through ‘High alert’ more police reduces crime rates. The
+coefficient of ‘Midday ridership’ means, with the METRO ridership
+control, it is expected to have 6 less total daily crime.
 
 ## 2) Tree modeling: dengue cases
 
@@ -69,9 +81,9 @@ class and adopted in my base model to evaluate performance.
 
 Out-of-sample RMSEs for un-pruned CART and pruned CART is,
 
-    ## [1] 20.83567
+    ## [1] 26.2382
 
-    ## [1] 21.61547
+    ## [1] 27.80342
 
 Result shows pruned CART gives a little bit higher RMSE compared to
 un-pruned CART. This is due to the fact that pruned CART has higher bias
@@ -93,7 +105,7 @@ of random forest eliminates need for cross validation.
 
 Out-of-sample RMSEs for random forests is,
 
-    ## [1] 20.13438
+    ## [1] 24.20235
 
 #### Gradient Boosted trees to predict dengue cases
 
@@ -104,7 +116,7 @@ plotted error curve, which is deviance plot.
 
 ![](ECO-395M-exercise-3_files/figure-markdown_strict/problem%202.Gradient_boosted.1-1.png)
 
-    ## [1] 55
+    ## [1] 47
 
 The green line is our cross validated error. The x-axis of error curve
 is number of iterations and y-axis of error curve is deviance of the
@@ -113,7 +125,7 @@ best number of iteration minimizing error.
 
 Out-of-sample RMSEs for Gradient boosted tree is,
 
-    ## [1] 19.62217
+    ## [1] 24.54856
 
 ##### Checking model performance with out-of-sample RMSEs for each models
 
@@ -134,7 +146,7 @@ RMSE
 Un-pruned Tree
 </td>
 <td style="text-align:right;">
-20.83567
+26.23820
 </td>
 </tr>
 <tr>
@@ -142,7 +154,7 @@ Un-pruned Tree
 Pruned Tree
 </td>
 <td style="text-align:right;">
-21.61547
+27.80342
 </td>
 </tr>
 <tr>
@@ -150,7 +162,7 @@ Pruned Tree
 Random Forest
 </td>
 <td style="text-align:right;">
-20.13438
+24.20235
 </td>
 </tr>
 <tr>
@@ -158,7 +170,7 @@ Random Forest
 Gradient Boosting
 </td>
 <td style="text-align:right;">
-19.62217
+24.54856
 </td>
 </tr>
 </tbody>
@@ -262,7 +274,7 @@ RMSE
 Linear model
 </td>
 <td style="text-align:right;">
-1010.4864
+1042.6596
 </td>
 </tr>
 <tr>
@@ -270,7 +282,7 @@ Linear model
 Improved linear model
 </td>
 <td style="text-align:right;">
-1007.7794
+1027.1765
 </td>
 </tr>
 <tr>
@@ -278,7 +290,7 @@ Improved linear model
 Tree model
 </td>
 <td style="text-align:right;">
-938.2899
+948.8476
 </td>
 </tr>
 <tr>
@@ -286,7 +298,7 @@ Tree model
 Pruned tree model
 </td>
 <td style="text-align:right;">
-997.6447
+1025.1588
 </td>
 </tr>
 <tr>
@@ -294,7 +306,7 @@ Pruned tree model
 Random forest model
 </td>
 <td style="text-align:right;">
-746.7080
+687.4469
 </td>
 </tr>
 <tr>
@@ -302,7 +314,7 @@ Random forest model
 Boosted model
 </td>
 <td style="text-align:right;">
-795.8239
+767.8546
 </td>
 </tr>
 </tbody>
@@ -335,7 +347,7 @@ RMSE
 CART
 </td>
 <td style="text-align:right;">
-65769.62
+68185.82
 </td>
 </tr>
 <tr>
@@ -343,7 +355,7 @@ CART
 Random Forest
 </td>
 <td style="text-align:right;">
-50537.04
+52093.84
 </td>
 </tr>
 <tr>
@@ -351,7 +363,7 @@ Random Forest
 Gradient-Boosted Tree
 </td>
 <td style="text-align:right;">
-55383.28
+57529.63
 </td>
 </tr>
 </tbody>
