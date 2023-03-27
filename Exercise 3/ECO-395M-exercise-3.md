@@ -77,13 +77,11 @@ training data.
 To perform cross-validation, I used prune function given during the
 class and adopted in my base model to evaluate performance.
 
-![](ECO-395M-exercise-3_files/figure-markdown_strict/problem%202.CART.2-1.png)
-
 Out-of-sample RMSEs for un-pruned CART and pruned CART is,
 
-    ## [1] 26.37657
+    ## [1] 27.0909
 
-    ## [1] 28.34189
+    ## [1] 28.78253
 
 Result shows pruned CART gives a little bit higher RMSE compared to
 un-pruned CART. This is due to the fact that pruned CART has higher bias
@@ -105,7 +103,7 @@ of random forest eliminates need for cross validation.
 
 Out-of-sample RMSEs for random forests is,
 
-    ## [1] 22.64133
+    ## [1] 25.78279
 
 #### Gradient Boosted trees to predict dengue cases
 
@@ -116,7 +114,7 @@ plotted error curve, which is deviance plot.
 
 ![](ECO-395M-exercise-3_files/figure-markdown_strict/problem%202.Gradient_boosted.1-1.png)
 
-    ## [1] 52
+    ## [1] 78
 
 The green line is our cross validated error. The x-axis of error curve
 is number of iterations and y-axis of error curve is deviance of the
@@ -125,7 +123,7 @@ best number of iteration minimizing error.
 
 Out-of-sample RMSEs for Gradient boosted tree is,
 
-    ## [1] 24.71001
+    ## [1] 25.88387
 
 ##### Checking model performance with out-of-sample RMSEs for each models
 
@@ -146,7 +144,7 @@ RMSE
 Un-pruned Tree
 </td>
 <td style="text-align:right;">
-26.37657
+27.09090
 </td>
 </tr>
 <tr>
@@ -154,7 +152,7 @@ Un-pruned Tree
 Pruned Tree
 </td>
 <td style="text-align:right;">
-28.34189
+28.78253
 </td>
 </tr>
 <tr>
@@ -162,7 +160,7 @@ Pruned Tree
 Random Forest
 </td>
 <td style="text-align:right;">
-22.64133
+25.78279
 </td>
 </tr>
 <tr>
@@ -170,7 +168,7 @@ Random Forest
 Gradient Boosting
 </td>
 <td style="text-align:right;">
-24.71001
+25.88387
 </td>
 </tr>
 </tbody>
@@ -205,15 +203,18 @@ positive effect on predicted outcome.
 
 ## 3) Predictive model building: green certification
 
-1.  Overview This question attempts to build the best predictive model
-    for revenue per square foot per calender year and to use this model
-    to possibly quantify the average change in rental income per square
-    foot associated with green certification, holding other features of
-    the building constant.
+#### Overview
 
-2.  Modeling First, I created a new variable called “revenue” by
-    multiplying Rent and leasing\_rate Next, I split the data into train
-    and test set
+This question attempts to build the best predictive model for revenue
+per square foot per calender year and to use this model to possibly
+quantify the average change in rental income per square foot associated
+with green certification, holding other features of the building
+constant.
+
+#### Modeling
+
+First, I created a new variable called “revenue” by multiplying Rent and
+leasing\_rate Next, I split the data into train and test set
 
 We started out by fitting a linear regression model to predict revenue
 that included every variable in the data set as predictors.  
@@ -221,11 +222,72 @@ We took out Rent and leasing\_rate as they are already taken into
 account as revenue. We also chose to take out LEED and Energystar and
 collapsed them into a single “green certified” category.
 
+    ## 
+    ## Call:
+    ## lm(formula = revenue ~ . - Rent - leasing_rate - CS_PropertyID - 
+    ##     LEED - Energystar, data = green_train)
+    ## 
+    ## Coefficients:
+    ##       (Intercept)            cluster               size            empl_gr  
+    ##        -1.488e+03          8.248e-02          8.003e-04          2.568e+00  
+    ##           stories                age          renovated            class_a  
+    ##        -1.035e+00         -1.153e+00          3.328e+01          5.013e+02  
+    ##           class_b       green_rating                net          amenities  
+    ##         2.820e+02          1.472e+02         -2.466e+02          1.607e+02  
+    ##       cd_total_07         hd_total07        total_dd_07      Precipitation  
+    ##        -4.793e-03          7.062e-02                 NA          2.713e-01  
+    ##         Gas_Costs  Electricity_Costs   City_Market_Rent  
+    ##        -1.073e+04          1.508e+04          9.779e+01
+
 We improved our linear regression model by adding interactions between
 Gas\_Costs, Electricity Costs with possible sources of the costs.
 Specifically, we figured that gas and electricity costs are associated
 with number of heating/cooling degree days, precipitation, city market
 rent, stories, age, amenities, renovation status by correlation tests.
+
+    ## 
+    ## Call:
+    ## lm(formula = revenue ~ . - Rent - leasing_rate - CS_PropertyID - 
+    ##     LEED - Energystar + Gas_Costs:total_dd_07 + Gas_Costs:Precipitation + 
+    ##     Gas_Costs:amenities + Gas_Costs:City_Market_Rent + Gas_Costs:stories + 
+    ##     Electricity_Costs:renovated + Electricity_Costs:total_dd_07 + 
+    ##     Electricity_Costs:Precipitation + Electricity_Costs:Gas_Costs + 
+    ##     Electricity_Costs:stories + Electricity_Costs:age + Electricity_Costs:City_Market_Rent + 
+    ##     Electricity_Costs:amenities, data = green_train)
+    ## 
+    ## Coefficients:
+    ##                        (Intercept)                             cluster  
+    ##                         -1.101e+03                           9.331e-02  
+    ##                               size                             empl_gr  
+    ##                          8.122e-04                           2.872e+00  
+    ##                            stories                                 age  
+    ##                         -4.222e+01                          -8.250e-01  
+    ##                          renovated                             class_a  
+    ##                          4.027e+01                           3.969e+02  
+    ##                            class_b                        green_rating  
+    ##                          2.334e+02                           1.607e+02  
+    ##                                net                           amenities  
+    ##                         -2.410e+02                          -6.940e+02  
+    ##                        cd_total_07                          hd_total07  
+    ##                          5.586e-02                           1.652e-01  
+    ##                        total_dd_07                       Precipitation  
+    ##                                 NA                           1.848e+01  
+    ##                          Gas_Costs                   Electricity_Costs  
+    ##                          1.330e+05                          -3.347e+04  
+    ##                   City_Market_Rent               total_dd_07:Gas_Costs  
+    ##                          6.956e+01                          -2.107e+01  
+    ##            Precipitation:Gas_Costs                 amenities:Gas_Costs  
+    ##                         -5.112e+02                           5.142e+04  
+    ##         Gas_Costs:City_Market_Rent                   stories:Gas_Costs  
+    ##                         -4.929e+02                           1.174e+02  
+    ##        renovated:Electricity_Costs       total_dd_07:Electricity_Costs  
+    ##                          7.804e+02                           4.138e+00  
+    ##    Precipitation:Electricity_Costs         Gas_Costs:Electricity_Costs  
+    ##                         -6.468e+02                           3.449e+05  
+    ##          stories:Electricity_Costs               age:Electricity_Costs  
+    ##                          1.318e+03                          -6.171e+01  
+    ## Electricity_Costs:City_Market_Rent         amenities:Electricity_Costs  
+    ##                          9.019e+02                           1.004e+04
 
 We then created a CART model with basic independent variables
 
@@ -243,13 +305,14 @@ We tried the random forest model and the gradient-boosted model with the
 interactions I used earlier, but the tree models without them give me
 the lowest rmse model.
 
-We then drew a variable importance plot of random forest model. The plot
-shows that City\_Market\_Rent, Size, and age contribute the most to our
-prediction.
+We then drew a variable importance plot of random forest model. This
+plot list the variables included in the random forest model in order of
+‘importance’ to the model. As you can see, City Market rent contributes
+to the random forest model the most and so on.
 
 ![](ECO-395M-exercise-3_files/figure-markdown_strict/problem%203.8-1.png)
 
-1.  Conclusion
+#### Conclusion
 
 We fit linear models, tree models, random forests models and boosted
 random forests models. As we develop more sophisticated models, we find
@@ -274,7 +337,7 @@ RMSE
 Linear model
 </td>
 <td style="text-align:right;">
-975.8319
+1077.7588
 </td>
 </tr>
 <tr>
@@ -282,7 +345,7 @@ Linear model
 Improved linear model
 </td>
 <td style="text-align:right;">
-968.5109
+1078.0633
 </td>
 </tr>
 <tr>
@@ -290,7 +353,7 @@ Improved linear model
 Tree model
 </td>
 <td style="text-align:right;">
-904.4125
+1102.3409
 </td>
 </tr>
 <tr>
@@ -298,7 +361,7 @@ Tree model
 Pruned tree model
 </td>
 <td style="text-align:right;">
-965.6552
+1120.0305
 </td>
 </tr>
 <tr>
@@ -306,7 +369,7 @@ Pruned tree model
 Random forest model
 </td>
 <td style="text-align:right;">
-734.6471
+878.1369
 </td>
 </tr>
 <tr>
@@ -314,7 +377,7 @@ Random forest model
 Boosted model
 </td>
 <td style="text-align:right;">
-770.7215
+905.7466
 </td>
 </tr>
 </tbody>
@@ -347,7 +410,7 @@ RMSE
 CART
 </td>
 <td style="text-align:right;">
-68680.37
+69479.37
 </td>
 </tr>
 <tr>
@@ -355,7 +418,7 @@ CART
 Random Forest
 </td>
 <td style="text-align:right;">
-52207.34
+51662.43
 </td>
 </tr>
 <tr>
@@ -363,7 +426,7 @@ Random Forest
 Gradient-Boosted Tree
 </td>
 <td style="text-align:right;">
-57196.96
+56969.33
 </td>
 </tr>
 </tbody>
