@@ -2,7 +2,7 @@
 title: "ECO 395M exercise 4"
 author: "Phillip An, Paul Park, Min Jin Kang"
 date: "2023-04-07"
-output: html_document
+output: md_document
 ---
 
 ```{r setup, include=FALSE}
@@ -10,23 +10,122 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(foreach)
 library(mosaic)
-#library(LICORS)
 library(corrplot)
 library(dplyr)
 library(knitr)
 library(kableExtra)
-
-
+library(reshape2)
 library(ggplot2)
 library(rsample)  
 library(caret)
 library(modelr)
-library(parallel)
-library(reshape2)
+library(arules)
+library(arulesViz)
+
 
 ```
 
-## Market segmentation
+
+## 1) Clustering and PCA
+
+
+## K-means Clustering
+```{r 1.1.1, message=FALSE, echo=FALSE, warning=FALSE}
+
+wine = read.csv('Data/wine.csv', header = TRUE)
+
+summary(wine)
+View(wine)
+
+# Center and scale the data
+X = wine[,-(12:13)]
+X = scale(X, center=TRUE, scale=TRUE)
+
+
+# Extract the centers and scales from the rescaled data (which are named attributes)
+mu = attr(X,"scaled:center")
+sigma = attr(X,"scaled:scale")
+
+
+# Using kmenas
+clust_wine = kmeans(X, 2, nstart = 10)
+
+### Alcohol and pH
+ggplot(wine) + 
+  geom_point(aes(alcohol, pH, color = factor(clust_wine$cluster), shape=factor(clust_wine$cluster)))+
+  labs(x ="Alcohol", y ="pH ", title = "Cluster Membership")+
+
+```
+
+
+```{r 1.1.2, message=FALSE, echo=FALSE, warning=FALSE}
+
+ggplot(wine) + 
+  geom_point(aes(alcohol, pH, color = color , shape=factor(clust_wine$cluster)))+  guides(shape =guide_legend(title="Cluster"))+
+  labs(x ="alcohol", y ="pH ", title = " Is white wine separated from red wine?")
+
+```
+
+
+```{r 1.1.3, message=FALSE, echo=FALSE, warning=FALSE}
+### residual sugar and density
+ggplot(wine) + 
+  geom_point(aes(volatile.acidity, residual.sugar, color = factor(clust_wine$cluster), shape=factor(clust_wine$cluster)))+
+  labs(x ="volatile acidity ", y ="residual sugar ", title = "Cluster Membership")
+
+```
+
+
+```{r 1.1.4, message=FALSE, echo=FALSE, warning=FALSE}
+ggplot(wine) + 
+  geom_point(aes(volatile.acidity, residual.sugar, color = color , shape=factor(clust_wine$cluster)))+ guides(shape =guide_legend(title="Cluster"))+
+  labs(x ="volatile acidity", y ="residual sugar", title = "Is white wine separated from red wine?")
+
+```
+
+
+```{r 1.1.5, message=FALSE, echo=FALSE, warning=FALSE}
+
+ggplot(wine) + 
+  geom_point(aes(volatile.acidity, total.sulfur.dioxide, color = quality, shape=factor(clust_wine$cluster)))+ 
+  guides(shape =guide_legend(title="Cluster"))+
+  labs( title = "Wine Quality?")
+
+```
+
+
+## PCA
+
+```{r 1.2.1, message=FALSE, echo=FALSE, warning=FALSE}
+######## PCA
+#Setup
+pca_wine = prcomp(X, rank=6, scale=TRUE)
+loadings = pca_wine$rotation
+scores = pca_wine$x
+
+#linear combinations
+kable(head(loadings))
+
+summary(pca_wine)
+```
+
+
+```{r 1.2.2, message=FALSE, echo=FALSE, warning=FALSE}
+
+qplot(scores[,1], scores[,3], color=wine$color, xlab='Component 1', ylab='Component 3') + scale_color_manual(values=c("red", "grey"))
+
+```
+
+
+```{r 1.2.3, message=FALSE, echo=FALSE, warning=FALSE}
+
+qplot(scores[,1], scores[,3], color=wine$quality, xlab='Component 1', ylab='Component 3')
+
+```
+
+
+
+## 2) Market segmentation
 
 Method to be used is `K-means clustering`. With this method, we will be able to detect interesting market segments that seem to be exceptional within NutrientH20's social-media audience. 
 
@@ -34,7 +133,7 @@ Read the `social_marketing.csv` and let's take a look for the 36 different categ
 \newline
 ```{r 2.1.1, message=FALSE, echo=FALSE, warning=FALSE}
 # read the data
-data=read.csv('/Users/minjinkang/Desktop/ECO395M/data/social_marketing.csv')
+data=read.csv('Data/social_marketing.csv')
 
 # let's explore data
 c=colnames(data)
@@ -167,3 +266,102 @@ knitr::kable(kable_output)%>% kable_minimal() %>% kable_styling(full_width = FAL
 \newline
 \newline
 \newline
+
+
+
+
+
+## 3) Association rules for grocery purchases
+
+### analysis 
+
+`groceries.txt` file contains a total of 9,835 unique shopping baskets. We frst went through some data wrangling process before conducting Market Basket Analysis using the "arules" package. As for the thresholds, we chose support of .001, confidence of .5, and maxlen of 10. A relatively low support of .001 was chosen because we wanted to capture as many items as possible from the dataset. Confidence of .5 was chosen to sort out weak associations. Lastly, we limited the maximum number of items per item set to be 10 to account for as many possible grocery combinations as possible. Runinng the algorithym using the above threshold resulted in 5,668 rules, which we thought was enough for this analysis. Below are two plots showing the resulting rules; the first is plotted between support and lift, while the second is between support and confidence.
+
+
+```{r problem 3, message=FALSE, echo=FALSE, warning=FALSE}
+
+#read groceries.txt file
+groceries=read.table('Data/groceries.txt', sep = '\n', header = FALSE)
+
+# using add_column()
+groceries <- groceries %>%
+  add_column(person = "", .before = 1)
+
+# add user number to each row
+groceries$person <- seq.int(nrow(groceries))
+
+# split grocery items by comma and turn person into a factor
+
+groceries = strsplit(groceries$V1, ",")
+groceries$person = factor(groceries$person)
+
+## Remove duplicates ("de-dupe")
+groceries = lapply(groceries, unique)
+
+## Cast this variable as a special arules "transactions" class.
+groceriestrans = as(groceries, "transactions")
+
+# Now run the 'apriori' algorithm
+# Look at rules with support > .005 & confidence >.1 & length (# grocery items) <= 5
+groceriesrules = apriori(groceriestrans, 
+                     parameter=list(support=.001, confidence=.5, maxlen=10))
+
+# plot  rules in (support, confidence) space
+plot(groceriesrules, measure = c("support", "lift"), shading = "confidence")
+
+# "two key" plot: coloring is by size (order) of item set
+plot(groceriesrules, method='two-key plot')
+
+# Choose a subset
+subset = subset(groceriesrules, subset=support > .001 & confidence > .5)
+
+rules_df <- arules::DATAFRAME(groceriesrules)
+
+```
+
+Below is a table that shows the top ten rules with the highest confidence. Confidence shows the probability of having item(s) on the RHS given those on the LHS are purchased. You can see that out of the top ten rules, the most frequent RHS items are milk and other vegetables. However, this does not reveal much about association. Take `{canned fish,hygiene articles} -> {whole milk}` as an example. Intuitively, buying canned fish and hygiene articles doesn't seem to have anything to do with buying whole milk. However, this this is still at thoe top of the list simply because whole milk gets bought the most frequently when people go grocery shopping, regardless of what other items they purchase. To see more relevant association rules, let's look at a list with the highest lift.
+
+
+```{r problem 3-1, message=FALSE, echo=FALSE, warning=FALSE}
+
+rules_df_confidence <- rules_df %>%
+  arrange(desc(confidence)) %>%
+  head(10) %>%
+  kable(caption = 'Top 10 rules with the highest confidence')
+
+rules_df_confidence
+```
+
+
+Below is a table showing the top ten rules with the highest lift. Lift is different from confidence in that it is the ratio between confidence and expected confidence. In other words, lift measures the relative strength of association between LHS and RHS. It takes care of the high frequency issue of whole milk purchase we observed above. Lift > 1 indicates that the association rule improves the chances of outcome, where as lift < 1 reveals that the model lowers the chance of the outcome. Lift = 1 does not have any effect on the outcome. The result here is much more interesting and informative.
+
+`{popcorn,soda} -> {salty snack}` Here, it seems like people are getting ready for a movie night. People who buy popcorn and soda are likely to buy other salty snacks. Thus, the model makes sense.
+
+`{ham,processed cheese} -> {white bread}`These are ingredients to make a quick sandwich. Hence, the rule makes sense again.
+
+```{r problem 3-2, message=FALSE, echo=FALSE, warning=FALSE}
+
+rules_df_lift <- rules_df %>%
+  arrange(desc(lift)) %>%
+  head(10) %>%
+  kable(caption = 'Top 10 rules with the highest lift')
+
+rules_df_lift
+```
+
+The last plot is a graph-visualization representing the association rules. Each item in the LHS is connected with to the RHS item, and the arrows indicate the direction of the relationship.
+
+```{r problem 3-3, message=FALSE, echo=FALSE, warning=FALSE}
+
+#plot
+#saveAsGraph(subset, file = "groceriesrules.graphml")
+
+# graph-based visualization
+# export
+# associations are represented as edges
+# For rules, each item in the LHS is connected
+# with a directed edge to the item in the RHS. 
+groceries_graph = associations2igraph(subset)
+igraph::write_graph(groceries_graph, file='groceries.graphml', format = "graphml")
+
+```
