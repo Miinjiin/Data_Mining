@@ -3,6 +3,8 @@ title: "ECO 395M exercise 4"
 author: "Phillip An, Paul Park, Min Jin Kang"
 date: "2023-04-07"
 output: md_document
+always_allow_html: true
+
 ---
 
 ```{r setup, include=FALSE}
@@ -21,7 +23,7 @@ library(caret)
 library(modelr)
 library(arules)
 library(arulesViz)
-
+library(igraph)
 
 ```
 
@@ -32,7 +34,7 @@ library(arulesViz)
 ## K-means Clustering
 ```{r 1.1.1, message=FALSE, echo=FALSE, warning=FALSE}
 
-wine = read.csv('Data/wine.csv', header = TRUE)
+wine = read.csv('Data/wine.csv')
 
 summary(wine)
 View(wine)
@@ -50,10 +52,10 @@ sigma = attr(X,"scaled:scale")
 # Using kmenas
 clust_wine = kmeans(X, 2, nstart = 10)
 
-### Alcohol and pH
+# Alcohol and pH
 ggplot(wine) + 
   geom_point(aes(alcohol, pH, color = factor(clust_wine$cluster), shape=factor(clust_wine$cluster)))+
-  labs(x ="Alcohol", y ="pH ", title = "Cluster Membership")+
+  labs(x ="Alcohol", y ="pH ", title = "Cluster Membership")
 
 ```
 
