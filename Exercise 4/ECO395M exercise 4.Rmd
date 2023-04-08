@@ -1,0 +1,169 @@
+---
+title: "ECO 395M exercise 4"
+author: "Phillip An, Paul Park, Min Jin Kang"
+date: "2023-04-07"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(foreach)
+library(mosaic)
+#library(LICORS)
+library(corrplot)
+library(dplyr)
+library(knitr)
+library(kableExtra)
+
+
+library(ggplot2)
+library(rsample)  
+library(caret)
+library(modelr)
+library(parallel)
+library(reshape2)
+
+```
+
+## Market segmentation
+
+Method to be used is `K-means clustering`. With this method, we will be able to detect interesting market segments that seem to be exceptional within NutrientH20's social-media audience. 
+
+Read the `social_marketing.csv` and let's take a look for the 36 different categories
+\newline
+```{r 2.1.1, message=FALSE, echo=FALSE, warning=FALSE}
+# read the data
+data=read.csv('/Users/minjinkang/Desktop/ECO395M/data/social_marketing.csv')
+
+# let's explore data
+c=colnames(data)
+col_list=matrix(c[2:37], nrow=6, ncol=6 ,byrow=TRUE)
+col_table=as.table(col_list)
+knitr::kable(col_table, col.names= NULL, row.names = FALSE, caption="36 different categories of interest") %>% kable_minimal()
+
+
+```
+
+
+With K-means clustering, we can cluster these categories, for example, "physical wellness" can be one cluster containing `personal_fitness`, `health_nutrition`, `outdoors`.
+
+\newline
+
+As mentioned in the question, we can check there are categories like `spam`, `adult`, `uncategorized`, and I will remove `spam` and `adult` to clean our dataset. 
+
+
+```{r}
+
+# drop first column, which user has labeled as random 9-digit code
+X=data[,-1]
+# drop spam and adult column which slip through the data
+X=X[,-(35:36)]
+# center and scale
+X=scale(X, center=TRUE, scale=TRUE)
+# Extract the centers and scales from the rescaled data (which are named attributes)
+mu = attr(X,"scaled:center")
+sigma = attr(X,"scaled:scale")
+
+
+```
+
+After cleaning/centering/scaling the data, I will start with correlation plot for k-means clustering, as correlation plot can visualize which categories in the dataset are strongly correlated each other, and also can identify which categories have similar scales. 
+
+```{r 2.1.2, message=FALSE, echo=FALSE, warning=FALSE}
+
+corrplot::corrplot(cor(X), method='color', addCoef.col=0.3, number.cex = 0.2, tl.cex=0.3)
+
+```
+
+As there's so many variables, I will sort highest correlations. 
+```{r 2.1.3, message=FALSE, echo=FALSE, warning=FALSE}
+
+corr_highest <- function(){
+  corr = cor(X)
+  # drop duplicates, and correlation 1
+  corr[lower.tri(corr,diag=TRUE)] <- NA 
+  corr[corr == 1] <- NA 
+  # removing na values and making dataframe
+  corr = as.data.frame(as.table(corr))
+  corr = na.omit(corr) 
+  # select significant values (Freq more than 0.6)
+  corr = subset(corr, abs(Freq) > 0.6) 
+  # sort highest corr
+  corr = corr[order(-abs(corr$Freq)),] 
+  mtx_corr = reshape2::acast(corr, Var1~Var2, value.var="Freq")
+  corrplot(mtx_corr, is.corr=FALSE, na.label=" ", tl.cex=0.9, col = colorRampPalette(c("#FDE2E2", "#FAA2A2", "#F55D5D", "#D92727", "#A51414"))(100))
+  knitr::kable(corr,row.names = FALSE, caption="Highest correlation among categories") %>% kable_minimal()
+}
+corr_highest()
+```
+
+As you can see, `health_nutrition` and `personal_fitness` has the highest correlation and this is exactly what I thought would be in the same cluster - "physical wellness". 
+
+\newline
+
+We've finished previewing for k-means clustering with correlation plot, and we'll start analyzing with k-means clustering.
+
+\newline
+\newline
+\newline
+\newline
+
+### K-means clustering
+
+First, will start from choosing optimal K, the amount of clusters.
+Below is Elbow plot. Elbow plot used to determine the optimal number of clustering. The plot displays within-cluster sum of squares(WSS) as a function of the number of clusters.
+
+```{r 2.2.1, message=FALSE, echo=FALSE, warning=FALSE}
+# use the code we learned during the class
+k_grid = seq(2, 30, by=1)
+SSE_grid = foreach(k = k_grid, .combine='c') %do% {
+  cluster_k = kmeans(X, k, nstart=25)
+  cluster_k$tot.withinss
+}
+
+# plotting elbow plot to see 
+plot(k_grid, SSE_grid, main="Elbow Plot") 
+
+
+```
+
+\newline
+\newline
+
+10 seems to me to be the elbow point, so we'll use 10 for k.
+
+\newline
+\newline
+
+We can get surface-level information about market segments for NutrientH20. 
+
+```{r 2.2.2, message=FALSE, echo=FALSE, warning=FALSE, including=FALSE}
+
+# Run k-means with 10 clusters and 25 starts
+clu= kmeans(X, centers=10, nstart=25)
+
+# make an empty list to store kable output
+kable_output <- list()
+
+# loop through each plot and sort by the first column in ascending order, then print the top 5 rows
+for (i in 0:9) {
+  plot_name <- paste0("cluster", i+1)
+  plot <- data.frame(clu$center[i+1,]*sigma + mu)
+  plot_sorted_top5 <- plot %>% arrange(desc(plot[1])) %>% head(5)
+  names(plot_sorted_top5)[1] <- plot_name
+  kable_output[[i+1]] <- plot_sorted_top5
+}
+
+# print the kable output for all 10 plots
+knitr::kable(kable_output)%>% kable_minimal() %>% kable_styling(full_width = FALSE, position="left", latex_options="scale_down")
+
+```
+
+
+
+
+\newline
+\newline
+\newline
+\newline
