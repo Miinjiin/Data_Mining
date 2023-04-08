@@ -264,11 +264,6 @@ knitr::kable(kable_output)%>% kable_minimal() %>% kable_styling(full_width = FAL
 
 
 
-\newline
-\newline
-\newline
-\newline
-
 
 
 
@@ -353,7 +348,7 @@ rules_df_lift
 
 The last plot is a graph-visualization representing the association rules. Each item in the LHS is connected with to the RHS item, and the arrows indicate the direction of the relationship.
 
-```{r graphml_plot}
+```{r problem 3-3, message=FALSE, echo=FALSE, warning=FALSE}
 
 #plot
 #saveAsGraph(subset, file = "groceriesrules.graphml")
@@ -365,7 +360,7 @@ The last plot is a graph-visualization representing the association rules. Each 
 # with a directed edge to the item in the RHS. 
 groceries_graph = associations2igraph(subset)
 igraph::write_graph(groceries_graph, file='groceries.graphml', format = "graphml")
-
-grViz("groceries.graphml")
+mygraph <- read_graph('groceries.graphml', format='graphml')
+plot(mygraph)
 
 ```
