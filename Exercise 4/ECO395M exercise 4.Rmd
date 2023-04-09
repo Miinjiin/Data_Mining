@@ -348,7 +348,7 @@ rules_df_lift <- rules_df %>%
 rules_df_lift
 ```
 
-The last plot is a graph-visualization representing the association rules. Each item in the LHS is connected with to the RHS item, and the arrows indicate the direction of the relationship.
+The last plot is a graph-visualization representing the association rules. Each item in the LHS is connected with to the RHS item, and the arrows indicate the direction of the relationship. To avoid over-crowded plot, we have limited to rules with lift > 10.
 
 ```{r problem 3-4, message=FALSE, echo=FALSE, warning=FALSE}
 
