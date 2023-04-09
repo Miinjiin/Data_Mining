@@ -563,6 +563,61 @@ cluster1
 <tbody>
 <tr>
 <td style="text-align:left;">
+chatter
+</td>
+<td style="text-align:right;">
+9.731328
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+photo\_sharing
+</td>
+<td style="text-align:right;">
+5.963693
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+shopping
+</td>
+<td style="text-align:right;">
+4.120332
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+current\_events
+</td>
+<td style="text-align:right;">
+1.992739
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+health\_nutrition
+</td>
+<td style="text-align:right;">
+1.600622
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+cluster2
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
 news
 </td>
 <td style="text-align:right;">
@@ -611,61 +666,6 @@ sports\_fandom
 <th style="text-align:left;">
 </th>
 <th style="text-align:right;">
-cluster2
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-politics
-</td>
-<td style="text-align:right;">
-11.267241
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-travel
-</td>
-<td style="text-align:right;">
-9.103448
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-computers
-</td>
-<td style="text-align:right;">
-4.100575
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-chatter
-</td>
-<td style="text-align:right;">
-4.060345
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-news
-</td>
-<td style="text-align:right;">
-3.617816
-</td>
-</tr>
-</tbody>
-</table>
-</td>
-<td>
-<table>
-<thead>
-<tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:right;">
 cluster3
 </th>
 </tr>
@@ -673,18 +673,18 @@ cluster3
 <tbody>
 <tr>
 <td style="text-align:left;">
-college\_uni
+health\_nutrition
 </td>
 <td style="text-align:right;">
-11.098870
+12.591270
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-online\_gaming
+personal\_fitness
 </td>
 <td style="text-align:right;">
-10.850283
+6.661376
 </td>
 </tr>
 <tr>
@@ -692,23 +692,23 @@ online\_gaming
 chatter
 </td>
 <td style="text-align:right;">
-4.096045
+3.767196
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-sports\_playing
+cooking
 </td>
 <td style="text-align:right;">
-2.745763
+3.414021
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-photo\_sharing
+outdoors
 </td>
 <td style="text-align:right;">
-2.655367
+2.903439
 </td>
 </tr>
 </tbody>
@@ -783,10 +783,34 @@ cluster5
 <tbody>
 <tr>
 <td style="text-align:left;">
+college\_uni
+</td>
+<td style="text-align:right;">
+11.098870
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+online\_gaming
+</td>
+<td style="text-align:right;">
+10.850283
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
 chatter
 </td>
 <td style="text-align:right;">
-9.731328
+4.096045
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+sports\_playing
+</td>
+<td style="text-align:right;">
+2.745763
 </td>
 </tr>
 <tr>
@@ -794,31 +818,7 @@ chatter
 photo\_sharing
 </td>
 <td style="text-align:right;">
-5.963693
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-shopping
-</td>
-<td style="text-align:right;">
-4.120332
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-current\_events
-</td>
-<td style="text-align:right;">
-1.992739
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-health\_nutrition
-</td>
-<td style="text-align:right;">
-1.600622
+2.655367
 </td>
 </tr>
 </tbody>
@@ -893,18 +893,26 @@ cluster7
 <tbody>
 <tr>
 <td style="text-align:left;">
-tv\_film
+politics
 </td>
 <td style="text-align:right;">
-5.597087
+11.267241
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-art
+travel
 </td>
 <td style="text-align:right;">
-5.038835
+9.103448
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+computers
+</td>
+<td style="text-align:right;">
+4.100575
 </td>
 </tr>
 <tr>
@@ -912,23 +920,15 @@ art
 chatter
 </td>
 <td style="text-align:right;">
-3.929612
+4.060345
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-college\_uni
+news
 </td>
 <td style="text-align:right;">
-2.548544
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-photo\_sharing
-</td>
-<td style="text-align:right;">
-2.453883
+3.617816
 </td>
 </tr>
 </tbody>
@@ -942,6 +942,61 @@ photo\_sharing
 </th>
 <th style="text-align:right;">
 cluster8
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+sports\_fandom
+</td>
+<td style="text-align:right;">
+6.196347
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+religion
+</td>
+<td style="text-align:right;">
+5.557078
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+food
+</td>
+<td style="text-align:right;">
+4.727550
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+parenting
+</td>
+<td style="text-align:right;">
+4.258752
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+chatter
+</td>
+<td style="text-align:right;">
+3.849315
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+cluster9
 </th>
 </tr>
 </thead>
@@ -996,61 +1051,6 @@ travel
 <th style="text-align:left;">
 </th>
 <th style="text-align:right;">
-cluster9
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-health\_nutrition
-</td>
-<td style="text-align:right;">
-12.591270
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-personal\_fitness
-</td>
-<td style="text-align:right;">
-6.661376
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-chatter
-</td>
-<td style="text-align:right;">
-3.767196
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-cooking
-</td>
-<td style="text-align:right;">
-3.414021
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-outdoors
-</td>
-<td style="text-align:right;">
-2.903439
-</td>
-</tr>
-</tbody>
-</table>
-</td>
-<td>
-<table>
-<thead>
-<tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:right;">
 cluster10
 </th>
 </tr>
@@ -1058,34 +1058,18 @@ cluster10
 <tbody>
 <tr>
 <td style="text-align:left;">
-sports\_fandom
+tv\_film
 </td>
 <td style="text-align:right;">
-6.196347
+5.597087
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-religion
+art
 </td>
 <td style="text-align:right;">
-5.557078
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-food
-</td>
-<td style="text-align:right;">
-4.727550
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-parenting
-</td>
-<td style="text-align:right;">
-4.258752
+5.038835
 </td>
 </tr>
 <tr>
@@ -1093,7 +1077,23 @@ parenting
 chatter
 </td>
 <td style="text-align:right;">
-3.849315
+3.929612
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+college\_uni
+</td>
+<td style="text-align:right;">
+2.548544
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+photo\_sharing
+</td>
+<td style="text-align:right;">
+2.453883
 </td>
 </tr>
 </tbody>
@@ -1121,29 +1121,7 @@ analysis. Below are two plots showing the resulting rules; the first is
 plotted between support and lift, while the second is between support
 and confidence.
 
-    ## Apriori
-    ## 
-    ## Parameter specification:
-    ##  confidence minval smax arem  aval originalSupport maxtime support minlen
-    ##         0.5    0.1    1 none FALSE            TRUE       5   0.001      1
-    ##  maxlen target  ext
-    ##      10  rules TRUE
-    ## 
-    ## Algorithmic control:
-    ##  filter tree heap memopt load sort verbose
-    ##     0.1 TRUE TRUE  FALSE TRUE    2    TRUE
-    ## 
-    ## Absolute minimum support count: 9 
-    ## 
-    ## set item appearances ...[0 item(s)] done [0.00s].
-    ## set transactions ...[169 item(s), 9836 transaction(s)] done [0.00s].
-    ## sorting and recoding items ... [157 item(s)] done [0.00s].
-    ## creating transaction tree ... done [0.00s].
-    ## checking subsets of size 1 2 3 4 5 6 done [0.01s].
-    ## writing ... [5668 rule(s)] done [0.00s].
-    ## creating S4 object  ... done [0.00s].
-
-![](ECO395M-exercise-4_files/figure-markdown_strict/problem%203-1.png)![](ECO395M-exercise-4_files/figure-markdown_strict/problem%203-2.png)
+![](ECO395M-exercise-4_files/figure-markdown_strict/problem%203-1-1.png)![](ECO395M-exercise-4_files/figure-markdown_strict/problem%203-1-2.png)
 
 Below is a table that shows the top ten rules with the highest
 confidence. Confidence shows the probability of having item(s) on the
@@ -1705,4 +1683,4 @@ The last plot is a graph-visualization representing the association
 rules. Each item in the LHS is connected with to the RHS item, and the
 arrows indicate the direction of the relationship.
 
-![](ECO395M-exercise-4_files/figure-markdown_strict/problem%203-3-1.png)
+![](ECO395M-exercise-4_files/figure-markdown_strict/problem%203-4-1.png)
