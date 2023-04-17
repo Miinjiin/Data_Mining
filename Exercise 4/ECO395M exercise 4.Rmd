@@ -154,7 +154,7 @@ With K-means clustering, we can cluster these categories, for example, "physical
 As mentioned in the question, we can check there are categories like `spam`, `adult`, `uncategorized`, and I will remove `spam` and `adult` to clean our dataset. 
 
 
-```{r}
+```{2.1.1.2, message=FALSE, echo=FALSE, warning=FALSE}
 
 # drop first column, which user has labeled as random 9-digit code
 X=data[,-1]
@@ -261,18 +261,27 @@ knitr::kable(kable_output)%>% kable_minimal() %>% kable_styling(full_width = FAL
 
 ```
 
+\newline
+\newline
 
+Above is the table for the highest five categories for each clusters in total of 10 clusters.
+It appears that there are distinct groups of categories in each clusters. 
+Cluster with college_uni, online_gaming, sports_playing in top 5 categories will explain NutrientH20's social-media audience is male college students whose in their early 20s. 
+Cluster with news, politics, automotive, sports_fandom in top 5 categories will explain NutrientH20's social-media audience can be guys in their 30s, 40s. 
+Cluster with health_nutrition, personal_fitness, outdoors in top 5 categories will explain NutrientH20's social-media audience is people interested in exercise and health. 
+With this result, NutrientH20 can do marketing through gyms, product advertisements in men's magazines, or selling products in college vending machines.
 
-
+\newline
+\newline
 
 
 
 
 ## 3) Association rules for grocery purchases
 
-### analysis 
+###  Analysis 
 
-`groceries.txt` file contains a total of 9,835 unique shopping baskets. We frst went through some data wrangling process before conducting Market Basket Analysis using the "arules" package. As for the thresholds, we chose support of .001, confidence of .5, and maxlen of 10. A relatively low support of .001 was chosen because we wanted to capture as many items as possible from the dataset. Confidence of .5 was chosen to sort out weak associations. Lastly, we limited the maximum number of items per item set to be 10 to account for as many possible grocery combinations as possible. Runinng the algorithym using the above threshold resulted in 5,668 rules, which we thought was enough for this analysis. Below are two plots showing the resulting rules; the first is plotted between support and lift, while the second is between support and confidence.
+`groceries.txt` file contains a total of 9,835 unique shopping baskets. We frst went through some data wrangling process before conducting Market Basket Analysis using the "arules" package. As for the thresholds, we chose support of .001, confidence of .5, and maxlen of 10. A relatively low support of .001 was chosen because we wanted to capture as many items as possible from the dataset. Confidence of .5 was chosen to sort out weak associations. Lastly, we limited the maximum number of items per item set to be 10 to account for as many possible grocery combinations as possible. Running the algorithm using the above threshold resulted in 5,668 rules, which we thought was enough for this analysis. Below are two plots showing the resulting rules; the first is plotted between support and lift, while the second is between support and confidence.
 
 
 ```{r problem 3, message=FALSE, echo=FALSE, warning=FALSE, include=FALSE}
@@ -318,7 +327,10 @@ rules_df <- arules::DATAFRAME(groceriesrules)
 
 ```
 
-Below is a table that shows the top ten rules with the highest confidence. Confidence shows the probability of having item(s) on the RHS given those on the LHS are purchased. You can see that out of the top ten rules, the most frequent RHS items are milk and other vegetables. However, this does not reveal much about association. Take `{canned fish,hygiene articles} -> {whole milk}` as an example. Intuitively, buying canned fish and hygiene articles doesn't seem to have anything to do with buying whole milk. However, this this is still at thoe top of the list simply because whole milk gets bought the most frequently when people go grocery shopping, regardless of what other items they purchase. To see more relevant association rules, let's look at a list with the highest lift.
+
+###  Findings 
+
+Below is a table that shows the top ten rules with the highest confidence. Confidence shows the probability of having item(s) on the RHS given those on the LHS are purchased. You can see that out of the top ten rules, the most frequent RHS items are `whole milk` and `other vegetables`. However, the association rules here are not very interesting nor revealing. Take `{canned fish,hygiene articles} -> {whole milk}` as an example. Intuitively, buying canned fish and hygiene articles doesn't seem to have anything to do with buying whole milk. However, this this is still at the top of the list simply because whole milk gets bought the most frequently when people go grocery shopping, regardless of what other items they purchase. To see more relevant and revealing association rules, let's look at a list with the highest lift.
 
 
 ```{r problem 3-2, message=FALSE, echo=FALSE, warning=FALSE}
@@ -336,7 +348,7 @@ Below is a table showing the top ten rules with the highest lift. Lift is differ
 
 `{popcorn,soda} -> {salty snack}` Here, it seems like people are getting ready for a movie night. People who buy popcorn and soda are likely to buy other salty snacks. Thus, the model makes sense.
 
-`{ham,processed cheese} -> {white bread}`These are ingredients to make a quick sandwich. Hence, the rule makes sense again.
+`{ham,processed cheese} -> {white bread}`These are ingredients to make a quick sandwich. People who buy ham and processed cheese are likely to buy white bread to make a sandwich. Hence, the rule makes sense again.
 
 ```{r problem 3-3, message=FALSE, echo=FALSE, warning=FALSE}
 

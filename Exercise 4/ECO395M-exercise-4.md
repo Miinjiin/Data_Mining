@@ -364,15 +364,17 @@ As mentioned in the question, we can check there are categories like
 `spam`, `adult`, `uncategorized`, and I will remove `spam` and `adult`
 to clean our dataset.
 
-    # drop first column, which user has labeled as random 9-digit code
-    X=data[,-1]
-    # drop spam and adult column which slip through the data
-    X=X[,-(35:36)]
-    # center and scale
-    X=scale(X, center=TRUE, scale=TRUE)
-    # Extract the centers and scales from the rescaled data (which are named attributes)
-    mu = attr(X,"scaled:center")
-    sigma = attr(X,"scaled:scale")
+\`\`\`{2.1.1.2, message=FALSE, echo=FALSE, warning=FALSE}
+
+# drop first column, which user has labeled as random 9-digit code
+
+X=data\[,-1\] \# drop spam and adult column which slip through the data
+X=X\[,-(35:36)\] \# center and scale X=scale(X, center=TRUE, scale=TRUE)
+\# Extract the centers and scales from the rescaled data (which are
+named attributes) mu = attr(X,“scaled:center”) sigma =
+attr(X,“scaled:scale”)
+
+\`\`\`
 
 After cleaning/centering/scaling the data, I will start with correlation
 plot for k-means clustering, as correlation plot can visualize which
@@ -403,123 +405,24 @@ Freq
 <tbody>
 <tr>
 <td style="text-align:left;">
-health\_nutrition
+free.sulfur.dioxide
 </td>
 <td style="text-align:left;">
-personal\_fitness
+total.sulfur.dioxide
 </td>
 <td style="text-align:right;">
-0.8099024
+0.7209341
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-online\_gaming
+density
 </td>
 <td style="text-align:left;">
-college\_uni
+alcohol
 </td>
 <td style="text-align:right;">
-0.7728393
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-cooking
-</td>
-<td style="text-align:left;">
-fashion
-</td>
-<td style="text-align:right;">
-0.7214027
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-cooking
-</td>
-<td style="text-align:left;">
-beauty
-</td>
-<td style="text-align:right;">
-0.6642389
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-travel
-</td>
-<td style="text-align:left;">
-politics
-</td>
-<td style="text-align:right;">
-0.6602100
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-religion
-</td>
-<td style="text-align:left;">
-parenting
-</td>
-<td style="text-align:right;">
-0.6555973
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-sports\_fandom
-</td>
-<td style="text-align:left;">
-religion
-</td>
-<td style="text-align:right;">
-0.6379748
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-beauty
-</td>
-<td style="text-align:left;">
-fashion
-</td>
-<td style="text-align:right;">
-0.6349739
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-health\_nutrition
-</td>
-<td style="text-align:left;">
-outdoors
-</td>
-<td style="text-align:right;">
-0.6082254
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-sports\_fandom
-</td>
-<td style="text-align:left;">
-parenting
-</td>
-<td style="text-align:right;">
-0.6077181
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-travel
-</td>
-<td style="text-align:left;">
-computers
-</td>
-<td style="text-align:right;">
-0.6029349
+-0.6867454
 </td>
 </tr>
 </tbody>
@@ -563,42 +466,42 @@ cluster1
 <tbody>
 <tr>
 <td style="text-align:left;">
-health\_nutrition
+total.sulfur.dioxide
 </td>
 <td style="text-align:right;">
-12.591270
+117.545709
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-personal\_fitness
+free.sulfur.dioxide
 </td>
 <td style="text-align:right;">
-6.661376
+24.000933
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-chatter
+alcohol
 </td>
 <td style="text-align:right;">
-3.767196
+10.395134
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-cooking
+fixed.acidity
 </td>
 <td style="text-align:right;">
-3.414021
+7.372854
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-outdoors
+residual.sugar
 </td>
 <td style="text-align:right;">
-2.903439
+4.212313
 </td>
 </tr>
 </tbody>
@@ -618,42 +521,42 @@ cluster2
 <tbody>
 <tr>
 <td style="text-align:left;">
-news
+total.sulfur.dioxide
 </td>
 <td style="text-align:right;">
-6.802353
+35.481203
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-politics
+free.sulfur.dioxide
 </td>
 <td style="text-align:right;">
-5.517647
+11.812030
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-automotive
+fixed.acidity
 </td>
 <td style="text-align:right;">
-4.383529
+11.313158
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-chatter
+alcohol
 </td>
 <td style="text-align:right;">
-4.124706
+10.616416
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-sports\_fandom
+pH
 </td>
 <td style="text-align:right;">
-3.051765
+3.142669
 </td>
 </tr>
 </tbody>
@@ -673,42 +576,42 @@ cluster3
 <tbody>
 <tr>
 <td style="text-align:left;">
-politics
+total.sulfur.dioxide
 </td>
 <td style="text-align:right;">
-11.267241
+130.168344
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-travel
+free.sulfur.dioxide
 </td>
 <td style="text-align:right;">
-9.103448
+32.718680
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-computers
+alcohol
 </td>
 <td style="text-align:right;">
-4.100575
+10.632696
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-chatter
+fixed.acidity
 </td>
 <td style="text-align:right;">
-4.060345
+6.311689
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-news
+pH
 </td>
 <td style="text-align:right;">
-3.617816
+3.375112
 </td>
 </tr>
 </tbody>
@@ -728,42 +631,42 @@ cluster4
 <tbody>
 <tr>
 <td style="text-align:left;">
-chatter
+total.sulfur.dioxide
 </td>
 <td style="text-align:right;">
-3.078366
+164.095580
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-photo\_sharing
+free.sulfur.dioxide
 </td>
 <td style="text-align:right;">
-1.547655
+41.548985
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-current\_events
+residual.sugar
 </td>
 <td style="text-align:right;">
-1.264145
+14.499403
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-health\_nutrition
+alcohol
 </td>
 <td style="text-align:right;">
-1.143419
+9.276563
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-travel
+fixed.acidity
 </td>
 <td style="text-align:right;">
-1.085023
+7.129630
 </td>
 </tr>
 </tbody>
@@ -783,42 +686,42 @@ cluster5
 <tbody>
 <tr>
 <td style="text-align:left;">
-dating
+total.sulfur.dioxide
 </td>
 <td style="text-align:right;">
-9.293814
+46.865140
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-chatter
+free.sulfur.dioxide
 </td>
 <td style="text-align:right;">
-7.963917
+15.791985
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-photo\_sharing
+alcohol
 </td>
 <td style="text-align:right;">
-2.639175
+10.222540
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-fashion
+fixed.acidity
 </td>
 <td style="text-align:right;">
-2.505155
+7.279262
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-school
+pH
 </td>
 <td style="text-align:right;">
-2.257732
+3.379644
 </td>
 </tr>
 </tbody>
@@ -838,42 +741,42 @@ cluster6
 <tbody>
 <tr>
 <td style="text-align:left;">
-college\_uni
+total.sulfur.dioxide
 </td>
 <td style="text-align:right;">
-11.098870
+54.350844
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-online\_gaming
+free.sulfur.dioxide
 </td>
 <td style="text-align:right;">
-10.850283
+17.142589
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-chatter
+alcohol
 </td>
 <td style="text-align:right;">
-4.096045
+10.516135
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-sports\_playing
+fixed.acidity
 </td>
 <td style="text-align:right;">
-2.745763
+8.385178
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-photo\_sharing
+pH
 </td>
 <td style="text-align:right;">
-2.655367
+3.293189
 </td>
 </tr>
 </tbody>
@@ -893,42 +796,42 @@ cluster7
 <tbody>
 <tr>
 <td style="text-align:left;">
-tv\_film
+total.sulfur.dioxide
 </td>
 <td style="text-align:right;">
-5.597087
+137.403670
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-art
+free.sulfur.dioxide
 </td>
 <td style="text-align:right;">
-5.038835
+39.839450
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-chatter
+alcohol
 </td>
 <td style="text-align:right;">
-3.929612
+9.468807
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-college\_uni
+fixed.acidity
 </td>
 <td style="text-align:right;">
-2.548544
+6.966055
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-photo\_sharing
+residual.sugar
 </td>
 <td style="text-align:right;">
-2.453883
+4.346789
 </td>
 </tr>
 </tbody>
@@ -948,42 +851,42 @@ cluster8
 <tbody>
 <tr>
 <td style="text-align:left;">
-sports\_fandom
+total.sulfur.dioxide
 </td>
 <td style="text-align:right;">
-6.196347
+181.576327
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-religion
+free.sulfur.dioxide
 </td>
 <td style="text-align:right;">
-5.557078
+52.929203
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-food
+alcohol
 </td>
 <td style="text-align:right;">
-4.727550
+9.823138
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-parenting
+residual.sugar
 </td>
 <td style="text-align:right;">
-4.258752
+8.487113
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-chatter
+fixed.acidity
 </td>
 <td style="text-align:right;">
-3.849315
+6.777102
 </td>
 </tr>
 </tbody>
@@ -1003,42 +906,42 @@ cluster9
 <tbody>
 <tr>
 <td style="text-align:left;">
-chatter
+total.sulfur.dioxide
 </td>
 <td style="text-align:right;">
-9.731328
+108.803172
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-photo\_sharing
+free.sulfur.dioxide
 </td>
 <td style="text-align:right;">
-5.963693
+29.220149
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-shopping
+alcohol
 </td>
 <td style="text-align:right;">
-4.120332
+12.266076
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-current\_events
+fixed.acidity
 </td>
 <td style="text-align:right;">
-1.992739
+6.600280
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-health\_nutrition
+residual.sugar
 </td>
 <td style="text-align:right;">
-1.600622
+3.272901
 </td>
 </tr>
 </tbody>
@@ -1058,42 +961,42 @@ cluster10
 <tbody>
 <tr>
 <td style="text-align:left;">
-cooking
+total.sulfur.dioxide
 </td>
 <td style="text-align:right;">
-11.788009
+52.625000
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-photo\_sharing
+free.sulfur.dioxide
 </td>
 <td style="text-align:right;">
-6.083512
+15.041667
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-fashion
+alcohol
 </td>
 <td style="text-align:right;">
-5.995717
+9.420833
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-beauty
+fixed.acidity
 </td>
 <td style="text-align:right;">
-4.218415
+8.441667
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-chatter
+pH
 </td>
 <td style="text-align:right;">
-4.194861
+3.064583
 </td>
 </tr>
 </tbody>
@@ -1102,10 +1005,22 @@ chatter
 </tr>
 </tbody>
 </table>
+Above is the table for the highest five categories for each clusters in
+total of 10 clusters. It appears that there are distinct groups of
+categories in each clusters. Cluster with college\_uni, online\_gaming,
+sports\_playing in top 5 categories will explain NutrientH20’s
+social-media audience is male college students whose in their early 20s.
+Cluster with news, politics, automotive, sports\_fandom in top 5
+categories will explain NutrientH20’s social-media audience can be guys
+in their 30s, 40s. Cluster with health\_nutrition, personal\_fitness,
+outdoors in top 5 categories will explain NutrientH20’s social-media
+audience is people interested in exercise and health. With this result,
+NutrientH20 can do marketing through gyms, product advertisements in
+men’s magazines, or selling products in college vending machines.
 
 ## 3) Association rules for grocery purchases
 
-### analysis
+### Analysis
 
 `groceries.txt` file contains a total of 9,835 unique shopping baskets.
 We frst went through some data wrangling process before conducting
@@ -1115,7 +1030,7 @@ thresholds, we chose support of .001, confidence of .5, and maxlen of
 capture as many items as possible from the dataset. Confidence of .5 was
 chosen to sort out weak associations. Lastly, we limited the maximum
 number of items per item set to be 10 to account for as many possible
-grocery combinations as possible. Runinng the algorithym using the above
+grocery combinations as possible. Running the algorithm using the above
 threshold resulted in 5,668 rules, which we thought was enough for this
 analysis. Below are two plots showing the resulting rules; the first is
 plotted between support and lift, while the second is between support
@@ -1123,18 +1038,21 @@ and confidence.
 
 ![](ECO395M-exercise-4_files/figure-markdown_strict/problem%203-1-1.png)![](ECO395M-exercise-4_files/figure-markdown_strict/problem%203-1-2.png)
 
+### Findings
+
 Below is a table that shows the top ten rules with the highest
 confidence. Confidence shows the probability of having item(s) on the
 RHS given those on the LHS are purchased. You can see that out of the
-top ten rules, the most frequent RHS items are milk and other
-vegetables. However, this does not reveal much about association. Take
+top ten rules, the most frequent RHS items are `whole milk` and
+`other vegetables`. However, the association rules here are not very
+interesting nor revealing. Take
 `{canned fish,hygiene articles} -> {whole milk}` as an example.
 Intuitively, buying canned fish and hygiene articles doesn’t seem to
 have anything to do with buying whole milk. However, this this is still
-at thoe top of the list simply because whole milk gets bought the most
+at the top of the list simply because whole milk gets bought the most
 frequently when people go grocery shopping, regardless of what other
-items they purchase. To see more relevant association rules, let’s look
-at a list with the highest lift.
+items they purchase. To see more relevant and revealing association
+rules, let’s look at a list with the highest lift.
 
 <table>
 <caption>
@@ -1414,7 +1332,8 @@ ready for a movie night. People who buy popcorn and soda are likely to
 buy other salty snacks. Thus, the model makes sense.
 
 `{ham,processed cheese} -> {white bread}`These are ingredients to make a
-quick sandwich. Hence, the rule makes sense again.
+quick sandwich. People who buy ham and processed cheese are likely to
+buy white bread to make a sandwich. Hence, the rule makes sense again.
 
 <table>
 <caption>
