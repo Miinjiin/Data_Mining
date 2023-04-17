@@ -1,47 +1,49 @@
 ## 1) Clustering and PCA
 
+We use the K-means to separate the red wine and white wine using 2
+different chemicals(clusters).
+
 ## K-means Clustering
 
-    ##  fixed.acidity    volatile.acidity  citric.acid     residual.sugar  
-    ##  Min.   : 3.800   Min.   :0.0800   Min.   :0.0000   Min.   : 0.600  
-    ##  1st Qu.: 6.400   1st Qu.:0.2300   1st Qu.:0.2500   1st Qu.: 1.800  
-    ##  Median : 7.000   Median :0.2900   Median :0.3100   Median : 3.000  
-    ##  Mean   : 7.215   Mean   :0.3397   Mean   :0.3186   Mean   : 5.443  
-    ##  3rd Qu.: 7.700   3rd Qu.:0.4000   3rd Qu.:0.3900   3rd Qu.: 8.100  
-    ##  Max.   :15.900   Max.   :1.5800   Max.   :1.6600   Max.   :65.800  
-    ##    chlorides       free.sulfur.dioxide total.sulfur.dioxide    density      
-    ##  Min.   :0.00900   Min.   :  1.00      Min.   :  6.0        Min.   :0.9871  
-    ##  1st Qu.:0.03800   1st Qu.: 17.00      1st Qu.: 77.0        1st Qu.:0.9923  
-    ##  Median :0.04700   Median : 29.00      Median :118.0        Median :0.9949  
-    ##  Mean   :0.05603   Mean   : 30.53      Mean   :115.7        Mean   :0.9947  
-    ##  3rd Qu.:0.06500   3rd Qu.: 41.00      3rd Qu.:156.0        3rd Qu.:0.9970  
-    ##  Max.   :0.61100   Max.   :289.00      Max.   :440.0        Max.   :1.0390  
-    ##        pH          sulphates         alcohol         quality     
-    ##  Min.   :2.720   Min.   :0.2200   Min.   : 8.00   Min.   :3.000  
-    ##  1st Qu.:3.110   1st Qu.:0.4300   1st Qu.: 9.50   1st Qu.:5.000  
-    ##  Median :3.210   Median :0.5100   Median :10.30   Median :6.000  
-    ##  Mean   :3.219   Mean   :0.5313   Mean   :10.49   Mean   :5.818  
-    ##  3rd Qu.:3.320   3rd Qu.:0.6000   3rd Qu.:11.30   3rd Qu.:6.000  
-    ##  Max.   :4.010   Max.   :2.0000   Max.   :14.90   Max.   :9.000  
-    ##     color          
-    ##  Length:6497       
-    ##  Class :character  
-    ##  Mode  :character  
-    ##                    
-    ##                    
-    ## 
+First, we use alcohol and pH chemicals and see if these two are enough
+to separate red wine from white wine.
 
-![](ECO395M-exercise-4_files/figure-markdown_strict/1.1.1-1.png)
+Looking at the cluster membership, it is indistinguishable.
 
 ![](ECO395M-exercise-4_files/figure-markdown_strict/1.1.2-1.png)
 
+Looking at the next plot, Alcohol and pH do not separate reds from white
+wine.
+
 ![](ECO395M-exercise-4_files/figure-markdown_strict/1.1.3-1.png)
+
+Next, we use residual sugar and volatile acidity to separate red wine
+from white wine.
+
+This graph is the cluster membership between the residual sugar and
+volatile acidity
 
 ![](ECO395M-exercise-4_files/figure-markdown_strict/1.1.4-1.png)
 
+This plot shows that residual sugar and volatile acidity are good
+chemicals to separate the reds from the whites.
+
 ![](ECO395M-exercise-4_files/figure-markdown_strict/1.1.5-1.png)
 
+However, residual sugar and volatile acidity cannot distinguish the
+quality of the wines.
+
+![](ECO395M-exercise-4_files/figure-markdown_strict/1.1.6-1.png)
+
 ## PCA
+
+Next, we are running PCA.
+
+First, we draw a table to look at the linear combinations that define
+the principal components.
+
+Importance of the PCs says that using 6 summary features gives us about
+85% of overall variations.
 
 <table>
 <thead>
@@ -216,9 +218,23 @@ free.sulfur.dioxide
     ## Proportion of Variance 0.2754 0.2267 0.1415 0.08823 0.06544 0.05521
     ## Cumulative Proportion  0.2754 0.5021 0.6436 0.73187 0.79732 0.85253
 
+Using score 1 and score 3, PCA does a good job of separating the reds
+and the whites.
+
 ![](ECO395M-exercise-4_files/figure-markdown_strict/1.2.2-1.png)
 
+We use the same scores and test their power to distinguish the quality
+of the wines. And we find that they again do a poor job of
+distinguishing the quality of wines.
+
 ![](ECO395M-exercise-4_files/figure-markdown_strict/1.2.3-1.png)
+
+\###Conclusion We conclude that PCA does a better job of distinguishing
+the reds from the whites. Part of it is because we do not have to pick
+two or more clusters when using PCA; PCA picks the principal components
+for us. However, both algorithms do not seem to be able to distinguish
+the quality of the wines. In my opinion, the quality of the wines do not
+depend on these chemicals.
 
 ## 2) Market segmentation
 
@@ -364,18 +380,6 @@ As mentioned in the question, we can check there are categories like
 `spam`, `adult`, `uncategorized`, and I will remove `spam` and `adult`
 to clean our dataset.
 
-\`\`\`{2.1.1.2, message=FALSE, echo=FALSE, warning=FALSE}
-
-# drop first column, which user has labeled as random 9-digit code
-
-X=data\[,-1\] \# drop spam and adult column which slip through the data
-X=X\[,-(35:36)\] \# center and scale X=scale(X, center=TRUE, scale=TRUE)
-\# Extract the centers and scales from the rescaled data (which are
-named attributes) mu = attr(X,“scaled:center”) sigma =
-attr(X,“scaled:scale”)
-
-\`\`\`
-
 After cleaning/centering/scaling the data, I will start with correlation
 plot for k-means clustering, as correlation plot can visualize which
 categories in the dataset are strongly correlated each other, and also
@@ -405,24 +409,123 @@ Freq
 <tbody>
 <tr>
 <td style="text-align:left;">
-free.sulfur.dioxide
+health\_nutrition
 </td>
 <td style="text-align:left;">
-total.sulfur.dioxide
+personal\_fitness
 </td>
 <td style="text-align:right;">
-0.7209341
+0.8099024
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-density
+online\_gaming
 </td>
 <td style="text-align:left;">
-alcohol
+college\_uni
 </td>
 <td style="text-align:right;">
--0.6867454
+0.7728393
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+cooking
+</td>
+<td style="text-align:left;">
+fashion
+</td>
+<td style="text-align:right;">
+0.7214027
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+cooking
+</td>
+<td style="text-align:left;">
+beauty
+</td>
+<td style="text-align:right;">
+0.6642389
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+travel
+</td>
+<td style="text-align:left;">
+politics
+</td>
+<td style="text-align:right;">
+0.6602100
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+religion
+</td>
+<td style="text-align:left;">
+parenting
+</td>
+<td style="text-align:right;">
+0.6555973
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+sports\_fandom
+</td>
+<td style="text-align:left;">
+religion
+</td>
+<td style="text-align:right;">
+0.6379748
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+beauty
+</td>
+<td style="text-align:left;">
+fashion
+</td>
+<td style="text-align:right;">
+0.6349739
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+health\_nutrition
+</td>
+<td style="text-align:left;">
+outdoors
+</td>
+<td style="text-align:right;">
+0.6082254
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+sports\_fandom
+</td>
+<td style="text-align:left;">
+parenting
+</td>
+<td style="text-align:right;">
+0.6077181
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+travel
+</td>
+<td style="text-align:left;">
+computers
+</td>
+<td style="text-align:right;">
+0.6029349
 </td>
 </tr>
 </tbody>
@@ -466,42 +569,42 @@ cluster1
 <tbody>
 <tr>
 <td style="text-align:left;">
-total.sulfur.dioxide
+news
 </td>
 <td style="text-align:right;">
-39.988024
+6.825059
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-free.sulfur.dioxide
+politics
 </td>
 <td style="text-align:right;">
-15.345309
+5.517730
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-alcohol
+automotive
 </td>
 <td style="text-align:right;">
-10.675383
+4.392435
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-fixed.acidity
+chatter
 </td>
 <td style="text-align:right;">
-6.746307
+4.115839
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-pH
+sports\_fandom
 </td>
 <td style="text-align:right;">
-3.455968
+3.061466
 </td>
 </tr>
 </tbody>
@@ -521,42 +624,42 @@ cluster2
 <tbody>
 <tr>
 <td style="text-align:left;">
-total.sulfur.dioxide
+chatter
 </td>
 <td style="text-align:right;">
-77.344828
+9.731328
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-free.sulfur.dioxide
+photo\_sharing
 </td>
 <td style="text-align:right;">
-18.724138
+5.963693
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-alcohol
+shopping
 </td>
 <td style="text-align:right;">
-9.406897
+4.120332
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-fixed.acidity
+current\_events
 </td>
 <td style="text-align:right;">
-8.227586
+1.992739
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-residual.sugar
+health\_nutrition
 </td>
 <td style="text-align:right;">
-3.158621
+1.600622
 </td>
 </tr>
 </tbody>
@@ -576,42 +679,42 @@ cluster3
 <tbody>
 <tr>
 <td style="text-align:left;">
-total.sulfur.dioxide
+sports\_fandom
 </td>
 <td style="text-align:right;">
-117.427898
+6.196347
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-free.sulfur.dioxide
+religion
 </td>
 <td style="text-align:right;">
-24.285580
+5.557078
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-alcohol
+food
 </td>
 <td style="text-align:right;">
-10.368787
+4.727550
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-fixed.acidity
+parenting
 </td>
 <td style="text-align:right;">
-7.372950
+4.258752
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-residual.sugar
+chatter
 </td>
 <td style="text-align:right;">
-4.091376
+3.849315
 </td>
 </tr>
 </tbody>
@@ -631,42 +734,42 @@ cluster4
 <tbody>
 <tr>
 <td style="text-align:left;">
-total.sulfur.dioxide
+tv\_film
 </td>
 <td style="text-align:right;">
-182.523595
+5.597087
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-free.sulfur.dioxide
+art
 </td>
 <td style="text-align:right;">
-54.169101
+5.038835
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-alcohol
+chatter
 </td>
 <td style="text-align:right;">
-9.809007
+3.929612
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-residual.sugar
+college\_uni
 </td>
 <td style="text-align:right;">
-8.265168
+2.548544
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-fixed.acidity
+photo\_sharing
 </td>
 <td style="text-align:right;">
-6.773595
+2.453883
 </td>
 </tr>
 </tbody>
@@ -686,42 +789,42 @@ cluster5
 <tbody>
 <tr>
 <td style="text-align:left;">
-total.sulfur.dioxide
+college\_uni
 </td>
 <td style="text-align:right;">
-35.176259
+11.098870
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-free.sulfur.dioxide
+online\_gaming
 </td>
 <td style="text-align:right;">
-12.428058
+10.850283
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-fixed.acidity
+chatter
 </td>
 <td style="text-align:right;">
-11.264748
+4.096045
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-alcohol
+sports\_playing
 </td>
 <td style="text-align:right;">
-10.536931
+2.745763
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-pH
+photo\_sharing
 </td>
 <td style="text-align:right;">
-3.151295
+2.655367
 </td>
 </tr>
 </tbody>
@@ -741,42 +844,42 @@ cluster6
 <tbody>
 <tr>
 <td style="text-align:left;">
-total.sulfur.dioxide
+cooking
 </td>
 <td style="text-align:right;">
-132.197207
+11.788009
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-free.sulfur.dioxide
+photo\_sharing
 </td>
 <td style="text-align:right;">
-32.972626
+6.083512
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-alcohol
+fashion
 </td>
 <td style="text-align:right;">
-10.537333
+5.995717
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-fixed.acidity
+beauty
 </td>
 <td style="text-align:right;">
-6.337374
+4.218415
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-residual.sugar
+chatter
 </td>
 <td style="text-align:right;">
-3.390223
+4.194861
 </td>
 </tr>
 </tbody>
@@ -796,42 +899,42 @@ cluster7
 <tbody>
 <tr>
 <td style="text-align:left;">
-total.sulfur.dioxide
+dating
 </td>
 <td style="text-align:right;">
-48.183060
+9.293814
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-free.sulfur.dioxide
+chatter
 </td>
 <td style="text-align:right;">
-15.918033
+7.963917
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-alcohol
+photo\_sharing
 </td>
 <td style="text-align:right;">
-11.028415
+2.639175
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-fixed.acidity
+fashion
 </td>
 <td style="text-align:right;">
-8.187978
+2.505155
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-pH
+school
 </td>
 <td style="text-align:right;">
-3.293060
+2.257732
 </td>
 </tr>
 </tbody>
@@ -851,42 +954,42 @@ cluster8
 <tbody>
 <tr>
 <td style="text-align:left;">
-total.sulfur.dioxide
+politics
 </td>
 <td style="text-align:right;">
-67.825243
+11.267241
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-free.sulfur.dioxide
+travel
 </td>
 <td style="text-align:right;">
-18.243689
+9.103448
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-alcohol
+computers
 </td>
 <td style="text-align:right;">
-9.664110
+4.100575
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-fixed.acidity
+chatter
 </td>
 <td style="text-align:right;">
-8.160583
+4.060345
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-pH
+news
 </td>
 <td style="text-align:right;">
-3.263107
+3.617816
 </td>
 </tr>
 </tbody>
@@ -906,42 +1009,42 @@ cluster9
 <tbody>
 <tr>
 <td style="text-align:left;">
-total.sulfur.dioxide
+chatter
 </td>
 <td style="text-align:right;">
-109.236599
+3.080133
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-free.sulfur.dioxide
+photo\_sharing
 </td>
 <td style="text-align:right;">
-29.365989
+1.548533
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-alcohol
+current\_events
 </td>
 <td style="text-align:right;">
-12.251094
+1.264893
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-fixed.acidity
+health\_nutrition
 </td>
 <td style="text-align:right;">
-6.598152
+1.143030
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-residual.sugar
+travel
 </td>
 <td style="text-align:right;">
-3.287015
+1.084971
 </td>
 </tr>
 </tbody>
@@ -961,42 +1064,42 @@ cluster10
 <tbody>
 <tr>
 <td style="text-align:left;">
-total.sulfur.dioxide
+health\_nutrition
 </td>
 <td style="text-align:right;">
-163.436364
+12.591270
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-free.sulfur.dioxide
+personal\_fitness
 </td>
 <td style="text-align:right;">
-41.083523
+6.661376
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-residual.sugar
+chatter
 </td>
 <td style="text-align:right;">
-14.347102
+3.767196
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-alcohol
+cooking
 </td>
 <td style="text-align:right;">
-9.299413
+3.414021
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-fixed.acidity
+outdoors
 </td>
 <td style="text-align:right;">
-7.120341
+2.903439
 </td>
 </tr>
 </tbody>

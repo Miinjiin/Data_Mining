@@ -30,14 +30,12 @@ library(DiagrammeR)
 
 ## 1) Clustering and PCA
 
+We use the K-means to separate the red wine and white wine using 2 different chemicals(clusters). 
 
 ## K-means Clustering
 ```{r 1.1.1, message=FALSE, echo=FALSE, warning=FALSE}
 
 wine = read.csv('Data/wine.csv')
-
-summary(wine)
-View(wine)
 
 # Center and scale the data
 X = wine[,-(12:13)]
@@ -52,6 +50,14 @@ sigma = attr(X,"scaled:scale")
 # Using kmenas
 clust_wine = kmeans(X, 2, nstart = 10)
 
+```
+
+First, we use alcohol and pH chemicals and see if these two are enough to separate red wine from white wine.
+
+Looking at the cluster membership, it is indistinguishable.
+
+```{r 1.1.2, message=FALSE, echo=FALSE, warning=FALSE}
+
 # Alcohol and pH
 ggplot(wine) + 
   geom_point(aes(alcohol, pH, color = factor(clust_wine$cluster), shape=factor(clust_wine$cluster)))+
@@ -59,8 +65,9 @@ ggplot(wine) +
 
 ```
 
+Looking at the next plot, Alcohol and pH do not separate reds from white wine. 
 
-```{r 1.1.2, message=FALSE, echo=FALSE, warning=FALSE}
+```{r 1.1.3, message=FALSE, echo=FALSE, warning=FALSE}
 
 ggplot(wine) + 
   geom_point(aes(alcohol, pH, color = color , shape=factor(clust_wine$cluster)))+  guides(shape =guide_legend(title="Cluster"))+
@@ -68,8 +75,11 @@ ggplot(wine) +
 
 ```
 
+Next, we use residual sugar and volatile acidity to separate red wine from white wine. 
 
-```{r 1.1.3, message=FALSE, echo=FALSE, warning=FALSE}
+This graph is the cluster membership between the residual sugar and volatile acidity
+
+```{r 1.1.4, message=FALSE, echo=FALSE, warning=FALSE}
 ### residual sugar and density
 ggplot(wine) + 
   geom_point(aes(volatile.acidity, residual.sugar, color = factor(clust_wine$cluster), shape=factor(clust_wine$cluster)))+
@@ -77,16 +87,18 @@ ggplot(wine) +
 
 ```
 
+This plot shows that residual sugar and volatile acidity are good chemicals to separate the reds from the whites.
 
-```{r 1.1.4, message=FALSE, echo=FALSE, warning=FALSE}
+```{r 1.1.5, message=FALSE, echo=FALSE, warning=FALSE}
 ggplot(wine) + 
   geom_point(aes(volatile.acidity, residual.sugar, color = color , shape=factor(clust_wine$cluster)))+ guides(shape =guide_legend(title="Cluster"))+
   labs(x ="volatile acidity", y ="residual sugar", title = "Is white wine separated from red wine?")
 
 ```
 
+However, residual sugar and volatile acidity cannot distinguish the quality of the wines.
 
-```{r 1.1.5, message=FALSE, echo=FALSE, warning=FALSE}
+```{r 1.1.6, message=FALSE, echo=FALSE, warning=FALSE}
 
 ggplot(wine) + 
   geom_point(aes(volatile.acidity, total.sulfur.dioxide, color = quality, shape=factor(clust_wine$cluster)))+ 
@@ -97,6 +109,13 @@ ggplot(wine) +
 
 
 ## PCA
+
+Next, we are running PCA.
+
+First, we draw a table to look at the linear combinations that define the principal components.
+
+Importance of the PCs says that using 6 summary features gives us about 85% of overall variations. 
+
 
 ```{r 1.2.1, message=FALSE, echo=FALSE, warning=FALSE}
 ######## PCA
@@ -111,6 +130,7 @@ kable(head(loadings))
 summary(pca_wine)
 ```
 
+Using score 1 and score 3, PCA does a good job of separating the reds and the whites.
 
 ```{r 1.2.2, message=FALSE, echo=FALSE, warning=FALSE}
 
@@ -118,6 +138,7 @@ qplot(scores[,1], scores[,3], color=wine$color, xlab='Component 1', ylab='Compon
 
 ```
 
+We use the same scores and test their power to distinguish the quality of the wines. And we find that they again do a poor job of distinguishing the quality of wines. 
 
 ```{r 1.2.3, message=FALSE, echo=FALSE, warning=FALSE}
 
@@ -125,7 +146,8 @@ qplot(scores[,1], scores[,3], color=wine$quality, xlab='Component 1', ylab='Comp
 
 ```
 
-
+###Conclusion
+We conclude that PCA does a better job of distinguishing the reds from the whites. Part of it is because we do not have to pick two or more clusters when using PCA; PCA picks the principal components for us. However, both algorithms do not seem to be able to distinguish the quality of the wines. In my opinion, the quality of the wines do not depend on these chemicals. 
 
 ## 2) Market segmentation
 
