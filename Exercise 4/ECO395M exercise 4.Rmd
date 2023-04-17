@@ -146,7 +146,7 @@ qplot(scores[,1], scores[,3], color=wine$quality, xlab='Component 1', ylab='Comp
 
 ```
 
-###Conclusion
+### Conclusion
 We conclude that PCA does a better job of distinguishing the reds from the whites. Part of it is because we do not have to pick two or more clusters when using PCA; PCA picks the principal components for us. However, both algorithms do not seem to be able to distinguish the quality of the wines. In my opinion, the quality of the wines do not depend on these chemicals. 
 
 ## 2) Market segmentation
@@ -382,7 +382,7 @@ rules_df_lift <- rules_df %>%
 rules_df_lift
 ```
 
-The last plot is a graph-visualization representing the association rules. Each item in the LHS is connected with to the RHS item, and the arrows indicate the direction of the relationship. To avoid over-crowded plot, we have limited to rules with lift > 10.
+The last plot is a graph-visualization representing the association rules. Each item in the LHS is connected with to the RHS item, and the arrows indicate the direction of the relationship. To avoid over-crowded plot, we have limited to rules with lift > 10. As such, one can see many of the rules from above table with the highest lift visualized.
 
 ```{r problem 3-4, message=FALSE, echo=FALSE, warning=FALSE}
 

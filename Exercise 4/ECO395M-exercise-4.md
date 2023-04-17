@@ -229,11 +229,13 @@ distinguishing the quality of wines.
 
 ![](ECO395M-exercise-4_files/figure-markdown_strict/1.2.3-1.png)
 
-\###Conclusion We conclude that PCA does a better job of distinguishing
-the reds from the whites. Part of it is because we do not have to pick
-two or more clusters when using PCA; PCA picks the principal components
-for us. However, both algorithms do not seem to be able to distinguish
-the quality of the wines. In my opinion, the quality of the wines do not
+### Conclusion
+
+We conclude that PCA does a better job of distinguishing the reds from
+the whites. Part of it is because we do not have to pick two or more
+clusters when using PCA; PCA picks the principal components for us.
+However, both algorithms do not seem to be able to distinguish the
+quality of the wines. In my opinion, the quality of the wines do not
 depend on these chemicals.
 
 ## 2) Market segmentation
@@ -569,26 +571,18 @@ cluster1
 <tbody>
 <tr>
 <td style="text-align:left;">
-news
+health\_nutrition
 </td>
 <td style="text-align:right;">
-6.825059
+12.591270
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-politics
+personal\_fitness
 </td>
 <td style="text-align:right;">
-5.517730
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-automotive
-</td>
-<td style="text-align:right;">
-4.392435
+6.661376
 </td>
 </tr>
 <tr>
@@ -596,15 +590,23 @@ automotive
 chatter
 </td>
 <td style="text-align:right;">
-4.115839
+3.767196
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-sports\_fandom
+cooking
 </td>
 <td style="text-align:right;">
-3.061466
+3.414021
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+outdoors
+</td>
+<td style="text-align:right;">
+2.903439
 </td>
 </tr>
 </tbody>
@@ -618,226 +620,6 @@ sports\_fandom
 </th>
 <th style="text-align:right;">
 cluster2
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-chatter
-</td>
-<td style="text-align:right;">
-9.731328
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-photo\_sharing
-</td>
-<td style="text-align:right;">
-5.963693
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-shopping
-</td>
-<td style="text-align:right;">
-4.120332
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-current\_events
-</td>
-<td style="text-align:right;">
-1.992739
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-health\_nutrition
-</td>
-<td style="text-align:right;">
-1.600622
-</td>
-</tr>
-</tbody>
-</table>
-</td>
-<td>
-<table>
-<thead>
-<tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:right;">
-cluster3
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-sports\_fandom
-</td>
-<td style="text-align:right;">
-6.196347
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-religion
-</td>
-<td style="text-align:right;">
-5.557078
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-food
-</td>
-<td style="text-align:right;">
-4.727550
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-parenting
-</td>
-<td style="text-align:right;">
-4.258752
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-chatter
-</td>
-<td style="text-align:right;">
-3.849315
-</td>
-</tr>
-</tbody>
-</table>
-</td>
-<td>
-<table>
-<thead>
-<tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:right;">
-cluster4
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-tv\_film
-</td>
-<td style="text-align:right;">
-5.597087
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-art
-</td>
-<td style="text-align:right;">
-5.038835
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-chatter
-</td>
-<td style="text-align:right;">
-3.929612
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-college\_uni
-</td>
-<td style="text-align:right;">
-2.548544
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-photo\_sharing
-</td>
-<td style="text-align:right;">
-2.453883
-</td>
-</tr>
-</tbody>
-</table>
-</td>
-<td>
-<table>
-<thead>
-<tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:right;">
-cluster5
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-college\_uni
-</td>
-<td style="text-align:right;">
-11.098870
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-online\_gaming
-</td>
-<td style="text-align:right;">
-10.850283
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-chatter
-</td>
-<td style="text-align:right;">
-4.096045
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-sports\_playing
-</td>
-<td style="text-align:right;">
-2.745763
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-photo\_sharing
-</td>
-<td style="text-align:right;">
-2.655367
-</td>
-</tr>
-</tbody>
-</table>
-</td>
-<td>
-<table>
-<thead>
-<tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:right;">
-cluster6
 </th>
 </tr>
 </thead>
@@ -892,7 +674,7 @@ chatter
 <th style="text-align:left;">
 </th>
 <th style="text-align:right;">
-cluster7
+cluster3
 </th>
 </tr>
 </thead>
@@ -947,62 +729,7 @@ school
 <th style="text-align:left;">
 </th>
 <th style="text-align:right;">
-cluster8
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-politics
-</td>
-<td style="text-align:right;">
-11.267241
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-travel
-</td>
-<td style="text-align:right;">
-9.103448
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-computers
-</td>
-<td style="text-align:right;">
-4.100575
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-chatter
-</td>
-<td style="text-align:right;">
-4.060345
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-news
-</td>
-<td style="text-align:right;">
-3.617816
-</td>
-</tr>
-</tbody>
-</table>
-</td>
-<td>
-<table>
-<thead>
-<tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:right;">
-cluster9
+cluster4
 </th>
 </tr>
 </thead>
@@ -1057,25 +784,41 @@ travel
 <th style="text-align:left;">
 </th>
 <th style="text-align:right;">
-cluster10
+cluster5
 </th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td style="text-align:left;">
-health\_nutrition
+sports\_fandom
 </td>
 <td style="text-align:right;">
-12.591270
+6.196347
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-personal\_fitness
+religion
 </td>
 <td style="text-align:right;">
-6.661376
+5.557078
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+food
+</td>
+<td style="text-align:right;">
+4.727550
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+parenting
+</td>
+<td style="text-align:right;">
+4.258752
 </td>
 </tr>
 <tr>
@@ -1083,23 +826,282 @@ personal\_fitness
 chatter
 </td>
 <td style="text-align:right;">
-3.767196
+3.849315
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+cluster6
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+college\_uni
+</td>
+<td style="text-align:right;">
+11.098870
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-cooking
+online\_gaming
 </td>
 <td style="text-align:right;">
-3.414021
+10.850283
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-outdoors
+chatter
 </td>
 <td style="text-align:right;">
-2.903439
+4.096045
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+sports\_playing
+</td>
+<td style="text-align:right;">
+2.745763
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+photo\_sharing
+</td>
+<td style="text-align:right;">
+2.655367
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+cluster7
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+news
+</td>
+<td style="text-align:right;">
+6.825059
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+politics
+</td>
+<td style="text-align:right;">
+5.517730
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+automotive
+</td>
+<td style="text-align:right;">
+4.392435
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+chatter
+</td>
+<td style="text-align:right;">
+4.115839
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+sports\_fandom
+</td>
+<td style="text-align:right;">
+3.061466
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+cluster8
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+chatter
+</td>
+<td style="text-align:right;">
+9.731328
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+photo\_sharing
+</td>
+<td style="text-align:right;">
+5.963693
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+shopping
+</td>
+<td style="text-align:right;">
+4.120332
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+current\_events
+</td>
+<td style="text-align:right;">
+1.992739
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+health\_nutrition
+</td>
+<td style="text-align:right;">
+1.600622
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+cluster9
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+politics
+</td>
+<td style="text-align:right;">
+11.267241
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+travel
+</td>
+<td style="text-align:right;">
+9.103448
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+computers
+</td>
+<td style="text-align:right;">
+4.100575
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+chatter
+</td>
+<td style="text-align:right;">
+4.060345
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+news
+</td>
+<td style="text-align:right;">
+3.617816
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+cluster10
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+tv\_film
+</td>
+<td style="text-align:right;">
+5.597087
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+art
+</td>
+<td style="text-align:right;">
+5.038835
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+chatter
+</td>
+<td style="text-align:right;">
+3.929612
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+college\_uni
+</td>
+<td style="text-align:right;">
+2.548544
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+photo\_sharing
+</td>
+<td style="text-align:right;">
+2.453883
 </td>
 </tr>
 </tbody>
@@ -1704,6 +1706,7 @@ count
 The last plot is a graph-visualization representing the association
 rules. Each item in the LHS is connected with to the RHS item, and the
 arrows indicate the direction of the relationship. To avoid over-crowded
-plot, we have limited to rules with lift &gt; 10.
+plot, we have limited to rules with lift &gt; 10. As such, one can see
+many of the rules from above table with the highest lift visualized.
 
 ![](ECO395M-exercise-4_files/figure-markdown_strict/problem%203-4-1.png)
