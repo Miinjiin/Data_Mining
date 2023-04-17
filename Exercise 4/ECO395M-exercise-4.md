@@ -469,7 +469,7 @@ cluster1
 total.sulfur.dioxide
 </td>
 <td style="text-align:right;">
-117.545709
+39.988024
 </td>
 </tr>
 <tr>
@@ -477,7 +477,7 @@ total.sulfur.dioxide
 free.sulfur.dioxide
 </td>
 <td style="text-align:right;">
-24.000933
+15.345309
 </td>
 </tr>
 <tr>
@@ -485,7 +485,7 @@ free.sulfur.dioxide
 alcohol
 </td>
 <td style="text-align:right;">
-10.395134
+10.675383
 </td>
 </tr>
 <tr>
@@ -493,15 +493,15 @@ alcohol
 fixed.acidity
 </td>
 <td style="text-align:right;">
-7.372854
+6.746307
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-residual.sugar
+pH
 </td>
 <td style="text-align:right;">
-4.212313
+3.455968
 </td>
 </tr>
 </tbody>
@@ -524,7 +524,7 @@ cluster2
 total.sulfur.dioxide
 </td>
 <td style="text-align:right;">
-35.481203
+77.344828
 </td>
 </tr>
 <tr>
@@ -532,15 +532,7 @@ total.sulfur.dioxide
 free.sulfur.dioxide
 </td>
 <td style="text-align:right;">
-11.812030
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-fixed.acidity
-</td>
-<td style="text-align:right;">
-11.313158
+18.724138
 </td>
 </tr>
 <tr>
@@ -548,15 +540,23 @@ fixed.acidity
 alcohol
 </td>
 <td style="text-align:right;">
-10.616416
+9.406897
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-pH
+fixed.acidity
 </td>
 <td style="text-align:right;">
-3.142669
+8.227586
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+residual.sugar
+</td>
+<td style="text-align:right;">
+3.158621
 </td>
 </tr>
 </tbody>
@@ -579,7 +579,7 @@ cluster3
 total.sulfur.dioxide
 </td>
 <td style="text-align:right;">
-130.168344
+117.427898
 </td>
 </tr>
 <tr>
@@ -587,7 +587,7 @@ total.sulfur.dioxide
 free.sulfur.dioxide
 </td>
 <td style="text-align:right;">
-32.718680
+24.285580
 </td>
 </tr>
 <tr>
@@ -595,7 +595,7 @@ free.sulfur.dioxide
 alcohol
 </td>
 <td style="text-align:right;">
-10.632696
+10.368787
 </td>
 </tr>
 <tr>
@@ -603,15 +603,15 @@ alcohol
 fixed.acidity
 </td>
 <td style="text-align:right;">
-6.311689
+7.372950
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-pH
+residual.sugar
 </td>
 <td style="text-align:right;">
-3.375112
+4.091376
 </td>
 </tr>
 </tbody>
@@ -634,7 +634,7 @@ cluster4
 total.sulfur.dioxide
 </td>
 <td style="text-align:right;">
-164.095580
+182.523595
 </td>
 </tr>
 <tr>
@@ -642,15 +642,7 @@ total.sulfur.dioxide
 free.sulfur.dioxide
 </td>
 <td style="text-align:right;">
-41.548985
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-residual.sugar
-</td>
-<td style="text-align:right;">
-14.499403
+54.169101
 </td>
 </tr>
 <tr>
@@ -658,7 +650,15 @@ residual.sugar
 alcohol
 </td>
 <td style="text-align:right;">
-9.276563
+9.809007
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+residual.sugar
+</td>
+<td style="text-align:right;">
+8.265168
 </td>
 </tr>
 <tr>
@@ -666,7 +666,7 @@ alcohol
 fixed.acidity
 </td>
 <td style="text-align:right;">
-7.129630
+6.773595
 </td>
 </tr>
 </tbody>
@@ -689,7 +689,7 @@ cluster5
 total.sulfur.dioxide
 </td>
 <td style="text-align:right;">
-46.865140
+35.176259
 </td>
 </tr>
 <tr>
@@ -697,15 +697,7 @@ total.sulfur.dioxide
 free.sulfur.dioxide
 </td>
 <td style="text-align:right;">
-15.791985
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-alcohol
-</td>
-<td style="text-align:right;">
-10.222540
+12.428058
 </td>
 </tr>
 <tr>
@@ -713,7 +705,15 @@ alcohol
 fixed.acidity
 </td>
 <td style="text-align:right;">
-7.279262
+11.264748
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+alcohol
+</td>
+<td style="text-align:right;">
+10.536931
 </td>
 </tr>
 <tr>
@@ -721,7 +721,7 @@ fixed.acidity
 pH
 </td>
 <td style="text-align:right;">
-3.379644
+3.151295
 </td>
 </tr>
 </tbody>
@@ -744,7 +744,7 @@ cluster6
 total.sulfur.dioxide
 </td>
 <td style="text-align:right;">
-54.350844
+132.197207
 </td>
 </tr>
 <tr>
@@ -752,7 +752,7 @@ total.sulfur.dioxide
 free.sulfur.dioxide
 </td>
 <td style="text-align:right;">
-17.142589
+32.972626
 </td>
 </tr>
 <tr>
@@ -760,7 +760,7 @@ free.sulfur.dioxide
 alcohol
 </td>
 <td style="text-align:right;">
-10.516135
+10.537333
 </td>
 </tr>
 <tr>
@@ -768,15 +768,15 @@ alcohol
 fixed.acidity
 </td>
 <td style="text-align:right;">
-8.385178
+6.337374
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-pH
+residual.sugar
 </td>
 <td style="text-align:right;">
-3.293189
+3.390223
 </td>
 </tr>
 </tbody>
@@ -799,7 +799,7 @@ cluster7
 total.sulfur.dioxide
 </td>
 <td style="text-align:right;">
-137.403670
+48.183060
 </td>
 </tr>
 <tr>
@@ -807,7 +807,7 @@ total.sulfur.dioxide
 free.sulfur.dioxide
 </td>
 <td style="text-align:right;">
-39.839450
+15.918033
 </td>
 </tr>
 <tr>
@@ -815,7 +815,7 @@ free.sulfur.dioxide
 alcohol
 </td>
 <td style="text-align:right;">
-9.468807
+11.028415
 </td>
 </tr>
 <tr>
@@ -823,15 +823,15 @@ alcohol
 fixed.acidity
 </td>
 <td style="text-align:right;">
-6.966055
+8.187978
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-residual.sugar
+pH
 </td>
 <td style="text-align:right;">
-4.346789
+3.293060
 </td>
 </tr>
 </tbody>
@@ -854,7 +854,7 @@ cluster8
 total.sulfur.dioxide
 </td>
 <td style="text-align:right;">
-181.576327
+67.825243
 </td>
 </tr>
 <tr>
@@ -862,7 +862,7 @@ total.sulfur.dioxide
 free.sulfur.dioxide
 </td>
 <td style="text-align:right;">
-52.929203
+18.243689
 </td>
 </tr>
 <tr>
@@ -870,15 +870,7 @@ free.sulfur.dioxide
 alcohol
 </td>
 <td style="text-align:right;">
-9.823138
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-residual.sugar
-</td>
-<td style="text-align:right;">
-8.487113
+9.664110
 </td>
 </tr>
 <tr>
@@ -886,7 +878,15 @@ residual.sugar
 fixed.acidity
 </td>
 <td style="text-align:right;">
-6.777102
+8.160583
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+pH
+</td>
+<td style="text-align:right;">
+3.263107
 </td>
 </tr>
 </tbody>
@@ -909,7 +909,7 @@ cluster9
 total.sulfur.dioxide
 </td>
 <td style="text-align:right;">
-108.803172
+109.236599
 </td>
 </tr>
 <tr>
@@ -917,7 +917,7 @@ total.sulfur.dioxide
 free.sulfur.dioxide
 </td>
 <td style="text-align:right;">
-29.220149
+29.365989
 </td>
 </tr>
 <tr>
@@ -925,7 +925,7 @@ free.sulfur.dioxide
 alcohol
 </td>
 <td style="text-align:right;">
-12.266076
+12.251094
 </td>
 </tr>
 <tr>
@@ -933,7 +933,7 @@ alcohol
 fixed.acidity
 </td>
 <td style="text-align:right;">
-6.600280
+6.598152
 </td>
 </tr>
 <tr>
@@ -941,7 +941,7 @@ fixed.acidity
 residual.sugar
 </td>
 <td style="text-align:right;">
-3.272901
+3.287015
 </td>
 </tr>
 </tbody>
@@ -964,7 +964,7 @@ cluster10
 total.sulfur.dioxide
 </td>
 <td style="text-align:right;">
-52.625000
+163.436364
 </td>
 </tr>
 <tr>
@@ -972,7 +972,15 @@ total.sulfur.dioxide
 free.sulfur.dioxide
 </td>
 <td style="text-align:right;">
-15.041667
+41.083523
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+residual.sugar
+</td>
+<td style="text-align:right;">
+14.347102
 </td>
 </tr>
 <tr>
@@ -980,7 +988,7 @@ free.sulfur.dioxide
 alcohol
 </td>
 <td style="text-align:right;">
-9.420833
+9.299413
 </td>
 </tr>
 <tr>
@@ -988,15 +996,7 @@ alcohol
 fixed.acidity
 </td>
 <td style="text-align:right;">
-8.441667
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-pH
-</td>
-<td style="text-align:right;">
-3.064583
+7.120341
 </td>
 </tr>
 </tbody>

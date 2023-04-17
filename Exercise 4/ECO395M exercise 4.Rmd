@@ -154,7 +154,7 @@ With K-means clustering, we can cluster these categories, for example, "physical
 As mentioned in the question, we can check there are categories like `spam`, `adult`, `uncategorized`, and I will remove `spam` and `adult` to clean our dataset. 
 
 
-```{2.1.1.2, message=FALSE, echo=FALSE, warning=FALSE}
+```{r 2.1.1.2, message=FALSE, echo=FALSE, warning=FALSE}
 
 # drop first column, which user has labeled as random 9-digit code
 X=data[,-1]
